@@ -1,6 +1,6 @@
 # Setup the environment
 
-### The Frontend App
+## Frontend App
 
 {% hint style="info" %}
 Make sure you have **NodeJS** and **NPM** installed on your machine before continue
@@ -27,47 +27,63 @@ sudo chmod -R 777 node_modules
 yarn start
 ```
 
-### The Backend Server
+## Backend Server
 
 {% hint style="info" %}
-The backend server requires **Redis** and **MongoDB** services and the **Shopify CLI** command line tool so make sure they are up and running on your local system. Read the following guide on how to set them up:
+The backend server requires **Redis** and **MongoDB** services and the **Shopify CLI** command line tool so make sure they are up and running on your local system.&#x20;
 {% endhint %}
 
-* [Install and config Redis on Mac OS X via HomeBrew](https://medium.com/@petehouston/install-and-config-redis-on-mac-os-x-via-homebrew-eb8df9a4f298)
-* [Install MongoDB Community Edition on macOS](https://medium.com/@petehouston/install-and-config-redis-on-mac-os-x-via-homebrew-eb8df9a4f298)
-* [Install the Shopify CLI command line tool](https://shopify.dev/apps/tools/cli/installation)
+*
 
-> If you are having troubles starting redis and mongodb on M1 mac
->
-> ```
-> /redis-server --daemonize yes
-> mongod --dbpath ~/Workspace/mongo-data --fork --logpath ~/Workspace/mongo-data/log.txt
-> ```
+Step to run the server:
 
-#### Clone the source codes and start the dev server
+**Install Docker:**
+
+{% embed url="https://docs.docker.com/desktop/mac/install" %}
+
+**Run the docker compose to start mongodb and redis:**
 
 ```bash
-# Clone the backend project
-git clone git@bitbucket.org:bravebits/pfserver.git
-
-# go to backend source
-cd pfserver
-
-# create .env file from .env.example file
-cp .env.example .env
-
-# Remember to update all config behind that
-
-# login to Shopify:
-shopify login
-
-# install dependencies and start
-yarn && yarn shopify
-
-# or just yarn start if you don't need to update backend code.
-
-# now your backend project is live in http://localhost:8080
+     sudo docker compose up -d
 ```
+
+**Copy the .env.example to .env**
+
+```bash
+    cp .env.example .env
+```
+
+**Install the Shopify CLI and make sure it in the newest version:**
+
+* [Install the Shopify CLI command line tool](https://shopify.dev/apps/tools/cli/installation)
+
+```bash
+    brew tap shopify/shopify
+    brew install shopify-cli
+    shopify version
+```
+
+**Update the .env file**
+
+```bash
+    SHOPIFY_API_KEY=
+    SHOPIFY_API_SECRET=
+    SHOP=your-shop.myshopify.com
+```
+
+**Install the dependencies and run `yarn shopify` command.**
+
+```bash
+    yarn && yarn shopify
+```
+
+**Start the pfcore:**
+
+```bash
+    yarn && yarn start
+```
+
+## Update your account to Premium
 
 Update new PageFly plan into database by go to: [http://localhost:3000/api/update-pf-plan](http://localhost:3000/api/update-pf-plan)
 
@@ -75,7 +91,7 @@ Next, in `pfcore/config`, copy `proxySetup.example.js` to `proxySetup.js` After 
 
 Now, <mark style="background-color:green;">`yarn start`</mark> in pfcore and you will get our app running in [http://localhost:3000](http://localhost:3000)
 
-### **Use missing lang tool**
+## **Use missing lang tool**
 
 ```
 # run in terminal
