@@ -1,7 +1,3 @@
----
-description: What forces layout / reflow /repaint
----
-
 # CSS Layout and reflow
 
 All of the below properties or methods, when requested/called in JavaScript, will trigger the browser to synchronously calculate the style and layout\*. This is also called reflow or [layout thrashing](http://www.kellegous.com/j/2013/01/26/layout-performance/), and is common performance bottleneck.
