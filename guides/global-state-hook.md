@@ -6,8 +6,6 @@ coverY: 0
 
 # Global State Hook
 
-{% embed url="https://www.npmjs.com/package/global-state-hook" %}
-
 ## How to use
 
 ### createSubscription(initialState)
