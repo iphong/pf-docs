@@ -2,6 +2,9 @@
 description: >-
   Step by step instructions for new developers to get started working on PageFly
   project.
+cover: >-
+  https://images.unsplash.com/photo-1537884944318-390069bb8665?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxOTcwMjR8MHwxfHNlYXJjaHw4fHxjb2RlfGVufDB8fHx8MTYzNTkwODIzOQ&ixlib=rb-1.2.1&q=85
+coverY: 0
 ---
 
 # Getting started
