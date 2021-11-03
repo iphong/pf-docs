@@ -2,12 +2,13 @@
 description: >-
   Step by step instructions for new developers to get started working on PageFly
   project.
-cover: >-
-  https://images.unsplash.com/photo-1537884944318-390069bb8665?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxOTcwMjR8MHwxfHNlYXJjaHw4fHxjb2RlfGVufDB8fHx8MTYzNTkwODIzOQ&ixlib=rb-1.2.1&q=85
-coverY: 0
 ---
 
 # Getting started
+
+{% hint style="info" %}
+To learn more about the PageFly product and all of its functionalities, read the documentations on [help.pagefly.io](https://help.pagefly.io)
+{% endhint %}
 
 {% hint style="info" %}
 \*\*This project bootstrapped by ejecting Create React App but still keep many functions from it, so you should take a look at \*\*[**CRA Docs**](https://create-react-app.dev/docs/getting-started/)
