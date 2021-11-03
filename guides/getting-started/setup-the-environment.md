@@ -33,10 +33,6 @@ yarn start
 The backend server requires **Redis** and **MongoDB** services and the **Shopify CLI** command line tool so make sure they are up and running on your local system.&#x20;
 {% endhint %}
 
-*
-
-Step to run the server:
-
 **Install Docker:**
 
 {% embed url="https://docs.docker.com/desktop/mac/install" %}
@@ -54,8 +50,6 @@ Step to run the server:
 ```
 
 **Install the Shopify CLI and make sure it in the newest version:**
-
-* [Install the Shopify CLI command line tool](https://shopify.dev/apps/tools/cli/installation)
 
 ```bash
     brew tap shopify/shopify
