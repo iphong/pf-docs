@@ -14,8 +14,3 @@
 * [Web Performance](guides/web-performance/README.md)
   * [What forces layout and reflow](guides/web-performance/css-layout-and-reflow.md)
   * [Web Rendering Performance](https://developers.google.com/web/fundamentals/performance/rendering)
-
-## Links
-
-* [React](https://reactjs.org/docs)
-* [Global State Hook](https://www.npmjs.com/package/global-state-hook)

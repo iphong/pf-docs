@@ -4,26 +4,26 @@
 
 {% hint style="info" %}
 Make sure you have **NodeJS** and **NPM** installed on your machine before continue
-
-* [Click here to download NodeJS](https://nodejs.org/en/download/)
 {% endhint %}
 
+{% embed url="https://nodejs.org/en/download" %}
+
+**Clone project source code**
+
 ```bash
-# clone this repo with SSH
-# make sure you setup the SSH in bitbucket setting
 git clone git@bitbucket.org:bravebits/pfcore.git
+```
 
-# go to cloned pfcore folder
+#### Then install the dependencies
+
+```bash
 cd pfcore
-
-# install the dependencies
 yarn install
+```
 
-# if you failed to install and the console is throwing permission issue, please chmod the node_modules:
-sudo chmod -R 777 node_modules
-# then yarn install again.
+#### Finally start the dev server
 
-# Start the app in port 3000
+```bash
 yarn start
 ```
 
@@ -33,42 +33,46 @@ yarn start
 The backend server requires **Redis** and **MongoDB** services and the **Shopify CLI** command line tool so make sure they are up and running on your local system.&#x20;
 {% endhint %}
 
-**Install Docker:**
-
 {% embed url="https://docs.docker.com/desktop/mac/install" %}
 
-**Run the docker compose to start mongodb and redis:**
+**Clone project source code**
 
 ```bash
-     sudo docker compose up -d
+git clone git@bitbucket.org:bravebits/pfcore.git
+```
+
+**Start mongodb and redis with docker-compose**
+
+```bash
+sudo docker compose up -d
 ```
 
 **Copy the .env.example to .env**
 
 ```bash
-    cp .env.example .env
+cp .env.example .env
 ```
 
 **Install the Shopify CLI and make sure it in the newest version:**
 
 ```bash
-    brew tap shopify/shopify
-    brew install shopify-cli
-    shopify version
+brew tap shopify/shopify
+brew install shopify-cli
+shopify version
 ```
 
 **Update the .env file**
 
 ```bash
-    SHOPIFY_API_KEY=
-    SHOPIFY_API_SECRET=
-    SHOP=your-shop.myshopify.com
+SHOPIFY_API_KEY=
+SHOPIFY_API_SECRET=
+SHOP=your-shop.myshopify.com
 ```
 
 **Install the dependencies and run `yarn shopify` command.**
 
 ```bash
-    yarn && yarn shopify
+yarn && yarn shopify
 ```
 
 **Start the pfcore:**
@@ -77,7 +81,7 @@ The backend server requires **Redis** and **MongoDB** services and the **Shopify
     yarn && yarn start
 ```
 
-## Update your account to Premium
+## Update your account
 
 Update new PageFly plan into database by go to: [http://localhost:3000/api/update-pf-plan](http://localhost:3000/api/update-pf-plan)
 
