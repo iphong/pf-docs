@@ -1,8 +1,8 @@
-# VSCode integration
+# Integrate with Macbook M1
 
 In VS Code add folder pfcore and pfserver to workspace
 
-![](<../.gitbook/assets/Screen Shot 2021-11-03 at 16.30.15.png>)
+![](<../../.gitbook/assets/Screen Shot 2021-11-03 at 16.30.15.png>)
 
 Then in the Run & Debug tab, create new configurations for each project fiolder as following:
 
@@ -105,7 +105,7 @@ Then in the Run & Debug tab, create new configurations for each project fiolder 
 
 #### Then select the configuration to run
 
-![](<../.gitbook/assets/Screen Shot 2021-11-03 at 16.49.01.png>)
+![](<../../.gitbook/assets/Screen Shot 2021-11-03 at 16.49.01.png>)
 
 #### Now press the play icon on your M1 Macbook
 

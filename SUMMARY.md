@@ -18,7 +18,8 @@
 * [Web Performance](guides/web-performance/README.md)
   * [What forces layout and reflow](guides/web-performance/css-layout-and-reflow.md)
   * [Web Rendering Performance](https://developers.google.com/web/fundamentals/performance/rendering)
-* [VSCode integration](guides/vscode-integration.md)
+* [Visual Studio Code](guides/visual-studio-code/README.md)
+  * [Integrate with Macbook M1](guides/visual-studio-code/integrate-with-macbook-m1.md)
 
 ## Reference
 
