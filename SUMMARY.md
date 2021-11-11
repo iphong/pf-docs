@@ -24,3 +24,7 @@
 ## Reference
 
 * [Components](reference/README.md)
+
+## Pricing API
+
+* [Migrate from Old Pricing API](pricing-api/migrate-from-old-pricing-api.md)

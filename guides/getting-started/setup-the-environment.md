@@ -30,7 +30,7 @@ yarn start
 ## Backend Server
 
 {% hint style="info" %}
-The backend server requires **Redis** and **MongoDB** services and the **Shopify CLI** command line tool so make sure they are up and running on your local system.&#x20;
+The backend server requires **Redis** and **MongoDB** services and the **Shopify CLI** command line tool so make sure they are up and running on your local system.
 {% endhint %}
 
 {% embed url="https://docs.docker.com/desktop/mac/install" %}
@@ -83,7 +83,7 @@ yarn && yarn shopify
 
 ## Update your account
 
-Update new PageFly plan into database by go to: [http://localhost:3000/api/update-pf-plan](http://localhost:3000/api/update-pf-plan)
+Update new PageFly plan into database by go to: [http://localhost:3000/api/seed-plan-db](http://localhost:3000/api/seed-plan-db)
 
 Next, in `pfcore/config`, copy `proxySetup.example.js` to `proxySetup.js` After that update the proxy information if needed.
 
