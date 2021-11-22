@@ -28,3 +28,8 @@
 ## Pricing API
 
 * [Migrate from Old Pricing API](pricing-api/migrate-from-old-pricing-api.md)
+* [API reference](pricing-api/api-reference/README.md)
+  * [Get List Plan](pricing-api/api-reference/get-list-plan.md)
+  * [Get List Add Ons](pricing-api/api-reference/get-list-add-ons.md)
+  * [Create Charge](pricing-api/api-reference/create-charge.md)
+  * [Calculate Analytic usage](pricing-api/api-reference/calculate-analytic-usage.md)
