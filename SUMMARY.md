@@ -33,3 +33,4 @@
   * [Get List Add Ons](pricing-api/api-reference/get-list-add-ons.md)
   * [Create Charge](pricing-api/api-reference/create-charge.md)
   * [Calculate Analytic usage](pricing-api/api-reference/calculate-analytic-usage.md)
+  * [Purchase Analytic Session Packages](pricing-api/api-reference/purchase-analytic-session-packages.md)
