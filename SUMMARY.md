@@ -25,6 +25,10 @@
 
 * [Components](reference/README.md)
 
+## API
+
+* [Events Bus](api/events-bus.md)
+
 ## Pricing API
 
 * [Migrate from Old Pricing API](pricing-api/migrate-from-old-pricing-api.md)
