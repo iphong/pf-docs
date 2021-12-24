@@ -1,5 +1,3 @@
-PF Server
-
 # PF Server
 
 ## Table of contents
