@@ -27,6 +27,8 @@
   * [Core API](references/events-api/core-api.md)
   * [EventSource API](references/events-api/eventsource-api.md)
   * [WebSocket API](references/events-api/websocket-api.md)
+* [Analytics API](references/analytics-api.md)
+* [Global Sections](references/global-sections.md)
 * [Global State Hook](references/global-state-hook.md)
 * [Web Components](references/web-components/README.md)
   * [Lit Element](references/web-components/lit-element/README.md)
