@@ -17,6 +17,8 @@
 
 ## References
 
+* [Page 2](references/page-2.md)
+* [GraphQL API](references/graphql-api.md)
 * [Pricing API](references/pricing-api/README.md)
   * [Get List Plan](references/pricing-api/get-list-plan.md)
   * [Get List Add Ons](references/pricing-api/get-list-add-ons.md)
