@@ -9,11 +9,11 @@
   * [Coding Standards](guides/getting-started/coding-standards.md)
   * [Commit your code](guides/getting-started/commit-your-code.md)
   * [Write your first element](guides/getting-started/write-your-first-element.md)
-* [Setup Environment](guides/setup-environment/README.md)
-  * [Integrate with Macbook M1](guides/setup-environment/integrate-with-macbook-m1.md)
 * [Improve Performance](guides/improve-performance/README.md)
   * [What forces layout and reflow](guides/improve-performance/css-layout-and-reflow.md)
   * [Web Rendering Performance](https://developers.google.com/web/fundamentals/performance/rendering)
+* [Setup Workspace](guides/setup-workspace/README.md)
+  * [Integrate with Macbook M1](guides/setup-workspace/integrate-with-macbook-m1.md)
 
 ## References
 
