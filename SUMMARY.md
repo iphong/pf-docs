@@ -36,5 +36,5 @@
     * [Lit Element Playground](https://lit.dev/playground/)
   * [PageFly examples](references/web-components/pagefly-examples.md)
 * Modules
-  * [pfcore][references/pfcore/README.md]
-  * [pfserver][references/pfserver/README.md]
+  * [pfcore](references/pfcore/README.md)
+  * [pfserver](references/pfserver/README.md)
