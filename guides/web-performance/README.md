@@ -4,10 +4,12 @@ cover: >-
 coverY: 0
 ---
 
-# Web Performance
+# Improve Performance
 
-{% swagger method="get" path="" baseUrl="" summary="" %}
-{% swagger-description %}
+{% content-ref url="css-layout-and-reflow.md" %}
+[css-layout-and-reflow.md](css-layout-and-reflow.md)
+{% endcontent-ref %}
 
-{% endswagger-description %}
-{% endswagger %}
+{% content-ref url="broken-reference" %}
+[Broken link](broken-reference)
+{% endcontent-ref %}

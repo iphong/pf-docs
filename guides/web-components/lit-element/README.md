@@ -4,11 +4,11 @@ Lit is a simple library for building fast, lightweight web components.
 
 At Lit's core is a boilerplate-killing component base class that provides reactive state, scoped styles, and a declarative template system that's tiny, fast and expressive.
 
-### What can I build with Lit? <a href="what-can-i-build-with-lit" id="what-can-i-build-with-lit"></a>
+### What can I build with Lit? <a href="#what-can-i-build-with-lit" id="what-can-i-build-with-lit"></a>
 
 You can build just about any kind of web UI with Lit!
 
-The first thing to know about Lit is that **every Lit component is a standard **[**web component**](https://developer.mozilla.org/en-US/docs/Web/Web\_Components). Web components have the superpower of interoperability: natively supported by browsers, web components can be used in any HTML environment, with any framework or none at all.
+The first thing to know about Lit is that \*\*every Lit component is a standard \*\*[**web component**](https://developer.mozilla.org/en-US/docs/Web/Web\_Components). Web components have the superpower of interoperability: natively supported by browsers, web components can be used in any HTML environment, with any framework or none at all.
 
 This makes Lit an ideal choice for developing **shareable components or design systems**. Lit components can be used across multiple apps and sites, even if those apps and sites are built on a variety of front-end stacks. Site developers using Lit components don’t need to write or even see any Lit code; they can just use the components the same way they do built-in HTML elements.
 
@@ -18,7 +18,7 @@ Of course, you can also build **highly interactive, feature-rich apps** out of L
 
 When you build an app with Lit, it’s easy to sprinkle in “vanilla” web components, or web components built with other libraries. You can even update to a major new version of Lit–or migrate to another library–one component at a time, without disrupting product development.
 
-### What is it like to develop with Lit? <a href="what-is-it-like-to-develop-with-lit" id="what-is-it-like-to-develop-with-lit"></a>
+### What is it like to develop with Lit? <a href="#what-is-it-like-to-develop-with-lit" id="what-is-it-like-to-develop-with-lit"></a>
 
 If you’ve done any modern, component-based web development, you should feel right at home with Lit. Even if you haven’t developed with components before, we think you’ll find Lit to be very approachable.
 
@@ -110,13 +110,10 @@ export class MyTimer extends LitElement {
 function pad(pad: unknown, val: number) {
   return pad ? String(val).padStart(2, '0') : val;
 }/* playground-fold-end */
-
 ```
 {% endtab %}
 
 {% tab title="index.html" %}
-
-
 ```html
 <!doctype html>
 <head><!-- playground-fold -->
@@ -136,20 +133,16 @@ function pad(pad: unknown, val: number) {
   <my-timer duration="60"></my-timer>
   <my-timer duration="300"></my-timer>
 </body>
-
 ```
 {% endtab %}
 
 {% tab title="icons.ts" %}
-
-
 ```typescript
 import {html} from 'lit';
 
 export const replay = html`<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><title>Replay</title><g><rect fill="none" height="24" width="24"/><rect fill="none" height="24" width="24"/><rect fill="none" height="24" width="24"/></g><g><g/><path d="M12,5V1L7,6l5,5V7c3.31,0,6,2.69,6,6s-2.69,6-6,6s-6-2.69-6-6H4c0,4.42,3.58,8,8,8s8-3.58,8-8S16.42,5,12,5z"/></g></svg>`;
 export const pause = html`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><title>Pause</title><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
 export const play = html`<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><title>Play</title><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 8.64L15.27 12 10 15.36V8.64M8 5v14l11-7L8 5z"/></svg>`;
-
 ```
 {% endtab %}
 {% endtabs %}
@@ -164,7 +157,7 @@ Some things to note:
 
 Lit doesn’t require compilation or building during development, so it can be used virtually tool-free if you prefer. First-class [IDE support](https://lit.dev/docs/tools/development/#ide-plugins) (code-completion, linting, etc.) and [tooling for production](https://lit.dev/docs/tools/production/) (localization, template minification, etc.) are readily available.
 
-### Why should I choose Lit? <a href="why-should-i-choose-lit" id="why-should-i-choose-lit"></a>
+### Why should I choose Lit? <a href="#why-should-i-choose-lit" id="why-should-i-choose-lit"></a>
 
 As we’ve already noted, Lit is a great choice for building all sorts of web UI, pairing the interop-based advantages of web components with a modern, ergonomic developer experience.
 

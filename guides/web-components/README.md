@@ -8,33 +8,33 @@ coverY: 0
 
 {% embed url="https://www.webcomponents.org" %}
 
-## What are web components? <a href="what-are-web-components" id="what-are-web-components"></a>
+## What are web components? <a href="#what-are-web-components" id="what-are-web-components"></a>
 
 Web components are a set of web platform APIs that allow you to create new custom, reusable, encapsulated HTML tags to use in web pages and web apps. Custom components and widgets build on the Web Component standards, will work across modern browsers, and can be used with any JavaScript library or framework that works with HTML.
 
 Web components are based on existing web standards. Features to support web components are currently being added to the HTML and DOM specs, letting web developers easily extend HTML with new elements with encapsulated styling and custom behavior.
 
-## Specifications <a href="specifications" id="specifications"></a>
+## Specifications <a href="#specifications" id="specifications"></a>
 
 Web components are based on four main specifications:
 
-### Custom Elements <a href="custom-elements" id="custom-elements"></a>
+### Custom Elements <a href="#custom-elements" id="custom-elements"></a>
 
 The [Custom Elements specification](https://w3c.github.io/webcomponents/spec/custom/) lays the foundation for designing and using new types of DOM elements.
 
-### Shadow DOM <a href="shadow-dom" id="shadow-dom"></a>
+### Shadow DOM <a href="#shadow-dom" id="shadow-dom"></a>
 
 The [shadow DOM specification](https://w3c.github.io/webcomponents/spec/shadow/) defines how to use encapsulated style and markup in web components.
 
-### ES Modules <a href="es-modules" id="es-modules"></a>
+### ES Modules <a href="#es-modules" id="es-modules"></a>
 
 The [ES Modules specification](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-module-system) defines the inclusion and reuse of JS documents in a standards based, modular, performant way.
 
-### HTML Template <a href="html-template" id="html-template"></a>
+### HTML Template <a href="#html-template" id="html-template"></a>
 
 The [HTML template element specification](https://html.spec.whatwg.org/multipage/scripting.html#the-template-element/) defines how to declare fragments of markup that go unused at page load, but can be instantiated later on at runtime.
 
-## How do I use a web component? <a href="how-do-i-use-a-web-component" id="how-do-i-use-a-web-component"></a>
+## How do I use a web component? <a href="#how-do-i-use-a-web-component" id="how-do-i-use-a-web-component"></a>
 
 The components on this site provide new HTML elements that you can use in your web pages and web applications.
 
@@ -55,7 +55,7 @@ mkdir my-new-app && cd my-new-app
 npm install --save @polymer/paper-button
 ```
 
-## How do I define a new HTML element? <a href="how-do-i-define-a-new-html-element" id="how-do-i-define-a-new-html-element"></a>
+## How do I define a new HTML element? <a href="#how-do-i-define-a-new-html-element" id="how-do-i-define-a-new-html-element"></a>
 
 This section describes the syntax for the cross-browser version of the Web Components specification.
 
@@ -87,7 +87,7 @@ document.querySelector('app-drawer').addEventListener('open', function() {...});
 </script>
 ```
 
-## Creating and using a shadow root <a href="creating-and-using-a-shadow-root" id="creating-and-using-a-shadow-root"></a>
+## Creating and using a shadow root <a href="#creating-and-using-a-shadow-root" id="creating-and-using-a-shadow-root"></a>
 
 This section describes the syntax for creating shadow DOM with the new cross-browser version (v1) of the shadow DOM specification. Shadow DOM is a new DOM feature that helps you build components. You can think of shadow DOM as a scoped subtree inside your element.
 
@@ -101,7 +101,7 @@ shadowRoot.innerHTML = '<h1>Hello Shadow DOM</h1>'; // Could also use appendChil
 // shadowRoot.host === header
 ```
 
-## Libraries for building web components <a href="libraries-for-building-web-components" id="libraries-for-building-web-components"></a>
+## Libraries for building web components <a href="#libraries-for-building-web-components" id="libraries-for-building-web-components"></a>
 
 Many libraries already exist that make it easier to build web components. [The libraries section](https://www.webcomponents.org/libraries) of the site has additional details but here are some you can try out:
 

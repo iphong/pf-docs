@@ -16,7 +16,7 @@ The function should be:
 let isOldPricing = ['pro', 'premuim', 'silver', 'gold', 'platinum'].includes(globalConfig.license
 ```
 
-## API Reference
+## API References
 
 {% content-ref url="get-list-plan.md" %}
 [get-list-plan.md](get-list-plan.md)
