@@ -21,20 +21,12 @@
 * [Visual Studio Code](guides/visual-studio-code/README.md)
   * [Integrate with Macbook M1](guides/visual-studio-code/integrate-with-macbook-m1.md)
 
-## Reference
+## API Reference
 
-* [Components](reference/README.md)
-
-## API
-
-* [Events Bus](api/events-bus.md)
-
-## Pricing API
-
-* [Migrate from Old Pricing API](pricing-api/migrate-from-old-pricing-api.md)
-* [API reference](pricing-api/api-reference/README.md)
-  * [Get List Plan](pricing-api/api-reference/get-list-plan.md)
-  * [Get List Add Ons](pricing-api/api-reference/get-list-add-ons.md)
-  * [Create Charge](pricing-api/api-reference/create-charge.md)
-  * [Calculate Analytic usage](pricing-api/api-reference/calculate-analytic-usage.md)
-  * [Purchase Analytic Session Packages](pricing-api/api-reference/purchase-analytic-session-packages.md)
+* [Pricing API](api-reference/pricing-api/README.md)
+  * [Get List Plan](api-reference/pricing-api/get-list-plan.md)
+  * [Get List Add Ons](api-reference/pricing-api/get-list-add-ons.md)
+  * [Create Charge](api-reference/pricing-api/create-charge.md)
+  * [Calculate Analytic usage](api-reference/pricing-api/calculate-analytic-usage.md)
+  * [Purchase Analytic Session Packages](api-reference/pricing-api/purchase-analytic-session-packages.md)
+* [Events Bus](api-reference/events-bus.md)
