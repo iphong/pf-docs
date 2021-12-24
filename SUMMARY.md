@@ -23,11 +23,11 @@
   * [Create Charge](references/pricing-api/create-charge.md)
   * [Calculate Analytic usage](references/pricing-api/calculate-analytic-usage.md)
   * [Purchase Analytic Session Packages](references/pricing-api/purchase-analytic-session-packages.md)
-* [Events API](references/events-api/README.md)
+* Events API
   * [Core API](references/events-api/core-api.md)
   * [EventSource API](references/events-api/eventsource-api.md)
   * [WebSocket API](references/events-api/websocket-api.md)
-* [Analytics API](references/analytics-api.md)
+* Analytics API
 * [Global Sections](references/global-sections.md)
 * [Global State Hook](references/global-state-hook.md)
 * [Web Components](references/web-components/README.md)
