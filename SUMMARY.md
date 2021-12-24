@@ -38,4 +38,4 @@
 
 ## Projects
 
-* [pfserver](projects/pfserver.md)
+* [pfserver](projects/pfserver/README.md)
