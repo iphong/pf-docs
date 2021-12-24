@@ -38,7 +38,7 @@
 
 ## Projects
 
-* [pfserver](projects/pfserver/README.md)
+* pfserver
   * [controllers/editor](projects/pfserver/modules/controllers_editor.md)
   * [controllers/notification](projects/pfserver/modules/controllers_notification.md)
   * [controllers/page](projects/pfserver/modules/controllers_page.md)
