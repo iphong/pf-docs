@@ -10,7 +10,16 @@
 
 Usage:&#x20;
 
-Same as the Create Charge function, after execute the `purchaseSessionPackage,` it will return a JSON data including the `confirmationUrl`. Next, redirect the app to that `confirmationUrl` then let users confirm the onetime charge.
+Same as the Create Charge function, after executing the `purchaseSessionPackage` function, it will return JSON data including the `confirmationUrl`. Next, redirect the app to that `confirmationUrl` then let users confirm the one-time charge.
+
+After confirming the charge, you will see the data like this in `globalConfig.license`
+
+![](<../../.gitbook/assets/Screen Shot 2022-01-24 at 11.11.26.png>)
 
 
 
+
+
+### Function `getAnalyticMonthToDateUsage`&#x20;
+
+Get the amount of session usage for this month.
