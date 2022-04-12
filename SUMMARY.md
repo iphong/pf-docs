@@ -36,3 +36,8 @@
     * [Lit Element Docs](https://lit.dev/docs)
     * [Lit Element Playground](https://lit.dev/playground/)
   * [PageFly examples](references/web-components/pagefly-examples.md)
+
+## App Design Documents
+
+* [Introduction](app-design-documents/introduction.md)
+* [Feature 1](app-design-documents/feature-1.md)
