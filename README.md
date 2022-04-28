@@ -22,8 +22,8 @@ To learn more about the PageFly product and all of its functionalities, read the
 [folder-structure.md](guides/getting-started/folder-structure.md)
 {% endcontent-ref %}
 
-{% content-ref url="guides/getting-started/coding-standards.md" %}
-[coding-standards.md](guides/getting-started/coding-standards.md)
+{% content-ref url="guides/readme/code-formatting.md" %}
+[code-formatting.md](guides/readme/code-formatting.md)
 {% endcontent-ref %}
 
 {% content-ref url="guides/getting-started/commit-your-code.md" %}
