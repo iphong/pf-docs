@@ -21,7 +21,7 @@ Let's explain a little bit:
 
 ### Configs for ESLint
 
-Create a config file `.eslintrc.js` on the root folder
+Create a config file `.eslintrc.js` in the root folder
 
 ```
 module.exports = {
@@ -57,7 +57,7 @@ module.exports = {
 
 ### Configs for Prettier
 
-Create a configs file `.prettierrc`
+Create a configs file `.prettierrc in the root folder`
 
 ```
 {
@@ -131,7 +131,9 @@ cd src/next && npx lint-staged
 
 :tada::tada::tada: **Enjoy the new code formatter** :tada::tada::tada:
 
-
+{% embed url="https://www.loom.com/share/84a812718f3b46ddbb027b98b19c3caf" %}
+Demo lint-staged Prettier
+{% endembed %}
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
