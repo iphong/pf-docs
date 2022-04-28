@@ -96,11 +96,13 @@ config
 ### Update `package.json`
 
 ```
-...
-"lint-staged": {
-  "**/*.{ts,tsx,js,jsx}": [
-    "prettier --write"
-  ]
+{
+  ...,
+  "lint-staged": {
+    "**/*.{ts,tsx,js,jsx}": [
+      "prettier --write"
+    ]
+  }
 }
 ```
 
@@ -110,7 +112,7 @@ This will format all staged files when you commit code
 
 Open `pre-commit` inside `.husky` folder (can be found in the project root)
 
-By default it should look like this
+By default, it should look like this
 
 ```
 #!/bin/sh
@@ -129,9 +131,11 @@ cd src/next && npx lint-staged
 
 :tada::tada::tada: **Enjoy the new code formatter** :tada::tada::tada:
 
-####
 
-#### In case you want to format code without commiting, you can follow this way:
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+#### In case you want to format code without committing or while coding, you can follow this way:
 
 ### Setup Prettier for your editor
 
@@ -139,17 +143,25 @@ cd src/next && npx lint-staged
 
 ![](<../../.gitbook/assets/image (1).png>)
 
-Shortcut:&#x20;
+{% hint style="info" %}
+Shortcut:
 
-* MacOS: `Shift + Option + F`
+* Mac: `Shift + Option + F`
 * Windows: `Shift + Alt + F`
+{% endhint %}
 
-####
+
 
 #### For Webstorm users, Prettier is default installed in your plugins, you just need to enable it to use
 
-* MacOS: `Ctrl + Option + L`
+{% hint style="info" %}
+Shortcut:
+
+* Mac: `Ctrl + Option + L`
 * Windows: ...
+{% endhint %}
+
+
 
 ## **Coding Styles**
 
