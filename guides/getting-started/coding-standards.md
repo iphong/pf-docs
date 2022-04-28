@@ -1,6 +1,6 @@
 # Code Formatting
 
-Here is how I setup Code Formatting for our projects, you don't have to do anything, just to get more knowledge when you have to setup a new project
+Here is how I setup Code Formatting for our projects, you don't have to do anything, just to get more knowledge so you know what to do when you have to setup for a new project
 
 ### Install dependencies
 
@@ -150,8 +150,6 @@ Shortcut:
 * Windows: `Shift + Alt + F`
 {% endhint %}
 
-
-
 #### For Webstorm users, Prettier is default installed in your plugins, you just need to enable it to use
 
 {% hint style="info" %}
@@ -160,8 +158,6 @@ Shortcut:
 * Mac: `Ctrl + Option + L`
 * Windows: ...
 {% endhint %}
-
-
 
 ## **Coding Styles**
 
