@@ -1,19 +1,155 @@
-# Coding Standards
+# Code Formatting
 
-## **Update on Jan 2022:**
+Here is how I setup Code Formatting for our projects, you don't have to do anything, just to get more knowledge when you have to setup a new project
 
-FLY, update lại `indentation rules` theo chuẩn quốc tế đang dùng ([https://github.com/airbnb/javascript#whitespace](https://github.com/airbnb/javascript#whitespace)) là 2 spaces.\
-Cách update như sau:\
-Với ae dùng VSCode thì cần cài 2 extensions: EditorConfig và ESLint, sau khi cài xong thì expect là VSCode sẽ follow theo configs ở file `.editorconfig` trong project luôn, trong trường hợp ko thấy apply thì cần kiểm tra lại xem có đang bật extension format nào khác ko.\
-Với ae dùng Webstorm thì cũng cần cài plugin Editorconfig và bật eslint trong phần Languages & Framework lên là đc.\
-Hiện tại với project `pfcore` thì sẽ chưa bắt buộc phải format lại code, cần update dần dần, để tránh việc format toàn bộ file, mọi người có thể sử dụng cách sau:\
-Khi đang edit 1 file trong webstorm, dùng tổ hợp `CMD+Option+Shift+L`, sẽ hiện lên bàng lựa chọn format option, chọn vào `Only VCS changed code`.\
-Ngoài ra nếu muốn format toàn bộ file với eslint thì có thể cài phím tắt ở webstorm như sau: Vào Preferences => tìm `fix eslint problems` => gán phím tắt.\
-Sau đó quay lại file edit và sử dụng phím tắt vừa tạo để format.![](broken-reference)
+### Install dependencies
 
-![CMD+Option+Shift+L](<../../.gitbook/assets/Screen Shot 2022-01-10 at 15.33.20.png>)
+In this project, we use Eslint and Prettier to check for bad syntax and bad formatting
 
-![Add eslint fix hotkey](<../../.gitbook/assets/Screen Shot 2022-01-10 at 15.39.40.png>)
+These packages must be installed as dev dependencies
+
+```
+pnpm i -D eslint eslint-config-prettier lint-staged prettier husky
+```
+
+Let's explain a little bit:
+
+* **ESLint**: Find and fix problems in your JavaScript code
+* **Prettier**: A code formatter that supports many languages and integrates with most editors
+* **lint-staged**: Run linters against staged git files and don't let 💩 slip into your code base!
+* **husky**: You can use it to **lint your commit messages**, **run tests**, **lint code**, etc... when you commit or push. Husky supports [all Git hooks](https://git-scm.com/docs/githooks).
+
+### Configs for ESLint
+
+Create a config file `.eslintrc.js` on the root folder
+
+```
+module.exports = {
+    extends: ['react-app', 'react-app/jest', 'prettier'],
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+        ecmaFeatures: {
+            jsx: true,
+        },
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+    },
+    plugins: ['react', '@typescript-eslint'],
+    rules: {
+        "jsx-a11y/anchor-is-valid": "off",
+        'max-len': [
+            'warn',
+            {
+                code: 360,
+            },
+        ],
+        'max-lines': [
+            'warn',
+            {
+                max: 480,
+                skipComments: true,
+            },
+        ],
+    },
+}
+
+```
+
+### Configs for Prettier
+
+Create a configs file `.prettierrc`
+
+```
+{
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 120,
+    "jsxSingleQuote": false,
+    "bracketSpacing": true,
+    "bracketSameLine": false,
+    "arrowParens": "avoid",
+    "singleAttributePerLine": false,
+    "useTabs": false,
+    "overrides": [
+        {
+            "files": "*.json",
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
+}
+```
+
+Create a file `.prettierignore` to ignore formatting code for some folders or files
+
+```
+# Ignore artifacts:
+build
+coverage
+public
+config
+```
+
+### Update `package.json`
+
+```
+...
+"lint-staged": {
+  "**/*.{ts,tsx,js,jsx}": [
+    "prettier --write"
+  ]
+}
+```
+
+This will format all staged files when you commit code
+
+### Setup husky
+
+Open `pre-commit` inside `.husky` folder (can be found in the project root)
+
+By default it should look like this
+
+```
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+```
+
+Add this line to run `lint-staged` before code commited
+
+```
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+cd src/next && npx lint-staged
+```
+
+:tada::tada::tada: **Enjoy the new code formatter** :tada::tada::tada:
+
+####
+
+#### In case you want to format code without commiting, you can follow this way:
+
+### Setup Prettier for your editor
+
+#### For Visual Studio Code users, please navigate to extensions install this extension
+
+![](<../../.gitbook/assets/image (1).png>)
+
+Shortcut:&#x20;
+
+* MacOS: `Shift + Option + F`
+* Windows: `Shift + Alt + F`
+
+####
+
+#### For Webstorm users, Prettier is default installed in your plugins, you just need to enable it to use
+
+* MacOS: `Ctrl + Option + L`
+* Windows: ...
 
 ## **Coding Styles**
 
@@ -23,21 +159,15 @@ ESLint with `react-app` rules
 
 And put it into `src/types` folder
 
-**Rule #2: Always format your code before committing.**
-
-This project is using pre-commit hooks to check if your code is valid and formatted or not, otherwise you cannot commit and push your code to the repository. So please make sure that your code is formatted and linted using ESlint before you commit.
-
-**Tips:** If you use Webstorm, please navigate to `Preferences` => `ESLint` and enable the ESLint. After that, go to `Keymap` and search for `Fix Eslint problems` and assign a shortcut to use.
-
-**Rule #3: Commenting your code**
+**Rule #2: Commenting your code**
 
 Please read this article to see how to documenting your code: https://react-styleguidist.js.org/docs/documenting.html
 
-**Rule #4: Write test for your code**
+**Rule #3: Write test for your code**
 
 Resource: https://jestjs.io/docs/en/getting-started.html
 
-**Rule #5: Separation of Concerns**
+**Rule #4: Separation of Concerns**
 
 * Do not write Logic, UI view, Data in one single file, we have to separate it into Components/Custom Hooks/ Stores,...
 * Limiting usage of state-full component since it storing data and View in one file. The better way to do it is using hook & custom hook.

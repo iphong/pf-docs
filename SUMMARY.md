@@ -7,7 +7,7 @@
   * [Useful tools](guides/readme/useful-tools.md)
   * [Technologies](guides/getting-started/technologies.md)
   * [Folder structure](guides/getting-started/folder-structure.md)
-  * [Coding Standards](guides/getting-started/coding-standards.md)
+  * [Code Formatting](guides/getting-started/coding-standards.md)
   * [Commit your code](guides/getting-started/commit-your-code.md)
   * [Write your first element](guides/getting-started/write-your-first-element.md)
 * [Improve Performance](guides/improve-performance/README.md)
