@@ -135,11 +135,9 @@ cd src/next && npx lint-staged
 Demo lint-staged Prettier
 {% endembed %}
 
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+### \[Optional] Setup Prettier for your editor
 
-#### In case you want to format code without committing or while coding, you can follow this way:
-
-### Setup Prettier for your editor
+In case you want to format code without committing or while coding, you can follow this way:
 
 #### For Visual Studio Code users, please navigate to extensions install this extension
 
