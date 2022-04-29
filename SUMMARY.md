@@ -31,6 +31,7 @@
 * [Analytics](references/analytics-api.md)
   * [Introduction](references/analytics-api/introduction.md)
   * [How analytics work](references/analytics-api/how-analytics-work.md)
+  * [Setup the environment](references/analytics-api/setup-the-environment.md)
   * [Project structure](references/analytics-api/project-structure.md)
   * [Analytics API](references/analytics-api/analytics-api.md)
 * [Global Sections](references/global-sections.md)
