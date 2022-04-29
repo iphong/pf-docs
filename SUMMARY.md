@@ -31,6 +31,7 @@
 * [Analytics](references/analytics-api.md)
   * [Introduction](references/analytics-api/introduction.md)
   * [How analytics work](references/analytics-api/how-analytics-work.md)
+  * [Analytics API](references/analytics-api/analytics-api.md)
 * [Global Sections](references/global-sections.md)
 * [Global State Hook](references/global-state-hook.md)
 * [Web Components](references/web-components/README.md)
