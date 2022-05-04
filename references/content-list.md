@@ -1,6 +1,8 @@
 # Content List
 
-Content list is written following event-driven architecture. Room is an object which is used to store element in Content List. Each room instance contains room Id array. This array stores all element id in this room. Room class has 3 main functions: add, remove and listen
+Content list is written following event-driven architecture. Room is an object which is used to store element in Content List. Each room instance contains room Id array. This array stores all element id in this room.&#x20;
+
+Room class has 3 main functions: add, remove and listen
 
 * add: add elementId into room
 * remove: remove elementId out of room
