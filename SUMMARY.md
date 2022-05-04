@@ -34,6 +34,7 @@
   * [Setup the environment](references/analytics-api/setup-the-environment.md)
   * [Project structure](references/analytics-api/project-structure.md)
   * [Analytics API](references/analytics-api/analytics-api.md)
+* [Content List](references/content-list.md)
 * [Global Sections](references/global-sections.md)
 * [Global State Hook](references/global-state-hook.md)
 * [Web Components](references/web-components/README.md)
