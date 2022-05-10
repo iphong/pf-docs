@@ -30,12 +30,12 @@ Trong quá trinh migrate, sẽ có thể có một số file ko thể migrate đ
 \
 \- Việc migrate sẽ tạo ra 1 link cdn mới cho image\
 \- File SVG vẫn có thể upload được lên Shopify cũng như PageFly thời điểm hiện tại, bài viết của Shopify bị outdate\
-\- Với video thì chỉ cho user upload thì chỉ cho user được upload từ máy của họ, ko thể có option upload từ url\
+\- Với video thì chỉ cho user upload từ máy của họ, ko thể có option upload từ url\
 \- Hiện tại Shopify chỉ cho update altText cho media, do vậy khi crop image, 1 image mới sẽ được tạo ra chứ ko thể thay thế image cũ \
-\- Sẽ có một số trường hợp server của Shopify ko download được image xuống, buộc user sẽ phải retry lại quá trình migrate cho các image đó. \
+\- Sẽ có một số trường hợp server của Shopify ko download được image xuống, buộc user sẽ phải retry lại quá trình migrate cho các image bị lỗi đó. \
 \- Sẽ có case resolution của image quá 20MP, khiến cho image ko thể migrate được\
 \
-\- Hiện nay Shopify ko hề có webhook hay 1 trigger cho sự thay đổi của file settings. Do vậy để có thể sync được data media giữa PF và Shopify, sẽ cần một khoảng thời gian chạy ngầm để lấy ra thông tin toàn bộ file trên Shopify, sau đó so sánh với data của PF để biết được là liêu có image nào bị xoá đi ko.\
+\- Hiện nay Shopify ko hề có webhook hay 1 trigger nào đưa ra tín hiệu có sự thay đổi của file settings . Do vậy để có thể sync được data media giữa PF và Shopify, sẽ buộc phải query đến Shopify để lấy ra thông tin tất cả các file trên Shopify, và cần một khoảng thời gian chạy ngầm để lấy ra thông tin đó. au đó so sánh với data của PF để biết được là liêu có image nào bị xoá đi ko.\
 &#x20;\=> Ở đây Shopify File Settings và Theme Customizer đều sử dụng navigation để tránh việc query lượng lớn file, khác hẳn với cách mà Media Manager của PF đang hoạt động.\
 \- Phần Trash của file sẽ có thời gian để xoá hẳn đi khỏi PF lẫn Shopify sau bao nhiêu ngày ko ?
 
