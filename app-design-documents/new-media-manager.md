@@ -4,10 +4,12 @@ description: Moving media manager from theme asset to dedicated environment(Shop
 
 # New media manager
 
-Vấn đề: PF hiện nay đang lưu image của merchant trong theme asset của họ. Việc này sẽ gây ra một vấn đề nghiêm trọng khi theme asset chứa các file image đó có thể bị xoá đi, khiến toàn bộ image sẽ bị mất. Do vậy cần tìm đến một môi trường khác để lưu data image của user => Shopify File Settings\
+<mark style="color:purple;">**Vấn đề:**</mark> \
+&#x20;       PF hiện nay đang lưu image của merchant trong theme asset của họ. Việc này sẽ gây ra một vấn đề nghiêm trọng khi theme asset chứa các file image đó có thể bị xoá đi, khiến toàn bộ image sẽ bị mất. Do vậy cần tìm đến một môi trường khác để lưu data image của user => Shopify File Settings\
 \
 \
-Mechanism: PF sẽ sử dụng Shopify Graphql API để upload image và video lên Shopify. Sau đó lưu lại id của các file được upload lên bởi PF trong . Sở dĩ cần lưu lại id của media lại trên PF db vì Shopify File API khá là hạn chế khi không cho edit displayName của file, mà chỉ có thể update altText của media. \
+<mark style="color:purple;">**Mechanism:**</mark> \
+&#x20;    PF sẽ sử dụng Shopify Graphql API để upload image và video lên Shopify. Sau đó lưu lại id của các file được upload lên bởi PF trong . Sở dĩ cần lưu lại id của media lại trên PF db vì Shopify File API khá là hạn chế khi không cho edit displayName của file, mà chỉ có thể update altText của media. \
 \
 &#x20;  \- Bắt buộc user phải accept  về `read_files` và `write_files`. \
 \
@@ -24,7 +26,7 @@ Trong quá trinh migrate, sẽ có thể có một số file ko thể migrate đ
 &#x20;  \- Các file SVG, MOV, MP4 thuộc GenericFile theo Shop\
 &#x20;  &#x20;
 
-&#x20;   Note dành cho design: \
+&#x20;<mark style="color:purple;">**Note dành cho design:**</mark> \
 \
 \- Việc migrate sẽ tạo ra 1 link cdn mới cho image\
 \- File SVG vẫn có thể upload được lên Shopify cũng như PageFly thời điểm hiện tại, bài viết của Shopify bị outdate\
