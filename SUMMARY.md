@@ -46,4 +46,5 @@
 ## App Design Documents
 
 * [Introduction](app-design-documents/introduction.md)
+* [New media manager](app-design-documents/new-media-manager.md)
 * [Feature 1](app-design-documents/feature-1.md)
