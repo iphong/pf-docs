@@ -35,7 +35,7 @@ Trong quá trinh migrate, sẽ có thể có một số file ko thể migrate đ
 \- Sẽ có một số trường hợp server của Shopify ko download được image xuống, buộc user sẽ phải retry lại quá trình migrate cho các image bị lỗi đó. \
 \- Sẽ có case resolution của image quá 20MP, khiến cho image ko thể migrate được\
 \
-\- Hiện nay Shopify ko hề có webhook hay 1 trigger nào đưa ra tín hiệu có sự thay đổi của file settings . Do vậy để có thể sync được data media giữa PF và Shopify, sẽ buộc phải query đến Shopify để lấy ra thông tin tất cả các file trên Shopify, và cần một khoảng thời gian chạy ngầm để lấy ra thông tin đó. au đó so sánh với data của PF để biết được là liêu có image nào bị xoá đi ko.\
-&#x20;\=> Ở đây Shopify File Settings và Theme Customizer đều sử dụng navigation để tránh việc query lượng lớn file, khác hẳn với cách mà Media Manager của PF đang hoạt động.\
-\- Phần Trash của file sẽ có thời gian để xoá hẳn đi khỏi PF lẫn Shopify sau bao nhiêu ngày ko ?
+\- Hiện nay Shopify ko hề có webhook hay 1 trigger nào đưa ra tín hiệu có sự thay đổi của file settings . Do vậy để có thể sync được data media giữa PF và Shopify, sẽ buộc phải query đến Shopify để lấy ra thông tin tất cả các file trên Shopify, và cần một khoảng thời gian chạy ngầm để lấy ra thông tin đó. Sau đó so sánh với data của PF để biết được là liêu có image nào bị xoá đi ko.\
+&#x20; \=> Ở đây Shopify File Settings và Theme Customizer đều sử dụng navigation để tránh việc query lượng lớn file, khác hẳn với cách mà Media Manager của PF đang hoạt động.\
+\- Phần Trash của file sẽ có thời gian để xoá hẳn đi khỏi PF lẫn Shopify sau bao nhiêu ngày ko ?&#x20;
 
