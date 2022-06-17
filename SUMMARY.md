@@ -15,6 +15,7 @@
   * [Web Rendering Performance](https://developers.google.com/web/fundamentals/performance/rendering)
 * [Setup Workspace](guides/setup-workspace/README.md)
   * [Integrate with Macbook M1](guides/setup-workspace/integrate-with-macbook-m1.md)
+* [Review a pull request](guides/review-a-pull-request.md)
 
 ## References
 
