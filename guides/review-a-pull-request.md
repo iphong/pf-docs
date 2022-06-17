@@ -16,7 +16,7 @@ description: This describes how a pull request should be handled
 * Mr. Silver will be the **main reviewer**
 * Within 2 hours (in working hours) since the time the PR is created, there should be an update
 * If a PR takes a long time to handle, there will be a comment of **reviewing** from the main reviewer
-* If a PR needs a demo, or complex, a review session is needed then PR owner shall proactively come to the lab ASAP to have the PR review. If failed, the PR will be declined after 4 hours.
+* If a PR needs a demo, or complex, a review session is needed then PR owner shall proactively come to the lab ASAP to have the PR review. If failed, the PR will be **declined** after 4 hours.
 * Sometimes, other core members (Dung, Duong and Kevin) will be added to review your code
 * If the PR is good, it will be approved
 
