@@ -101,3 +101,5 @@ Run `yarn uitest` to execute your code
 \---
 
 And that's it, you may have a look at the file `basic-dnd.test.js`
+
+Demo [here](https://www.loom.com/share/2190d8a85bde4f3286a95372934a9c20)
