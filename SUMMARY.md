@@ -16,6 +16,11 @@
 * [Setup Workspace](guides/setup-workspace/README.md)
   * [Integrate with Macbook M1](guides/setup-workspace/integrate-with-macbook-m1.md)
 * [Review a pull request](guides/review-a-pull-request.md)
+* [Testing in PageFly](guides/testing-in-pagefly/README.md)
+  * [Unit Tests](guides/testing-in-pagefly/unit-tests/README.md)
+    * [Add an Unit Test](guides/testing-in-pagefly/unit-tests/add-an-unit-test.md)
+  * [Automation Tests](guides/testing-in-pagefly/automation-tests/README.md)
+    * [Add an automation test](guides/testing-in-pagefly/automation-tests/add-an-automation-test.md)
 
 ## References
 
