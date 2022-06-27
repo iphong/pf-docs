@@ -18,6 +18,10 @@ The configuration is minimal and the starting procedure is somewhat easy to foll
 
 #### Step 0, Prerequisites
 
+* Close Chrome and start the debug mode by running this in terminal app
+  * `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222`&#x20;
+  * `get the ws id and replace the value below`&#x20;
+  * `const wsChromeEndpointUrl = 'ws://127.0.0.1:9222/devtools/browser/72466de8-3e60-4500-924b-487158db1d77'`
 * Start `pfserver` and `pfcore`
 * Create the file namely format like `your-test-name.test.js` inside the `/instrumental` folder
 * This must be `js` file because it's not transpiled by babel and webpack. It's shipped with pure JS
@@ -30,15 +34,15 @@ The configuration is minimal and the starting procedure is somewhat easy to foll
 it('A simple test that ensure the app is running', () => {})
 ```
 
-* The mouse moving function has a fixed variable between the puppeteer mouse and the actual mouse and this configuration is made for fullscreen mode. Let's start the browser **fullscreen** with puppeteer
+* The mouse moving function has a fixed variable between the puppeteer mouse and the actual mouse
 * The viewport is standard and needed to be exactly the same
 
 ```
-const browser = await puppeteer.launch({ 
-  headless: false, 
-  args: ['--start-fullscreen'], 
-  slowMo: 300 
-})
+  const browser = await puppeteer.connect({
+      browserWSEndpoint: wsChromeEndpointUrl,
+      defaultViewport: null,
+      slowMo: 300,
+  });
   const page = await browser.newPage()
 
   // Installs the helper to the page. Mouse will be visible in the subsequent navigation.
@@ -53,25 +57,24 @@ const browser = await puppeteer.launch({
 
 ```
 await page.goto(
-    `http://localhost:3000/editor?type=page&id=004c3bec-550b-4bff-a3e1-3123c8db15c2`,
+    'https://wip.pagefly.io/editor?id=8af35425-007f-4968-b9b5-0d316eb2a782',
     {waitUntil: 'load', timeout: 0}
   )
 ```
 
-* We setup the `localhost:3000` as a test domain so that it skips the authentication, you should use the link above with the same configuration for an optimal performance
-
 #### Step 3, perform life-like actions
 
 ```
-await page.click('[data-testid="basic-element-catalog"]')
-await delay(1000) // wait for the click finishes and the view updates
-await dragAndDropWithSelector(page,'[id$="Layout-popup"] [data-testid="catalog-item-1"]', '--iframe-- #editor-dnd-wrapper')
-await page.click('[data-testid="basic-element-catalog"]')
-await delay(1000)
-await page.click('[data-testid="submenu-Heading"]')
-await delay(1000)
-await dragAndDropWithSelector(page,'[id$="Heading-popup"] [data-testid="catalog-item-1"]', '--iframe-- .pf-4_')
-await dragAndDropWithSelector(page, '--iframe-- [data-pf-type="Heading"]', '--iframe-- [data-pf-type="Column"]')
+  await page.waitForSelector('[data-testid="basic-element-catalog"]')
+  await page.click('[data-testid="basic-element-catalog"]')
+  await page.waitForSelector('[id$="Layout-popup"] [data-testid="catalog-item-1"]')
+  await dragAndDropWithSelector(page,'[id$="Layout-popup"] [data-testid="catalog-item-1"]', '--iframe-- #editor-dnd-wrapper')
+  await page.click('[data-testid="basic-element-catalog"]')
+  await page.waitForSelector('[data-testid="submenu-Heading"]')
+  await page.click('[data-testid="submenu-Heading"]')
+  await page.waitForSelector('[id$="Heading-popup"] [data-testid="catalog-item-1"]')
+  await dragAndDropWithSelector(page,'[id$="Heading-popup"] [data-testid="catalog-item-1"]', '--iframe-- .pf-4_')
+  await dragAndDropWithSelector(page, '--iframe-- [data-pf-type="Heading"]', '--iframe-- [data-pf-type="Column"]')
 ```
 
 * `dragAndDropWithSelector` will move the queried element to the targeted queried position
