@@ -30,8 +30,8 @@ To learn more about the PageFly product and all of its functionalities, read the
 [commit-your-code.md](guides/getting-started/commit-your-code.md)
 {% endcontent-ref %}
 
-{% content-ref url="guides/getting-started/write-your-first-element.md" %}
-[write-your-first-element.md](guides/getting-started/write-your-first-element.md)
+{% content-ref url="guides/readme/write-your-first-element/" %}
+[write-your-first-element](guides/readme/write-your-first-element/)
 {% endcontent-ref %}
 
 ***
