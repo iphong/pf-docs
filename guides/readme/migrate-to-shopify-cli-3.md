@@ -8,7 +8,7 @@ description: Updated version currently on development branch only
 
 #### Step 1
 
-pull the latest code and run `yarn install` to install Shopify CLI libs
+Pull the latest code from `pfserver` `development` branch and run `yarn install` to install Shopify CLI libs
 
 #### Step 2
 

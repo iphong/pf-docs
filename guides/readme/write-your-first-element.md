@@ -74,7 +74,7 @@ export const StyledDemo = styled.div<any>`
 `
 ```
 
-## &#x20;Define Inspector View
+## Define Inspector View
 
 An inspector view show selected element settings and configurations.
 
