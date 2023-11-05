@@ -40,5 +40,5 @@ Trong quá trinh migrate, sẽ có thể có một số file ko thể migrate đ
 \- Phần Trash của file sẽ có thời gian để xoá hẳn đi khỏi PF lẫn Shopify sau bao nhiêu ngày ko ?&#x20;
 
 &#x20; <mark style="color:purple;">**Note dành cho developer:**</mark>\
-\- **** Theo như thống nhất với designer, PageFly theme asset sẽ không bị xoá thời điểm hiện tại. Do PageFly theme asset còn lưu cả capture image từ page và section. Nếu trong lúc implement, team có phương án lưu trữ lượng ảnh capture đó ở 1 nơi khác thì có thể cân nhắc đến việc xoá PageFly theme asset   \
+\- Theo như thống nhất với designer, PageFly theme asset sẽ không bị xoá thời điểm hiện tại. Do PageFly theme asset còn lưu cả capture image từ page và section. Nếu trong lúc implement, team có phương án lưu trữ lượng ảnh capture đó ở 1 nơi khác thì có thể cân nhắc đến việc xoá PageFly theme asset   \
 \- Please make sure you always read Shopify changelog to know which field is deprecated. This docs was written on version 2022-04 :) And update shopifyApiVersion on pfserver too&#x20;

@@ -3,6 +3,7 @@
 ## Guides
 
 * [Getting started](README.md)
+  * [Understanding Features](guides/readme/understanding-features.md)
   * [Setup the environment](guides/getting-started/setup-the-environment.md)
   * [Useful tools](guides/readme/useful-tools.md)
   * [Technologies](guides/getting-started/technologies.md)

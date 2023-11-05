@@ -19,7 +19,7 @@ Pull the latest code from `pfserver` `development` branch and run `yarn install`
 
 Under `pfserver` root folder
 
-Run `yarn dev-shopify --tunnel-url {YOUR_NGROK_URL}:3000` to start the backend. An example of the full command is `yarn dev-shopify --tunnel-url` [`https://0481-1-53-240-22.ngrok.io:3000`](https://0481-1-53-240-22.ngrok.io)``
+Run `yarn dev-shopify --tunnel-url {YOUR_NGROK_URL}:3000` to start the backend. An example of the full command is `yarn dev-shopify --tunnel-url` [`https://0481-1-53-240-22.ngrok.io:3000`](https://0481-1-53-240-22.ngrok.io)
 
 That's it
 

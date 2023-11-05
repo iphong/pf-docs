@@ -12,7 +12,7 @@ After Select the plan and click continue, use the function `createCharge` to sta
 * `addOns`: Array\<AddOnName> - Array of additional Add on, for example: `['BLOG_ADDON']`
 * coupon: String - The coupon code, for example: `PFXXXXXXXX`
 
-``
+
 
 #### Return data:
 
