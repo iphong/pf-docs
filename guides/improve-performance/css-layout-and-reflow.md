@@ -1,4 +1,4 @@
-# CSS Layout and reflow
+# What forces layout and reflow
 
 All of the below properties or methods, when requested/called in JavaScript, will trigger the browser to synchronously calculate the style and layout\*. This is also called reflow or [layout thrashing](http://www.kellegous.com/j/2013/01/26/layout-performance/), and is common performance bottleneck.
 
@@ -101,7 +101,7 @@ Use the "chromium source tree link" below to explore on your own!
   2. Use DevTools Performance Panel to see where this happens. You may be surprised to see how often your app code and library code hits this.
   3. Batch your writes & reads to the DOM (via [FastDOM](https://github.com/wilsonpage/fastdom) or a virtual DOM implementation). Read your metrics at the begininng of the frame (very very start of `rAF`, scroll handler, etc), when the numbers are still identical to the last time layout was done.
 
-&#x20;_Timeline trace of The Guardian. Outbrain is forcing layout repeatedly, probably in a loop._
+_Timeline trace of The Guardian. Outbrain is forcing layout repeatedly, probably in a loop._
 
 ![](https://cloud.githubusercontent.com/assets/39191/10144107/9fae0b48-65d0-11e5-8e87-c9a8e999b064.png)
 
@@ -129,4 +129,3 @@ Use the "chromium source tree link" below to explore on your own!
 * [web performance for the curious](https://www.igvita.com/slides/2012/web-performance-for-the-curious/)
 * [Jank Free](http://jankfree.org)
 
-***
