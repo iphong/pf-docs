@@ -26,7 +26,7 @@ description: >-
 
 * <mark style="color:blue;">Always create your PR with no commits behind the destination branch (Reviewer will check at the moment your PR is created)</mark>
 
-<figure><img src="../.gitbook/assets/Screenshot 2023-11-12 at 16.38.42.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Screenshot 2023-11-12 at 16.38.42.png" alt=""><figcaption></figcaption></figure>
 
 <mark style="color:blue;">**Mindset**</mark>
 
