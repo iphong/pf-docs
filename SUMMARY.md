@@ -20,6 +20,7 @@
 * [Review a pull request](guides/review-a-pull-request/README.md)
   * [Reviewing PR checklist](guides/review-a-pull-request/reviewing-pr-checklist.md)
 * [Resolving issues guidelines](guides/resolving-issues-guidelines.md)
+* [Integrating with 3rd-party apps](guides/integrating-with-3rd-party-apps.md)
 * [Testing in PageFly](guides/testing-in-pagefly/README.md)
   * [Unit Tests](guides/testing-in-pagefly/unit-tests/README.md)
     * [Add an Unit Test](guides/testing-in-pagefly/unit-tests/add-an-unit-test.md)
