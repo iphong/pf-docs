@@ -129,3 +129,4 @@ _Timeline trace of The Guardian. Outbrain is forcing layout repeatedly, probably
 * [web performance for the curious](https://www.igvita.com/slides/2012/web-performance-for-the-curious/)
 * [Jank Free](http://jankfree.org)
 
+***
