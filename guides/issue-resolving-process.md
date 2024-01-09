@@ -36,9 +36,7 @@ After understanding the problem, some developers start coding the very first ide
 
 Developers should find as many solutions as possible before writing the first line of code. If the time is limited, try to find at least two solutions.
 
-Regarding finding solutions, I heard some junior developers say that finding one solution is not easy, let alone finding many solutions.
-
-Usually, people make decisions based on facts. This way is called convergent thinking which involves finding one solution that is usually based on logic and linear thinking.
+Regarding finding solutions, usually, people make decisions based on facts. This way is called convergent thinking which involves finding one solution that is usually based on logic and linear thinking.
 
 In the opposite of convergent thinking, by looking at a situation from a unique perspective we may experience a “light-bulb” moment that inspires a unique solution. This can lead to a simple fix to a simple problem like using a coin to tighten a screw. This way is called _**divergent thinking**_.
 
@@ -50,11 +48,11 @@ Look at the image above, the concept of divergent thinking is to ask questions f
 
 In software development, a simple solution can save a lot of coding, understanding, and debugging hours. Not only for the developer who implements it but also for another developer who maintains it later.
 
-When developing a new feature, I would suggest the simplest solution is a solution that is independent, reusable and does not affect other functionalities of the application.
+When developing a new feature, I would suggest the simplest solution is a solution that is independent, reusable, and does not affect other functionalities of the application.
 
 When fixing a bug, the simplest solution must ensure a thorough fix without creating unnecessary new structures or mechanisms and not generating similar new code in different places.
 
-Remember the image that compares divergent thinking with convergent thinking included in step 3. Now it’s time to use convergent thinking. Use facts such as simplicity, modularity, reusable, and “do no harm” to make the final decision.
+Remember the image that compares divergent thinking with convergent thinking included in step 3. Now it’s time to use _**convergent thinking**_. Use facts such as simplicity, modularity, reusable, and “do no harm” to make the final decision.
 
 If you see more than one simple solution, estimate the total number of lines of code. A solution that requires fewer lines of code is the better solution.
 
@@ -76,9 +74,9 @@ Fail soon, fix soon, no bugs slip out. So, smile when it fails!
 
 It's time to feel free to write code. However, don't rely on automatic formatting. Instead, write each line of code yourself that complies with the coding standards. It shows your seriousness. When you are serious, bugs are more likely to be seen as soon as you write code. The [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) is a good coding standard to follow.
 
-When coding your solution, it is important to pay attention to the three aspects Separation of concerns (SoC), Keep it simple, stupid (KISS), and Don’t Repeat Yourself (DRY) as described below.
+When coding your solution, it is important to pay attention to the three aspects _**Separation of concerns (SoC)**_, _**Keep it simple, stupid (KISS)**_, and _**Don’t Repeat Yourself (DRY)**_ as described below.
 
-Separation of concerns (SoC) is a concept that each component or module should be independent and responsible for a single part of the functionality. It does not mean you need one component or module for each function. The intention is to ensure that you don’t have universal objects that do everything and, hence, are sensitive to change.
+_**Separation of concerns (SoC)**_ is a concept that each component or module should be _**independent**_ and responsible for a single part of the functionality. It does not mean you need one component or module for each function. The intention is to ensure that you don’t have universal objects that do everything and, hence, are sensitive to change.
 
 Let's take a simple webpage as an example:
 
@@ -247,7 +245,7 @@ export function deletePage(id: any): Promise<any> {
 
 For more details about the separation of concerns concept, I recommend you read the following articles: [Separation of Concerns The Simple Way](https://dev.to/tamerlang/separation-of-concerns-the-simple-way-4jp2), [Separation of Concerns in Node.js](https://www.infoq.com/articles/separation-concerns-nodejs/)
 
-Keep it simple, stupid (KISS) is a design principle that states that designs or systems should be as simple as possible. Simplicity guarantees acceptance and usability. Simplicity also prevents unwanted side effects or potential bugs.
+_**Keep it simple, stupid (KISS)**_ is a design principle that states that designs or systems should be as _**simple**_ as possible. Simplicity guarantees acceptance and usability. Simplicity also prevents unwanted side effects or potential bugs.
 
 Developers should write code as simply as possible. A line of code using nested ternaries or more than two operators, conditions, or function calls becomes complex. It should be split into multiple lines of code.
 
@@ -608,7 +606,7 @@ export const useCustomCodeEditor = () => {
 
 For more details about simplicity in programming, I recommend you read the following articles: [The Power of Simplicity in Code](https://www.audero.it/blog/2016/08/03/power-simplicity-code/), [Simplify Your Code: The Power of the KISS Principle in JavaScript](https://medium.com/@ksekwamote/keep-it-simple-stupid-how-it-applies-in-javascript-113b1c4e77a8)
 
-Don’t Repeat Yourself (DRY) is about modularity and reusable. Code repeats in more than two places, even only one line, should be converted to a reusable function. You might see it as a waste of time and unnecessary. However, imagine if that line of code needs to be updated. If you convert it to a reusable function, you can alter it in just one place. It will save time and help prevent bugs.
+_**Don’t Repeat Yourself (DRY)**_ is about _**modularity**_ and _**reusable**_. Code repeats in more than two places, even only one line, should be converted to a reusable function. You might see it as a waste of time and unnecessary. However, imagine if that line of code needs to be updated. If you convert it to a reusable function, you can alter it in just one place. It will save time and help prevent bugs.
 
 {% tabs %}
 {% tab title="Don't" %}
