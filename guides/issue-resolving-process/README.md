@@ -72,6 +72,8 @@ Fail soon, fix soon, no bugs slip out. So, smile when it fails!
 
 ## 5. Start coding
 
+**Important**: Make sure you setup your branch properly by following this [guideline](https://app.gitbook.com/o/-LALY4wpRdbiKWEAUz1H/s/4dRlrcbGMohh9Je45HcP/\~/changes/100/guides/resolving-issues-guidelines/create-your-first-good-pull-request)
+
 It's time to feel free to write code. However, don't rely on automatic formatting. Instead, write each line of code yourself that complies with the coding standards. It shows your seriousness. When you are serious, bugs are more likely to be seen as soon as you write code. The [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) is a good coding standard to follow.
 
 When coding your solution, it is important to pay attention to the three aspects Separation of concerns (SoC), Keep it simple, stupid (KISS), and Don’t Repeat Yourself (DRY) as described below.
