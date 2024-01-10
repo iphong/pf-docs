@@ -36,8 +36,8 @@
     * [Storage mechanism](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/storage-mechanism.md)
     * [Dynamic render](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/dynamic-render.md)
     * [Refactor UI components](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-ui-components.md)
-    * [Refactor editor elements](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-editor-elements.md)
-    * [Refactor inspector controls](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-inspector-controls.md)
+    * [Refactor the editor module](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-the-editor-module.md)
+    * [Refactor the inspector module](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-the-inspector-module.md)
   * [Conclusion](guides/refactor-pagefly-applying-oop/conclusion.md)
   * [References](guides/refactor-pagefly-applying-oop/references.md)
 
