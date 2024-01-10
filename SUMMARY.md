@@ -29,7 +29,17 @@
     * [Add an Unit Test](guides/testing-in-pagefly/unit-tests/add-an-unit-test.md)
   * [Automation Tests](guides/testing-in-pagefly/automation-tests/README.md)
     * [Add an automation test](guides/testing-in-pagefly/automation-tests/add-an-automation-test.md)
-* [Refactor PageFly applying OOP](guides/refactor-pagefly-applying-oop.md)
+* [Refactor PageFly applying OOP](guides/refactor-pagefly-applying-oop/README.md)
+  * [The concept of object-oriented programming (OOP)](guides/refactor-pagefly-applying-oop/the-concept-of-object-oriented-programming-oop.md)
+  * [Apply the OOP concept to refactor PageFly](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/README.md)
+    * [Directory structure](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/directory-structure.md)
+    * [Storage mechanism](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/storage-mechanism.md)
+    * [Dynamic render](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/dynamic-render.md)
+    * [Refactor UI components](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-ui-components.md)
+    * [Refactor editor elements](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-editor-elements.md)
+    * [Refactor inspector controls](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-inspector-controls.md)
+  * [Conclusion](guides/refactor-pagefly-applying-oop/conclusion.md)
+  * [References](guides/refactor-pagefly-applying-oop/references.md)
 
 ## References
 
