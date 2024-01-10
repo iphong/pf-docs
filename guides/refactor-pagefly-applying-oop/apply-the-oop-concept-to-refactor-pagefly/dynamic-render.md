@@ -19,7 +19,7 @@ function Dashboard() {
 
 In the example above, when rendering the `Dashboard` component, the `Render` component will look for the declaration file of the `DashboardOnboarding` component and dynamically load it if not loaded before. While loading the declaration file, the `Render` component will render the content provided for the `preRenderPlaceholder` property. If the declaration file is loaded before, the `Render` component will render the `DashboardOnboarding` component immediately.
 
-To dynamically render a React component using the `Render` component, you will need to define a mapping from the component name to its declaration file path in the `components` object declared in the `includes/loaders/components.ts` file. The content of that file is similar to the following.
+To dynamically render a React component using the `Render` component, you need to define a mapping from the component name to its declaration file path in the `components` object declared in the `includes/loaders/components.ts` file. The content of that file is similar to the following.
 
 ```javascript
 const components: StringToReactComponentMapping = {

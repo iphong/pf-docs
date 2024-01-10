@@ -37,9 +37,9 @@ export default class Component<P, S> extends PureComponent<P & ComponentProps, S
 }
 ```
 
-Every UI component should _**extend**_ the base `Component` class and _**override**_ the `render` method of the base class to display real content. A subclass also can override either the `propsToState` or `storageToStage` property to direct the base class to initialize its behavior.
+Every UI component should _**extend**_ the base `Component` class and _**override**_ the `render` method of the base class to display appropriate content. A subclass also can override either the `propsToState` or `storageToStage` property to direct the base class to initialize its behavior.
 
-If a subclass overrides other methods in the base class, it should manually call the original methods using the `super` keyword for proper initialization and reactivation.
+If a subclass overrides other methods in the base class, it should manually call the original methods using the `super` keyword for proper initialization, reactivation, and destruction.
 
 Below is an interface of the component for rendering the cookie consent bar after refactoring.
 
@@ -203,7 +203,25 @@ export default ComponentCookieConsentBar
 {% endtab %}
 {% endtabs %}
 
-Currently, PageFly strongly relies on hooks and contexts to work as intended. So, I've created two functions, `adaptHooks` and `adaptContexts`, to support passing hooks and contexts to a React component class.
+When a subclass overrides the static `propsToState` property to customize the initial behavior, it should also declare the static method `getDerivedStateFromProps`. React will call this method to update the internal state of a component class according to changes in the properties passed to that component when rendering.
+
+However, when executing the `getDerivedStateFromProps` method, React does not keep the original context of the method. Because of this behavior, the base class does not implement the static method `getDerivedStateFromProps` in its interface. A subclass of the base `Component` class should implement the `getDerivedStateFromProps` as follows.
+
+```javascript
+class ComponentCookieConsentBarClass extends Component<ComponentCookieConsentBarProps, ComponentCookieConsentBarState> {
+  // Map component props to state.
+  static propsToState: StringMapping = {
+    'hooks.cookieConsent.cookiesState': 'cookiesState',
+    'hooks.cookieConsent.gaTrackingState': 'gaTrackingState',
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    return ExtObject.createByPathMapping(props, ComponentCookieConsentBarClass.propsToState, state)
+  }
+}
+```
+
+Currently, PageFly strongly relies on hooks and contexts to work as intended. So, I've created `adaptHooks` and `adaptContexts` functions to support passing hooks and contexts to a React component class.
 
 As you can see, the `ComponentCookieConsentBar` above is created by calling the `adaptHooks` function to pass the results of the `useModal`, `useBreakpoints`, `useTranslation`, and `useCookieConsent` hooks to the component class.
 
