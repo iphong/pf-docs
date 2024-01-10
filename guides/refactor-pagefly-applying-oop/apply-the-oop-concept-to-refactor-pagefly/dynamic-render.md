@@ -1,8 +1,10 @@
 # Dynamic render
 
-The current code of PageFly is not _**modular**_ enough because of the loose structure. This thing causes, even when using lazy loading for rendering React elements, the very first loading is still not fast because of the large size of the initial trunks.
+The current code of PageFly is not modular enough because of the loose structure. This thing causes, even when using lazy loading for rendering React elements, the very first loading is still not fast because of the large size of the initial trunks.
 
-To solve this problem, I've created the `Render` component. This component supports loading the declaration of another React component dynamically. Using the `Render` component, declaration files will not load in the main trunk. This behavior helps avoid loading unnecessary files and also helps reduce the size of the initial trunk.
+To solve this problem, besides the need to refactor components and modules to be more modular, I've also created the new `Render` component. This component supports loading the declaration of another React component dynamically.
+
+Using the `Render` component, declaration files will not load in the main trunk. This behavior helps avoid loading unnecessary files and also helps reduce the size of the initial trunk.
 
 Below is a sample use of the `Render` component.
 

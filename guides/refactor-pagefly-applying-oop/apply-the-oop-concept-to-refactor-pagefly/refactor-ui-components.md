@@ -43,6 +43,57 @@ If a subclass overrides other methods in the base class, it should manually call
 
 Below is an interface of the component for rendering the cookie consent bar after refactoring.
 
+{% tabs %}
+{% tab title="Legacy" %}
+```javascript
+const CookieBar = () => {
+  const { setState, acceptCookies, acceptCrisp, acceptGATracking, gaTrackingState, cookiesState } = useCookiesConsent()
+
+  const { t } = useTranslation()
+  const [isExpand, setIsExpand] = useState(false)
+  const [activeToast, setActiveToast] = useState(false)
+  const toggleActiveToast = useCallback(() => setActiveToast(activeToast => !activeToast), [])
+  const toastMarkup = activeToast ? <Toast content={t('SETTINGS_SAVED')} onDismiss={toggleActiveToast} /> : null
+  const { mdUp, mdDown } = useBreakpoints()
+  const { openModal } = useModal()
+
+  useEffect(() => {
+    setState({
+      gaTrackingState: acceptGATracking,
+      cookiesState: acceptCookies,
+      crispTrackingState: acceptCrisp,
+    })
+  }, [])
+
+  const acceptGA = () => {}
+
+  useEffect(() => {
+    const cookiesBar = document.querySelector('.Consent-Banner') || null
+    if (cookiesBar) {
+      const observer = new ResizeObserver(() => {
+        const cookiesBarHeight = cookiesBar?.getBoundingClientRect().height || 0
+        updateStyleAttribute(document.body, '--cookie-bar', `${cookiesBarHeight}px`)
+      })
+      observer.observe(cookiesBar)
+      const cookiesBarHeight = cookiesBar?.getBoundingClientRect().height || 0
+      updateStyleAttribute(document.body, '--cookie-bar', `${cookiesBarHeight}px`)
+
+      return () => {
+        observer.unobserve(cookiesBar)
+      }
+    }
+    updateStyleAttribute(document.body, '--cookie-bar', `0px`)
+  }, [cookiesState, gaTrackingState])
+
+  if (cookiesState === null || gaTrackingState === null) return null
+
+  return '...'
+}
+
+```
+{% endtab %}
+
+{% tab title="Refactored" %}
 ```javascript
 class ComponentCookieConsentBarClass extends Component<ComponentCookieConsentBarProps, ComponentCookieConsentBarState> {
   // Define the default props.
@@ -74,6 +125,13 @@ class ComponentCookieConsentBarClass extends Component<ComponentCookieConsentBar
     return ExtObject.createByPathMapping(props, ComponentCookieConsentBarClass.propsToState, state)
   }
 
+  toggleActiveToast = () => this.setState({ activeToast: !this.state.activeToast })
+
+  updateBodyHeight = () => {
+    const reservedHeight = this.cookiesBar?.getBoundingClientRect().height || 0
+    updateStyleAttribute(document.body, '--cookie-bar', `${reservedHeight}px`)
+  }
+
   addObserver = () => {
     if (!this.observer && this.cookiesBar) {
       this.observer = new ResizeObserver(this.updateBodyHeight)
@@ -91,6 +149,23 @@ class ComponentCookieConsentBarClass extends Component<ComponentCookieConsentBar
   componentDidMount(): void {
     this.addObserver()
     super.componentDidMount()
+  }
+
+  componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<ComponentCookieConsentBarState>): void {
+    // Get current state.
+    const { cookiesState, gaTrackingState } = this.state
+
+    if (cookiesState !== prevState.cookiesState || gaTrackingState !== prevState.gaTrackingState) {
+      this.cookiesBar = document.querySelector('.Consent-Banner')
+
+      if (this.cookiesBar) {
+        this.addObserver()
+      } else {
+        this.removeObserver()
+      }
+
+      this.updateBodyHeight()
+    }
   }
 
   componentWillUnmount(): void {
@@ -125,6 +200,8 @@ const ComponentCookieConsentBar = adaptHooks(ComponentCookieConsentBarClass, {
 
 export default ComponentCookieConsentBar
 ```
+{% endtab %}
+{% endtabs %}
 
 Currently, PageFly strongly relies on hooks and contexts to work as intended. So, I've created two functions, `adaptHooks` and `adaptContexts`, to support passing hooks and contexts to a React component class.
 
