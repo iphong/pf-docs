@@ -25,12 +25,12 @@ src/next/@refactoring
 |- storages
 ```
 
-The `components` folder is to store UI components that are reusable across different screens of the app.
+The `components` folder is to store UI components that are reusable across different screens of the app, such as cookie consent settings, top bar, etc.
 
 The `constants` and `contexts` folders are to store common constants and contexts.
 
-The `includes` folder contains base functions and classes for building the entire app. The `loaders` directory inside the `includes` folder contains mapping definition files for dynamically loading UI components and storage classes when needed.
+The `includes` folder contains base functions and classes for building the entire app. The `loaders` directory inside the `includes` folder contains definition files for dynamically loading UI components and storage classes when needed.
 
-The `modules` folder contains packaged source code files for building a single feature or a set of related features. Each directory under the `modules` folder should contain independent code of a single module and should have `components`, `constants`, `contexts`, `includes`, and `storages` directories separated from the common.
+The `modules` folder contains packaged source code files for building a single feature or a set of related features, such as editor, inspector, etc. Each directory under the `modules` folder should contain independent code of a single module and should have `components`, `constants`, `contexts`, `includes`, and `storages` directories separated from the common.
 
-The `storages` folder contains declaration classes of storages commonly used across the app.
+The `storages` folder contains declarations of storage classes commonly used across the app, such as global config, onboarding state, etc.

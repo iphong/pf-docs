@@ -1,6 +1,6 @@
 # Refactor UI components
 
-According to the new structure, we will need to refactor the current components of PageFly, from React function components using global state hooks to component classes updating internal states based on changes in storage.
+According to the new structure, we will need to refactor the current components of PageFly, from React function components using hooks and global state subscriptions to component classes updating internal states based on events.
 
 I've created the `Component` class that extends the native `PureComponent` class of React as the base for real-life UI components to build upon. Below is the interface of the base class.
 
@@ -37,11 +37,77 @@ export default class Component<P, S> extends PureComponent<P & ComponentProps, S
 }
 ```
 
-Every UI component should _**extend**_ the base `Component` class and _**override**_ the `render` method of the base class to display appropriate content. A subclass also can override either the `propsToState` or `storageToStage` property to direct the base class to initialize its behavior.
+{% hint style="success" %}
+Every UI component should _**extend**_ the `Component` class and _**override**_ the `render` method of the base class to display the appropriate content.
+{% endhint %}
 
-If a subclass overrides other methods in the base class, it should manually call the original methods using the `super` keyword for proper initialization, reactivation, and destruction.
+Below is the refactored version of the UI component that renders the dashboard screen for new users.
 
-Below is an interface of the component for rendering the cookie consent bar after refactoring.
+{% tabs %}
+{% tab title="Legacy" %}
+```javascript
+export default function NewUserDashboardContent() {
+  return (
+    <VerticalStack gap={'4'}>
+      <OnBoardingTasksCard />
+      <LazyComponent component={'LazyNewUserDashboardContent'} />
+    </VerticalStack>
+  )
+}
+```
+{% endtab %}
+
+{% tab title="Refactored" %}
+```javascript
+export default class ScreenDashboardNewUser extends Component<void, void> {
+  render(): ReactNode {
+    return (
+      <VerticalStack gap={'4'}>
+        <Render componentName="ScreenDashboardOnboardingTasks" />
+        <LazyComponent component={'LazyNewUserDashboardContent'} />
+      </VerticalStack>
+    )
+  }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+{% hint style="info" %}
+A subclass can _**override**_ the following static properties to direct the `Component` class to initialize its behavior.
+
+* `defaultProps` is for defining the default values for the component properties. The properties passed to the component when rendering will override the default values.
+* `propsToState` directs the base class to auto-populate the component state from the properties passed to the component when rendering based on the defined mapping object assigned.
+* `storageToState` directs the base class to auto-populate the component state from the specified storage. When a subclass uses this directive, it should always define a list of storage classes to populate the component state from for the `storages` key of the `defaultProps` property.
+{% endhint %}
+
+{% hint style="success" %}
+When a subclass overrides the `propsToState` property to customize its initial behavior, it _**should declare**_ the static method `getDerivedStateFromProps`. React will call this method to update the internal state of a component class according to changes in the properties passed to that component when rendering.
+
+However, when executing the `getDerivedStateFromProps` method, React does not keep the original context of the method. Because of this behavior, the base class does not implement the static method `getDerivedStateFromProps` in its interface but requires declaring it in subclasses.
+{% endhint %}
+
+Below is an example of using the `propsToState` property and declaring the `getDerivedStateFromProps` method to auto-populate the component state from the passed properties when rendering.
+
+```javascript
+class ComponentCookieConsentBarClass extends Component<ComponentCookieConsentBarProps, ComponentCookieConsentBarState> {
+  // Map component props to state.
+  static propsToState: StringMapping = {
+    'hooks.cookieConsent.cookiesState': 'cookiesState',
+    'hooks.cookieConsent.gaTrackingState': 'gaTrackingState',
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    return ExtObject.createByPathMapping(props, ComponentCookieConsentBarClass.propsToState, state)
+  }
+}
+```
+
+{% hint style="success" %}
+If a subclass overrides methods other than the `render` method of the `Component` class, it should manually call the original methods using the `super` keyword for proper initialization, reactivation, and destruction.
+{% endhint %}
+
+Below is an interface of the refactored version of the UI component for rendering the cookie consent bar that demonstrates the use of the `super` keyword.
 
 {% tabs %}
 {% tab title="Legacy" %}
@@ -96,11 +162,6 @@ const CookieBar = () => {
 {% tab title="Refactored" %}
 ```javascript
 class ComponentCookieConsentBarClass extends Component<ComponentCookieConsentBarProps, ComponentCookieConsentBarState> {
-  // Define the default props.
-  static defaultProps = {
-    storages: [StorageCookieConsent],
-  }
-
   // Map component props to state.
   static propsToState: StringMapping = {
     'hooks.cookieConsent.cookiesState': 'cookiesState',
@@ -203,27 +264,11 @@ export default ComponentCookieConsentBar
 {% endtab %}
 {% endtabs %}
 
-When a subclass overrides the static `propsToState` property to customize the initial behavior, it should also declare the static method `getDerivedStateFromProps`. React will call this method to update the internal state of a component class according to changes in the properties passed to that component when rendering.
+{% hint style="info" %}
+Currently, PageFly strongly relies on hooks and contexts to work as intended. So, I've created `adaptHooks` and `adaptContexts` functions as adapters to pass hooks and contexts to a React component class.
+{% endhint %}
 
-However, when executing the `getDerivedStateFromProps` method, React does not keep the original context of the method. Because of this behavior, the base class does not implement the static method `getDerivedStateFromProps` in its interface. A subclass of the base `Component` class should implement the `getDerivedStateFromProps` as follows.
-
-```javascript
-class ComponentCookieConsentBarClass extends Component<ComponentCookieConsentBarProps, ComponentCookieConsentBarState> {
-  // Map component props to state.
-  static propsToState: StringMapping = {
-    'hooks.cookieConsent.cookiesState': 'cookiesState',
-    'hooks.cookieConsent.gaTrackingState': 'gaTrackingState',
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    return ExtObject.createByPathMapping(props, ComponentCookieConsentBarClass.propsToState, state)
-  }
-}
-```
-
-Currently, PageFly strongly relies on hooks and contexts to work as intended. So, I've created `adaptHooks` and `adaptContexts` functions to support passing hooks and contexts to a React component class.
-
-As you can see, the `ComponentCookieConsentBar` above is created by calling the `adaptHooks` function to pass the results of the `useModal`, `useBreakpoints`, `useTranslation`, and `useCookieConsent` hooks to the component class.
+In the refactored code above, the `ComponentCookieConsentBar` is created by calling the `adaptHooks` function to pass the results of the `useModal`, `useBreakpoints`, `useTranslation`, and `useCookieConsent` hooks to the component class.
 
 Below is a sample use of the `adaptContexts` function.
 

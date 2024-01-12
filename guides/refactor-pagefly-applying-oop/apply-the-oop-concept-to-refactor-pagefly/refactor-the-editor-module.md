@@ -1,4 +1,4 @@
-# Refactor editor elements
+# Refactor the editor module
 
 To simplify the creation of page elements, I've created the `EditorElement` class as the ground for building page elements. It will automatically do necessary initialization when rendering a page element, such as subscribing to storage, applying style, etc. Below is the interface of the base component.
 
@@ -59,7 +59,278 @@ export default class EditorElement<P, S> extends Component<P & EditorElementProp
 }
 ```
 
-When creating a new page element or refactoring existing page elements, you need to create a React component class that _**extends**_ the base `EditorElement` class and _**overrides**_ either the `renderElement` method or the `renderEdit` and `renderView` methods to display appropriate content.
+{% hint style="success" %}
+When creating a new page element or refactoring existing page elements, you need to create a new class that _**extends**_ the `EditorElement` class and _**overrides**_ either the `renderElement` method or both the `renderEdit` and `renderView` methods to display the appropriate content.
+{% endhint %}
+
+Below is the refactored version of the `Body` element.
+
+{% tabs %}
+{% tab title="Legacy" %}
+```javascript
+const Div = styled.div``
+
+export default function Body({ children, ...rest }: IPFElementProps) {
+  return <Div>{children}</Div>
+}
+```
+{% endtab %}
+
+{% tab title="Refactored" %}
+```javascript
+const StyledDiv = styled.div``
+
+export default class EditorElementBody extends EditorElement<void, void> {
+  renderElement(): ReactNode {
+    return <StyledDiv {...this.enhancedProps}>{this.props.children}</StyledDiv>
+  }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+Let's refactor the `Section` element which is a little bit complexity than the `Body` element. Below is the current code of the `Section` element.
+
+```javascript
+interface SectionProps extends IPFElementProps {
+  container: boolean
+  containerWidth: number
+  parallax: boolean
+  parallaxBg: string
+  parallaxSpeed: number
+  parallaxRev: boolean
+  src: string
+  sectionName: string
+  bgType: string
+  videoBg: string
+  filterColor: string
+  mode?: string
+}
+
+Section.defaultProps = {
+  container: true,
+  containerWidth: 1170,
+  parallax: false,
+  parallaxBg: '',
+  parallaxSpeed: 4,
+  parallaxRev: false,
+  src: '',
+  videoBg: '',
+  bgType: 'standard',
+  sectionName: '',
+  filterColor: 'rgba(0,0,0,0)',
+  name: t('SECTION'),
+}
+
+export default function Section(props: SectionProps) {
+  const {
+    container,
+    containerWidth,
+    bgType,
+    videoBg,
+    parallaxBg,
+    parallaxSpeed,
+    filterColor,
+    store,
+    children,
+    store: { type, mode },
+  } = props
+  const containerStyle = container
+    ? { [`--cw` as any]: isNaN(containerWidth) ? containerWidth : `${containerWidth}px` }
+    : undefined
+  const overlayStyle =
+    filterColor && filterColor !== 'rgba(0,0,0,0)' ? { [`--overlay` as any]: filterColor } : undefined
+  const styleStickyPage: any = mode === 'edit' ? { position: 'relative', top: 'initial', zIndex: 'initial' } : {}
+  const [showPlaceholder, setShowPlaceholder] = useState(true)
+  useEffect(() => {
+    setTimeout(() => {
+      const shouldNotRenderPlaceholder =
+        store.mode === 'view' ||
+        children.length !== 0 ||
+        store.styleStore.currentStyle.backgroundColor !== '' ||
+        store.styleStore.currentStyle.backgroundImage !== ''
+
+      setShowPlaceholder(!shouldNotRenderPlaceholder)
+    }, 300)
+  })
+
+  useElementState(store.elementStore, ['backgroundColor', 'backgroundImage'])
+
+  function renderPlaceholder() {
+    return (
+      <StyledSection
+        data-element-placeholder
+        data-parallax={bgType === 'parallax'}
+        data-section-id={`pf-${store.id.split('-')[1]}`}
+        style={store.mode === 'edit' ? { position: 'relative', minHeight: 50 } : {}}
+        className={store.mode === 'edit' ? 'pf-editor-section' : ''}
+      >
+        <Background bgType={bgType} videoBg={videoBg} parallaxBg={parallaxBg} filterColor={filterColor} mode={mode} />
+        {isSectionEditor() && !templateSelectedSubscription.state.preview && mode === 'edit' ? (
+          showPlaceholder && <LayoutPlaceholder {...props} />
+        ) : (
+          <PlaceholderLayout type={type} outline={true} name={t('SECTION')} />
+        )}
+      </StyledSection>
+    )
+  }
+
+  return children.length ? (
+    <StyledSection
+      data-parallax={bgType === 'parallax' || undefined}
+      data-parallax-speed={bgType === 'parallax' && mode === 'view' && parallaxSpeed ? parallaxSpeed : undefined}
+      style={{ ...overlayStyle, ...styleStickyPage }}
+      data-section-id={`pf-${store.id.split('-')[1]}`}
+    >
+      <Background bgType={bgType} videoBg={videoBg} parallaxBg={parallaxBg} filterColor={filterColor} mode={mode} />
+      {overlayStyle && <StyledOverlay />}
+      <Container style={containerStyle}>{children}</Container>
+    </StyledSection>
+  ) : (
+    renderPlaceholder()
+  )
+}
+```
+
+First, create a new file named `index.tsx` under the folder `modules/editor/elements/section` to recreate the `Section` element according to the new structure.
+
+There is no need to change element properties, so copy and paste them into the new file. Below is the initial declaration in the new file.
+
+{% tabs %}
+{% tab title="Legacy" %}
+```javascript
+interface SectionProps extends IPFElementProps {
+  container: boolean
+  containerWidth: number
+  parallax: boolean
+  parallaxBg: string
+  parallaxSpeed: number
+  parallaxRev: boolean
+  src: string
+  sectionName: string
+  bgType: string
+  videoBg: string
+  filterColor: string
+  mode?: string
+}
+
+Section.defaultProps = {
+  container: true,
+  containerWidth: 1170,
+  parallax: false,
+  parallaxBg: '',
+  parallaxSpeed: 4,
+  parallaxRev: false,
+  src: '',
+  videoBg: '',
+  bgType: 'standard',
+  sectionName: '',
+  filterColor: 'rgba(0,0,0,0)',
+  name: t('SECTION'),
+}
+
+export default function Section(props: SectionProps) {
+}
+```
+{% endtab %}
+
+{% tab title="Refactored" %}
+```javascript
+export type EditorElementSectionProps = EditorElementProps & {
+  container: boolean
+  containerWidth: number
+  parallax: boolean
+  parallaxBg: string
+  parallaxSpeed: number
+  parallaxRev: boolean
+  src: string
+  sectionName: string
+  bgType: string
+  videoBg: string
+  filterColor: string
+  mode?: string
+}
+
+export default class EditorElementSection extends EditorElement<EditorElementSectionProps, EditorElementSectionState> {
+  static defaultProps = {
+    container: true,
+    containerWidth: 1170,
+    parallax: false,
+    parallaxBg: '',
+    parallaxSpeed: 4,
+    parallaxRev: false,
+    src: '',
+    videoBg: '',
+    bgType: 'standard',
+    sectionName: '',
+    filterColor: 'rgba(0,0,0,0)',
+    name: t('SECTION'),
+    // Subclass must include default props from the base class.
+    ...EditorElement.defaultProps,
+  }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+{% hint style="success" %}
+Class declaration of every page element must include default props from the `EditorElement` class when defining the default props of that element. This action ensures a proper initialization and reactivation when rendering the page element.
+{% endhint %}
+
+In the current function component code of the `Section` element, there three states that control the behavior of the component which are `showPlaceholder`, `backgroundColor`, and `backgroundImage`. The first one is created using the `useState` function and the remaining are taken from the global state object by calling the function `useElementState`. Let's declare these states in the new component class.
+
+```javascript
+export type EditorElementSectionProps = EditorElementProps & {
+  container: boolean
+  containerWidth: number
+  parallax: boolean
+  parallaxBg: string
+  parallaxSpeed: number
+  parallaxRev: boolean
+  src: string
+  sectionName: string
+  bgType: string
+  videoBg: string
+  filterColor: string
+  mode?: string
+}
+
+export type EditorElementSectionState = EditorElementState & {
+  backgroundColor: string
+  backgroundImage: string
+  showPlaceholder: boolean
+}
+
+export default class EditorElementSection extends EditorElement<EditorElementSectionProps, EditorElementSectionState> {
+  static defaultProps = {
+    container: true,
+    containerWidth: 1170,
+    parallax: false,
+    parallaxBg: '',
+    parallaxSpeed: 4,
+    parallaxRev: false,
+    src: '',
+    videoBg: '',
+    bgType: 'standard',
+    sectionName: '',
+    filterColor: 'rgba(0,0,0,0)',
+    name: t('SECTION'),
+    // Subclass must include default props from the base class.
+    ...EditorElement.defaultProps,
+  }
+
+  state = {
+    count: 0,
+    backgroundColor: '',
+    backgroundImage: '',
+    showPlaceholder: true,
+  }
+}
+```
+
+As you can see, component classes of page elements no longer needs to manually call the `useElementState` hook to update the component according to changes in the element state subscription. The base class will automatically do that work by comparing the component's internal state with data from the element state subscription when rendering. This behavior helps reduce code duplication and also helps avoid bugs occurring because of missing initialization or wrong state.
+
+Now, we will convert the use of the `useEffect` hooks to the equivalent class methods.&#x20;
 
 If a subclass overrides either the `componentDidMount` or `componentWillUnmount` method of the base class, remember to use the `super` keyword to manually call the respective original method to ensure proper initialization, reactivation, and destruction.
 
@@ -275,8 +546,6 @@ export default class EditorElementSection extends EditorElement<EditorElementSec
 ```
 {% endtab %}
 {% endtabs %}
-
-An element class that extends the `EditorElement` class no longer needs to manually call the `useElementState` hook to update the component according to changes in the element state subscription. The base class will automatically do that work when rendering an element. This behavior helps reduce code duplication and also helps avoid bugs occurring because of missing initialization or wrong state.
 
 I've created the new `RenderElement` component and renamed the existing `RenderElement` component to `RenderLegacyElement`. Similar to the `Render` component, `RenderElement` takes a page element name from the property `componentName` and will look for its declaration file in the mapping object `elements` declared in the file `modules/editor/includes/loaders/elements.ts` to import dynamically and will render the element after importing completes. If the value passed to the property `componentName` is a legacy page element that is a React function component, `RenderElement` will automatically use the `RenderLegacyElement` to render the page element.
 

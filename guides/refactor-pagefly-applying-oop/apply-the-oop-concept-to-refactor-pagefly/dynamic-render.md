@@ -1,10 +1,6 @@
 # Dynamic render
 
-The current code of PageFly is not modular enough because of the loose structure. This thing causes, even when using lazy loading for rendering React elements, the very first loading is still not fast because of the large size of the initial trunks.
-
-To solve this problem, besides the need to refactor components and modules to be more modular, I've also created the new `Render` component. This component supports loading the declaration of another React component dynamically.
-
-Using the `Render` component, declaration files will not load in the main trunk. This behavior helps avoid loading unnecessary files and also helps reduce the size of the initial trunk.
+Besides the need to refactor components and modules to be more modular, I've created a React component for dynamically rendering UI components. The new `Render` component loads the declaration of a React component only when needed. Dynamic rendering coupled with encapsulated UI components and modules can reduce the main trunk volume and boost the loading speed.
 
 Below is a sample use of the `Render` component.
 
@@ -19,7 +15,11 @@ function Dashboard() {
 
 In the example above, when rendering the `Dashboard` component, the `Render` component will look for the declaration file of the `DashboardOnboarding` component and dynamically load it if not loaded before. While loading the declaration file, the `Render` component will render the content provided for the `preRenderPlaceholder` property. If the declaration file is loaded before, the `Render` component will render the `DashboardOnboarding` component immediately.
 
-To dynamically render a React component using the `Render` component, you need to define a mapping from the component name to its declaration file path in the `components` object declared in the `includes/loaders/components.ts` file. The content of that file is similar to the following.
+{% hint style="success" %}
+To dynamically render a React component using the `Render` component, you need to define a mapping from the component name to its declaration file path in an object named`components` declared in the `includes/loaders/components.ts` file.
+{% endhint %}
+
+The content of the file `includes/loaders/components.ts` is similar to the following.
 
 ```javascript
 const components: StringToReactComponentMapping = {
