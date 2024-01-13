@@ -496,7 +496,7 @@ export default class InspectorControlTextEditor extends InspectorControl<Inspect
 {% endtabs %}
 
 {% hint style="info" %}
-In the new structure, input control components no longer need to manually set the value inputted by end-users to the appropriate store and also don't need to wrap the HTML code inside the `InspectorController` component. The base class `InspectorControl` will set the value automatically based on the `keyPath` and `storage` properties passed by the `RenderControl` component when rendering.&#x20;
+In the new structure, input control components no longer need to manually set the value inputted by end-users to the appropriate store and also don't need to wrap the HTML output inside the `InspectorController` component. The base class `InspectorControl` will set the value automatically based on the `keyPath` and `storage` properties passed by the `RenderControl` component when rendering.&#x20;
 {% endhint %}
 
 Below is the interface of the `InspectorControl` component.
@@ -815,5 +815,5 @@ export default class InspectorControlTextInput extends InspectorControl<Inspecto
 As you can see, the `TextInput` and the `TextEditingInspector` input controls, after refactoring, no longer contain any code that processes logic or renders specific things for the editor module. This new behavior makes them independent and reusable outside the page editor. This characteristic helps the structure of the inspector module and the entire app be more straightforward.
 
 {% hint style="success" %}
-After creating a new inspect control or refactoring an existing one, you need to define a mapping from the inspect control name to its declaration file in the mapping object `controls` declared in the file `modules/inspector/includes/loaders/controls.ts`.
+After creating a new inspect control or refactoring an existing one, you need to define a mapping from the inspect control name to its declaration file in the mapping object `controls` declared in the file `modules/inspector/includes/loaders/controls.ts` and remove the old inspector control declaration from the list of inspector controls defined in the file `modules/inspector/group.ts`.
 {% endhint %}

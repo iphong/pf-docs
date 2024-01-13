@@ -276,7 +276,7 @@ export default class EditorElementSection extends EditorElement<EditorElementSec
 Class declaration of every page element _**must include**_ default props from the `EditorElement` class when defining the default props of that element. This action ensures a proper initialization and reactivation when rendering the page element.
 {% endhint %}
 
-In the current function component code of the `Section` element, three states control the behavior of the page element, which are `showPlaceholder`, `backgroundColor`, and `backgroundImage`. The function component creates the `showPlaceholder` state using the `useState` function. Then, it calls the `useElementState` function to refresh itself when either the `backgroundColor` or `backgroundImage` state changes in the element state subscription. Let's declare these states in the new component class.
+In the current function component of the `Section` element, three states control the behavior of the page element, which are `showPlaceholder`, `backgroundColor`, and `backgroundImage`. The function component creates the `showPlaceholder` state using the `useState` function. Then, it calls the `useElementState` function to refresh itself when either the `backgroundColor` or `backgroundImage` state changes in the element state subscription. Let's declare these states in the new component class.
 
 {% tabs %}
 {% tab title="Legacy" %}
@@ -929,13 +929,13 @@ export default class EditorElementSection extends EditorElement<EditorElementSec
 {% endtab %}
 {% endtabs %}
 
-In the current code base of PageFly, input controls that display on the inspector panel of page elements are defined in the inspector module and are always loaded regardless of whether the editor workspace has a related page element. This behavior causes the editor and the inspector module to depend on each other to work as intended. This behavior also causes the main code trunk of the editor screen to contain unnecessary code.
+In the current code base of PageFly, input controls that display on the inspector panel of page elements are defined in the inspector module. They are always loaded regardless of whether the editor workspace has a related page element. This behavior causes the editor and the inspector module to depend on each other to work as intended. This behavior also causes the main code trunk of the editor screen to contain unnecessary code.
 
 {% hint style="success" %}
 In the new structure, if a page element is customizable via the inspector panel, its component class _**must assign**_ a list of input controls to the static property `inspector`. The base class `EditorElement` will automatically register the declared input controls of a page element at initialization after importing the component class. This new behavior helps reduce the size of the main code trunk and also helps separate the editor module from the inspector module to make them more _**independent**_.
 {% endhint %}
 
-Let's take the `Section` element above as an example of this new behavior. After refactoring the UI component of the `Section` element from a function component to a component class, I moved the file that defines inspector controls for the element from the inspector module to the editor module. Then, I removed the inspector controls definition of the `Section` element from the current list containing inspector controls of all page elements defined in the file `modules/inspector/group.ts`. Finally, I import the list of inspector controls belonging to the `Section` element and assign it to the static property `inspector` in the body of the component class.
+Let's take the `Section` element above as an example of this new behavior. After refactoring the UI component of the `Section` element from a function component to a component class, I moved the file that defines inspector controls for the element from the inspector module to the editor module. Then, I removed the inspector control definition of the `Section` element from the current list containing inspector controls of all page elements defined in the file `modules/inspector/group.ts`. Finally, I import the list of inspector controls belonging to the `Section` element and assign it to the static property `inspector` in the body of the component class.
 
 Below is the final version of the component class of the page element `Section`.
 
@@ -1063,5 +1063,5 @@ By doing that, the inspector controls of the `Section` element will be loaded wi
 To support dynamically rendering page elements, I've created a new `RenderElement` component and renamed the existing `RenderElement` component to `RenderLegacyElement`. The new `RenderElement` component takes a page element name from the property `componentName` and will look for its declaration file in the object `elements` declared in the file `modules/editor/includes/loaders/elements.ts` to import dynamically and render the element after importing completes. If the value passed to the property `componentName` is a legacy page element that is a React function component, `RenderElement` will automatically use the `RenderLegacyElement` to render the page element.
 
 {% hint style="success" %}
-After creating a new element or refactoring an existing one, you need to define a mapping from the component name to its declaration file in the object `elements` declared in the file `modules/editor/includes/loaders/elements.ts` and remove the old component declaration from the list of element components defined in the file `elements/index.tsx`.
+After creating a new element or refactoring an existing one, you need to define a mapping from the page element name to its declaration file in the object `elements` declared in the file `modules/editor/includes/loaders/elements.ts` and remove the old component declaration from the list of element components defined in the file `elements/index.tsx`.
 {% endhint %}

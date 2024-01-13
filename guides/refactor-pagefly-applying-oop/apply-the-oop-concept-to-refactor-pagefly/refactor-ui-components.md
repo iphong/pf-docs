@@ -286,3 +286,7 @@ Below is a sample use of the `adaptContexts` function.
         preRenderPlaceholder: createElement(SkeletonDisplayText),
       })
 ```
+
+{% hint style="success" %}
+After creating a new UI component or refactoring an existing one, you need to define a mapping from the component name to its declaration file in the object `components` declared in the file `includes/loaders/components.ts`.
+{% endhint %}
