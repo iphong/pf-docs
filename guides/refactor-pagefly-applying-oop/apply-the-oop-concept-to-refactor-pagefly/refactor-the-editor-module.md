@@ -59,7 +59,7 @@ To simplify the creation of page elements, I've created the `EditorElement` clas
 </code></pre>
 
 {% hint style="success" %}
-When creating a new page element or refactoring existing page elements, you need to create a new class that _**extends**_ the `EditorElement` class and _**overrides**_ either the `renderElement` method or both the `renderEdit` and `renderView` methods to display the appropriate content.
+When creating a new page element or refactoring an existing page element, you need to create a new class that _**extends**_ the `EditorElement` class and _**overrides**_ either the `renderElement` method or both the `renderEdit` and `renderView` methods to display the appropriate content.
 {% endhint %}
 
 Below is the refactored version of the `Body` element.
