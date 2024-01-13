@@ -250,7 +250,7 @@ export type EditorElementSectionProps = EditorElementProps & {
   mode?: string
 }
 
-export default class EditorElementSection extends EditorElement<EditorElementSectionProps, EditorElementSectionState> {
+export default class EditorElementSection extends EditorElement<EditorElementSectionProps> {
   static defaultProps = {
     container: true,
     containerWidth: 1170,
@@ -273,10 +273,10 @@ export default class EditorElementSection extends EditorElement<EditorElementSec
 {% endtabs %}
 
 {% hint style="success" %}
-Class declaration of every page element must include default props from the `EditorElement` class when defining the default props of that element. This action ensures a proper initialization and reactivation when rendering the page element.
+Class declaration of every page element _**must include**_ default props from the `EditorElement` class when defining the default props of that element. This action ensures a proper initialization and reactivation when rendering the page element.
 {% endhint %}
 
-In the current function component code of the `Section` element, three states control the behavior of the `Section` element, which are `showPlaceholder`, `backgroundColor`, and `backgroundImage`. The function component creates the `showPlaceholder` state using the `useState` function and calls the `useElementState` function to refresh itself when either the `backgroundColor` or `backgroundImage` state changes in the element state subscription. Let's declare these states in the new component class.
+In the current function component code of the `Section` element, three states control the behavior of the page element, which are `showPlaceholder`, `backgroundColor`, and `backgroundImage`. The function component creates the `showPlaceholder` state using the `useState` function. Then, it calls the `useElementState` function to refresh itself when either the `backgroundColor` or `backgroundImage` state changes in the element state subscription. Let's declare these states in the new component class.
 
 {% tabs %}
 {% tab title="Legacy" %}
@@ -384,7 +384,7 @@ export default class EditorElementSection extends EditorElement<EditorElementSec
 {% endtab %}
 {% endtabs %}
 
-As you can see, component classes of page elements no longer need to manually call the `useElementState` hook to update the component according to changes in the element state subscription. The base class will automatically compare the component's internal state with the data from the element state subscription. This behavior helps reduce code duplication and also helps avoid bugs occurring because of missing initialization or wrong state.
+As you can see, component classes of page elements no longer need to manually call the `useElementState` hook to update the component according to changes in the element state subscription. The base class will automatically compare the component's internal state with the data from the element state subscription to decide whether the component should update itself. This behavior helps reduce code duplication and also helps avoid bugs occurring because of missing initialization or wrong state.
 
 Now, we will convert the use of the `useEffect` hooks to the equivalent class methods.
 
@@ -528,7 +528,7 @@ export default class EditorElementSection extends EditorElement<EditorElementSec
 {% endtabs %}
 
 {% hint style="success" %}
-If a subclass overrides either the `componentDidMount` or `componentWillUnmount` method of the base class, remember to use the `super` keyword to manually call the respective original method to ensure proper initialization, reactivation, and destruction.
+If a subclass overrides either the `componentDidMount` or `componentWillUnmount` method of the base class, remember to use the `super` keyword to _**manually call**_ the respective original method to ensure proper initialization, reactivation, and destruction.
 {% endhint %}
 
 If the legacy function component declares nested functions, we need to move these nested functions to class methods. The current code of the `Section` element has a nested function named `renderPlaceholder`. Let's move it to a method of the new component class.
@@ -887,8 +887,7 @@ export default class EditorElementSection extends EditorElement<EditorElementSec
   }
 
   renderElement(): React.ReactNode {
-    const { store, bgType, videoBg, children, container, parallaxBg, filterColor, parallaxSpeed, containerWidth } =
-      this.enhancedProps
+    const { store, bgType, videoBg, children, container, parallaxBg, filterColor, parallaxSpeed, containerWidth } = this.enhancedProps
 
     if (!children.length) {
       return this.renderPlaceholder()
@@ -932,7 +931,9 @@ export default class EditorElementSection extends EditorElement<EditorElementSec
 
 In the current code base of PageFly, input controls that display on the inspector panel of page elements are defined in the inspector module and are always loaded regardless of whether the editor workspace has a related page element. This behavior causes the editor and the inspector module to depend on each other to work as intended. This behavior also causes the main code trunk of the editor screen to contain unnecessary code.
 
-In the new structure, if a page element is customizable via the inspector panel, its component class must assign a list of input controls to the static property `inspector`. The base class `EditorElement` will automatically register the declared input controls of a page element at initialization after importing the component class. This new behavior helps reduce the size of the main code trunk and also helps separate the editor module from the inspector module to make them more _**independent**_.
+{% hint style="success" %}
+In the new structure, if a page element is customizable via the inspector panel, its component class _**must assign**_ a list of input controls to the static property `inspector`. The base class `EditorElement` will automatically register the declared input controls of a page element at initialization after importing the component class. This new behavior helps reduce the size of the main code trunk and also helps separate the editor module from the inspector module to make them more _**independent**_.
+{% endhint %}
 
 Let's take the `Section` element above as an example of this new behavior. After refactoring the UI component of the `Section` element from a function component to a component class, I moved the file that defines inspector controls for the element from the inspector module to the editor module. Then, I removed the inspector controls definition of the `Section` element from the current list containing inspector controls of all page elements defined in the file `modules/inspector/group.ts`. Finally, I import the list of inspector controls belonging to the `Section` element and assign it to the static property `inspector` in the body of the component class.
 
@@ -1059,7 +1060,7 @@ export default class EditorElementSection extends EditorElement<EditorElementSec
 
 By doing that, the inspector controls of the `Section` element will be loaded with the component class only when the editor workspace has the `Section` element. The base component `EditorElement` will automatically assign the declared inspector controls in the component class of the `Section` element to the list of inspector controls of all page elements.
 
-To support the dynamic rendering of page elements, I've created a new `RenderElement` component and renamed the existing `RenderElement` component to `RenderLegacyElement`. The `RenderElement` component takes a page element name from the property `componentName` and will look for its declaration file in the object `elements` declared in the file `modules/editor/includes/loaders/elements.ts` to import dynamically and will render the element after importing completes. If the value passed to the property `componentName` is a legacy page element that is a React function component, `RenderElement` will automatically use the `RenderLegacyElement` to render the page element.
+To support dynamically rendering page elements, I've created a new `RenderElement` component and renamed the existing `RenderElement` component to `RenderLegacyElement`. The new `RenderElement` component takes a page element name from the property `componentName` and will look for its declaration file in the object `elements` declared in the file `modules/editor/includes/loaders/elements.ts` to import dynamically and will render the element after importing completes. If the value passed to the property `componentName` is a legacy page element that is a React function component, `RenderElement` will automatically use the `RenderLegacyElement` to render the page element.
 
 {% hint style="success" %}
 After creating a new element or refactoring an existing element, you need to define a mapping from the component name to its declaration file and remove the old component declaration from the list of element components defined in the file `elements/index.tsx`.

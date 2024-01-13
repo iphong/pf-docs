@@ -161,7 +161,7 @@ The `Storage` class provides the following public methods to work with data:
 * The `unsubscribe()` method removes a callback function previously saved by the `subscribe()` method.
 {% endhint %}
 
-{% hint style="warning" %}
+{% hint style="danger" %}
 Subclasses extending the `Storage` class _**should not override**_ public methods of the base class to ensure the storage mechanism works as expected.
 {% endhint %}
 

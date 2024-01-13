@@ -81,7 +81,7 @@ A subclass can _**override**_ the following static properties to direct the `Com
 * `storageToState` directs the base class to auto-populate the component state from the specified storage. When a subclass uses this directive, it should always define a list of storage classes to populate the component state from for the `storages` key of the `defaultProps` property.
 {% endhint %}
 
-{% hint style="success" %}
+{% hint style="warning" %}
 When a subclass overrides the `propsToState` property to customize its initial behavior, it _**should declare**_ the static method `getDerivedStateFromProps`. React will call this method to update the internal state of a component class according to changes in the properties passed to that component when rendering.
 
 However, when executing the `getDerivedStateFromProps` method, React does not keep the original context of the method. Because of this behavior, the base class does not implement the static method `getDerivedStateFromProps` in its interface but requires declaring it in subclasses.
@@ -104,7 +104,7 @@ class ComponentCookieConsentBarClass extends Component<ComponentCookieConsentBar
 ```
 
 {% hint style="success" %}
-If a subclass overrides methods other than the `render` method of the `Component` class, it should manually call the original methods using the `super` keyword for proper initialization, reactivation, and destruction.
+If a subclass overrides methods other than the `render` method of the `Component` class, it _**should manually call**_ the original methods using the `super` keyword for proper initialization, reactivation, and destruction.
 {% endhint %}
 
 Below is an interface of the refactored version of the UI component for rendering the cookie consent bar that demonstrates the use of the `super` keyword.
