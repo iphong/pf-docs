@@ -4,7 +4,9 @@ The current inspector module in the code base of PageFly contains code to proces
 
 I've created two new React components that help make the inspector module more independent after refactoring. The `RenderControl` component supports flexibly rendering input controls, and the `InspectorControl` component is the base class for building independent and fully reusable input controls.
 
+{% hint style="info" %}
 The `RenderControl` component can take a custom React component from the `InspectorController` property and use it to render an input control. This characteristic supports rendering advanced input controls in specific use cases, such as inside the page editor context.
+{% endhint %}
 
 I've refactored and moved the file that declares the current `InspectorController` component from the inspector module to the editor module because it contains code to process logic related to the editor module. Below is the code of the `InspectorController` component after refactoring.
 
@@ -269,9 +271,9 @@ export default InspectorController
 {% endtab %}
 {% endtabs %}
 
-As you can see, the refactored component no longer renders the inspector control itself. It instead uses the new `RenderControl` component to render the HTML code. The `RenderControl` supports rendering both the refactored and non-refactored input controls.
+As you can see, the refactored component no longer renders the inspector control itself. It instead uses the new `RenderControl` component to render the appropriate input control. The `RenderControl` supports rendering both the refactored and non-refactored input controls.
 
-I've also refactored the `InspectorGroup` component, which renders a group of input controls, to use the `RenderControl` component to render an input control as follows.
+I've also refactored the `InspectorGroup` component, which renders a group of input controls, to use the `RenderControl` component to render input controls as follows.
 
 ```javascript
 export default class InspectorGroup extends Component<InspectorGroupProps, InspectorGroupState> {
@@ -332,7 +334,11 @@ export default class InspectorGroup extends Component<InspectorGroupProps, Inspe
 
 If the value passed to the `componentName` property is an input control name, `RenderControl` will look for the declaration file from the mapping object `controls` declared in the file `modules/inspector/includes/loaders/controls.ts` to import dynamically and render the input control after importing completes. Otherwise, if the value is a legacy input control that is a React function component, `RenderControl` will render the input control normally. This behavior ensures the use of both refactored and non-refactored input controls seamlessly.
 
-The new mechanism requires changing the definition of inspector controls. Below is the refactored definition for the text editor for inputting content for the `Heading` element.
+{% hint style="success" %}
+The new mechanism _**requires**_ changing the definition of inspector controls.
+{% endhint %}
+
+Below is the refactored definition for the text editor for inputting content for the `Heading` element.
 
 {% tabs %}
 {% tab title="Legacy" %}
@@ -489,7 +495,11 @@ export default class InspectorControlTextEditor extends InspectorControl<Inspect
 {% endtab %}
 {% endtabs %}
 
-In the new structure, input control components no longer need to manually set the value inputted by end-users to the appropriate store and also don't need to wrap the HTML code inside the `InspectorController` component. The base class `InspectorControl` will set the value automatically based on the `keyPath` and `storage` properties passed by the `RenderControl` component when rendering. Below is the interface of the InspectorControl component.
+{% hint style="info" %}
+In the new structure, input control components no longer need to manually set the value inputted by end-users to the appropriate store and also don't need to wrap the HTML code inside the `InspectorController` component. The base class `InspectorControl` will set the value automatically based on the `keyPath` and `storage` properties passed by the `RenderControl` component when rendering.&#x20;
+{% endhint %}
+
+Below is the interface of the `InspectorControl` component.
 
 ```javascript
 export default class InspectorControl<P, S> extends Component<P & InspectorControlProps, S & InspectorControlState> {
@@ -520,9 +530,23 @@ export default class InspectorControl<P, S> extends Component<P & InspectorContr
 }
 ```
 
-When creating a new input control or refactoring an existing one, you should create a class that _**extends**_ the `InspectorControl` class and _**overrides**_ the `renderInput` method to display the appropriate input field. The `render` and `onChange` methods of the base class should not be overridden to ensure proper initialization, reactivation, and destruction. `InspectorControl` can take a function via the `onChange` property passed to the component when rendering to handle change instead of using the built-in `onChange` method.
+{% hint style="success" %}
+When creating a new input control or refactoring an existing one, you should create a class that _**extends**_ the `InspectorControl` class and _**overrides**_ the `renderInput` method to display the appropriate input field.
+{% endhint %}
 
-You can use the `keyPath` property to direct the `InspectorControl` class to set the value inputted by end-users to a key-path other than the default `data.value` key-path. Below are the definitions of input controls for custom ID and class attributes.
+{% hint style="danger" %}
+The `render` and `onChange` methods of the base class _**should not be overridden**_ to ensure proper initialization, reactivation, and destruction.
+{% endhint %}
+
+{% hint style="info" %}
+`InspectorControl` can take a function via the `onChange` property passed to the component when rendering to handle change instead of using the built-in `onChange` method.
+{% endhint %}
+
+{% hint style="info" %}
+You can use the `keyPath` property to direct the `InspectorControl` class to set the value inputted by end-users to a key-path other than the default `data.value` key-path.
+{% endhint %}
+
+Below are the definitions of input controls for custom ID and class attributes that use a custom key-path to update data to the specified storage.
 
 {% tabs %}
 {% tab title="Legacy" %}
@@ -692,10 +716,7 @@ export default TextInput
 
 {% tab title="Refactored" %}
 ```javascript
-export default class InspectorControlTextInput extends InspectorControl<
-  InspectorControlTextInputProps,
-  InspectorControlTextInputState
-> {
+export default class InspectorControlTextInput extends InspectorControl<InspectorControlTextInputProps, InspectorControlTextInputState> {
   static contextType: Context<any> = PushParameterEvent
 
   static defaultProps: InspectorControlTextInputProps = {
@@ -792,3 +813,7 @@ export default class InspectorControlTextInput extends InspectorControl<
 {% endtabs %}
 
 As you can see, the `TextInput` and the `TextEditingInspector` input controls, after refactoring, no longer contain any code that processes logic or renders specific things for the editor module. This new behavior makes them independent and reusable outside the page editor. This characteristic helps the structure of the inspector module and the entire app be more straightforward.
+
+{% hint style="success" %}
+After creating a new inspect control or refactoring an existing one, you need to define a mapping from the inspect control name to its declaration file in the mapping object `controls` declared in the file `modules/inspector/includes/loaders/controls.ts`.
+{% endhint %}
