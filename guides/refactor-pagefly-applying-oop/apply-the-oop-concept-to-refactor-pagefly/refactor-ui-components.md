@@ -1,6 +1,10 @@
 # Refactor UI components
 
-According to the new structure, we will need to refactor the current components of PageFly, from React function components using hooks and global state subscriptions to component classes updating internal states based on events.
+Using the dynamic render mechanism, it will be better if we refactor the current UI components of PageFly from React functional components using hooks and global state subscriptions to component classes updating internal states based on events. This work aims to make UI components more encapsulated and independent. This behavior can optimize the loading trunk and help prevent failure from spreading from one UI component to another.
+
+However, because the functional components of React are simple and easy to create and promote the composition design pattern, stand-alone UI components that can composite with others to build a complete UI can be kept as is to save time and effort.
+
+On the other hand, UI components that can be used as a base to build advanced UI components should be refactored from React functional components to component classes. This work promotes the inheritance design pattern and can save a lot of code duplication to process similar logic, render similar content, and handle similar behavior.
 
 I've created the `Component` class that extends the native `PureComponent` class of React as the base for real-life UI components to build upon. Below is the interface of the base class.
 
@@ -38,40 +42,8 @@ export default class Component<P, S> extends PureComponent<P & ComponentProps, S
 ```
 
 {% hint style="success" %}
-Every UI component should _**extend**_ the `Component` class and _**override**_ the `render` method of the base class to display the appropriate content.
+UI components should _**extend**_ the `Component` class and _**override**_ the `render` method of the base class to display the appropriate content.
 {% endhint %}
-
-Below is the refactored version of the UI component that renders the dashboard screen for new users.
-
-{% tabs %}
-{% tab title="Legacy" %}
-```javascript
-export default function NewUserDashboardContent() {
-  return (
-    <VerticalStack gap={'4'}>
-      <OnBoardingTasksCard />
-      <LazyComponent component={'LazyNewUserDashboardContent'} />
-    </VerticalStack>
-  )
-}
-```
-{% endtab %}
-
-{% tab title="Refactored" %}
-```javascript
-export default class ScreenDashboardNewUser extends Component<void, void> {
-  render(): ReactNode {
-    return (
-      <VerticalStack gap={'4'}>
-        <Render componentName="ScreenDashboardOnboardingTasks" />
-        <LazyComponent component={'LazyNewUserDashboardContent'} />
-      </VerticalStack>
-    )
-  }
-}
-```
-{% endtab %}
-{% endtabs %}
 
 {% hint style="info" %}
 A subclass can _**override**_ the following static properties to direct the `Component` class to initialize its behavior.
@@ -84,21 +56,25 @@ A subclass can _**override**_ the following static properties to direct the `Com
 {% hint style="warning" %}
 When a subclass overrides the `propsToState` property to customize its initial behavior, it _**should declare**_ the static method `getDerivedStateFromProps`. React will call this method to update the internal state of a component class according to changes in the properties passed to that component when rendering.
 
-However, when executing the `getDerivedStateFromProps` method, React does not keep the original context of the method. Because of this behavior, the base class does not implement the static method `getDerivedStateFromProps` in its interface but requires declaring it in subclasses.
+When executing the `getDerivedStateFromProps` method, React does not keep the original context of the method. Because of this behavior, the base class does not implement the static method `getDerivedStateFromProps` in its interface but requires declaring it in subclasses.
 {% endhint %}
 
 Below is an example of using the `propsToState` property and declaring the `getDerivedStateFromProps` method to auto-populate the component state from the passed properties when rendering.
 
 ```javascript
-class ComponentCookieConsentBarClass extends Component<ComponentCookieConsentBarProps, ComponentCookieConsentBarState> {
-  // Map component props to state.
-  static propsToState: StringMapping = {
-    'hooks.cookieConsent.cookiesState': 'cookiesState',
-    'hooks.cookieConsent.gaTrackingState': 'gaTrackingState',
+class InspectorControllerClass extends Component<InspectorControllerProps, InspectorControllerState> {
+  static propsToState = {
+    'contexts.InspectorContext': 'store',
+    'contexts.ParameterDetail': 'parameterDetail',
+  }
+
+  state: InspectorControllerState = {
+    store: null,
+    parameterDetail: null,
   }
 
   static getDerivedStateFromProps(props, state) {
-    return ExtObject.createByPathMapping(props, ComponentCookieConsentBarClass.propsToState, state)
+    return ExtObject.createByPathMapping(props, InspectorControllerClass.propsToState, state)
   }
 }
 ```
@@ -109,166 +85,62 @@ If a subclass overrides methods other than the `render` method of the `Component
 
 Below is an interface of the refactored version of the UI component for rendering the cookie consent bar that demonstrates the use of the `super` keyword.
 
-{% tabs %}
-{% tab title="Legacy" %}
 ```javascript
-const CookieBar = () => {
-  const { setState, acceptCookies, acceptCrisp, acceptGATracking, gaTrackingState, cookiesState } = useCookiesConsent()
+export default class InspectorControl<P, S> extends Component<P & InspectorControlProps, S & InspectorControlState> {
+  static contextType: Context<any> = PushParameterEvent
 
-  const { t } = useTranslation()
-  const [isExpand, setIsExpand] = useState(false)
-  const [activeToast, setActiveToast] = useState(false)
-  const toggleActiveToast = useCallback(() => setActiveToast(activeToast => !activeToast), [])
-  const toastMarkup = activeToast ? <Toast content={t('SETTINGS_SAVED')} onDismiss={toggleActiveToast} /> : null
-  const { mdUp, mdDown } = useBreakpoints()
-  const { openModal } = useModal()
-
-  useEffect(() => {
-    setState({
-      gaTrackingState: acceptGATracking,
-      cookiesState: acceptCookies,
-      crispTrackingState: acceptCrisp,
-    })
-  }, [])
-
-  const acceptGA = () => {}
-
-  useEffect(() => {
-    const cookiesBar = document.querySelector('.Consent-Banner') || null
-    if (cookiesBar) {
-      const observer = new ResizeObserver(() => {
-        const cookiesBarHeight = cookiesBar?.getBoundingClientRect().height || 0
-        updateStyleAttribute(document.body, '--cookie-bar', `${cookiesBarHeight}px`)
-      })
-      observer.observe(cookiesBar)
-      const cookiesBarHeight = cookiesBar?.getBoundingClientRect().height || 0
-      updateStyleAttribute(document.body, '--cookie-bar', `${cookiesBarHeight}px`)
-
-      return () => {
-        observer.unobserve(cookiesBar)
-      }
-    }
-    updateStyleAttribute(document.body, '--cookie-bar', `0px`)
-  }, [cookiesState, gaTrackingState])
-
-  if (cookiesState === null || gaTrackingState === null) return null
-
-  return '...'
-}
-
-```
-{% endtab %}
-
-{% tab title="Refactored" %}
-```javascript
-class ComponentCookieConsentBarClass extends Component<ComponentCookieConsentBarProps, ComponentCookieConsentBarState> {
-  // Map component props to state.
-  static propsToState: StringMapping = {
-    'hooks.cookieConsent.cookiesState': 'cookiesState',
-    'hooks.cookieConsent.gaTrackingState': 'gaTrackingState',
+  // Define the default props.
+  static defaultProps = {
+    contexts: {},
+    keyPath: 'data.value',
+    storages: [StorageInspector],
   }
 
   // Define initial state.
-  state = {
-    isExpand: false,
-    activeToast: false,
-    cookiesState: null,
-    gaTrackingState: null,
-  }
-
-  // Cookies bar HTML element.
-  private cookiesBar
-
-  // Observer that handles resize action on viewport.
-  private observer
-
-  static getDerivedStateFromProps(props, state) {
-    return ExtObject.createByPathMapping(props, ComponentCookieConsentBarClass.propsToState, state)
-  }
-
-  toggleActiveToast = () => this.setState({ activeToast: !this.state.activeToast })
-
-  updateBodyHeight = () => {
-    const reservedHeight = this.cookiesBar?.getBoundingClientRect().height || 0
-    updateStyleAttribute(document.body, '--cookie-bar', `${reservedHeight}px`)
-  }
-
-  addObserver = () => {
-    if (!this.observer && this.cookiesBar) {
-      this.observer = new ResizeObserver(this.updateBodyHeight)
-      this.observer.observe(this.cookiesBar)
-    }
-  }
-
-  removeObserver = () => {
-    if (this.observer && this.cookiesBar) {
-      this.observer.unobserve(this.cookiesBar)
-      this.observer = null
-    }
-  }
+  state: InspectorControlState = {}
 
   componentDidMount(): void {
-    this.addObserver()
     super.componentDidMount()
-  }
 
-  componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<ComponentCookieConsentBarState>): void {
-    // Get current state.
-    const { cookiesState, gaTrackingState } = this.state
-
-    if (cookiesState !== prevState.cookiesState || gaTrackingState !== prevState.gaTrackingState) {
-      this.cookiesBar = document.querySelector('.Consent-Banner')
-
-      if (this.cookiesBar) {
-        this.addObserver()
-      } else {
-        this.removeObserver()
-      }
-
-      this.updateBodyHeight()
-    }
-  }
-
-  componentWillUnmount(): void {
-    this.removeObserver()
-    super.componentWillUnmount()
-  }
-
-  render(): ReactNode {
-    // Get current state.
-    const { isExpand, activeToast } = this.state
-
-    // Extract necessary props.
+    // Populate the initial input value.
     const {
-      hooks: {
-        translation: { t },
-        modal: { openModal },
-        breakpoints: { mdUp, mdDown },
-        cookieConsent: { gaTrackingState, cookiesState },
-      },
+      value,
+      keyPath,
+      storage,
+      contexts: { InspectorContext },
     } = this.props
 
-    return '...'
+    if (value !== undefined) {
+      this.setState({ value })
+    } else {
+      this.setState({
+        value: InspectorContext ? ExtObject.pathValue(InspectorContext, keyPath) : storage?.get(keyPath),
+      })
+    }
   }
 }
-
-const ComponentCookieConsentBar = adaptHooks(ComponentCookieConsentBarClass, {
-  modal: useModal,
-  breakpoints: useBreakpoints,
-  translation: useTranslation,
-  cookieConsent: useCookiesConsent,
-})
-
-export default ComponentCookieConsentBar
 ```
-{% endtab %}
-{% endtabs %}
 
 {% hint style="info" %}
 Currently, PageFly strongly relies on hooks and contexts to work as intended. So, I've created `adaptHooks` and `adaptContexts` functions as adapters to pass hooks and contexts to a React component class.
 {% endhint %}
 
-In the refactored code above, the `ComponentCookieConsentBar` is created by calling the `adaptHooks` function to pass the results of the `useModal`, `useBreakpoints`, `useTranslation`, and `useCookieConsent` hooks to the component class.
+Below is a sample use of the `adaptHooks` function.
+
+```javascript
+class EditorWorkspaceClass extends Component<void, EditorState> {
+  render(): ReactNode {
+    return '...'
+  }
+}
+
+const EditorWorkspace = adaptHooks(EditorWorkspaceClass, {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  hotKeyWindow: () => useHotKey(window),
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  hotKeyEditor: () => useHotKey(editorWindow.current, true),
+})
+```
 
 Below is a sample use of the `adaptContexts` function.
 
