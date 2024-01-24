@@ -2,7 +2,7 @@
 
 I've created the `Storage` class as a base for manipulating data. Below are the public properties and methods of this base class.
 
-```javascript
+```typescript
 export default class Storage {
   // Define synchronization with legacy stores.
   static syncWithLegacyStores: StorageSynchronization
@@ -89,7 +89,7 @@ I've created the following storages for working with global config, dashboard st
 
 {% tabs %}
 {% tab title="StorageConfig" %}
-```javascript
+```typescript
 export default class StorageConfig extends Storage {
   // Define synchronization with legacy stores.
   static syncWithLegacyStores: StorageSynchronization = () => globalConfigSubscription
@@ -101,7 +101,7 @@ export default class StorageConfig extends Storage {
 {% endtab %}
 
 {% tab title="StorageCookieConsent" %}
-```javascript
+```typescript
 export default class StorageCookieConsent extends Storage {
   // Define synchronization with legacy stores.
   static syncWithLegacyStores: StorageSynchronization = () => cookieSubscription
@@ -110,7 +110,7 @@ export default class StorageCookieConsent extends Storage {
 {% endtab %}
 
 {% tab title="StorageDashboard" %}
-```javascript
+```typescript
 export default class StorageDashboard extends Storage {
   // Define synchronization with legacy stores.
   static syncWithLegacyStores: StorageSynchronization = {
@@ -167,7 +167,7 @@ Subclasses extending the `Storage` class _**should not override**_ public method
 
 Below are some examples of using these public methods in reality.
 
-```javascript
+```typescript
 class StorageTest extends Storage {
   // No custom behavior is needed, leave the subclass declaration empty.
 }

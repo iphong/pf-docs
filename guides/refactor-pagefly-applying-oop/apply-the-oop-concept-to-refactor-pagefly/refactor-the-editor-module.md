@@ -2,7 +2,7 @@
 
 To simplify the creation of page elements, I've created the `EditorElement` class as the ground for building page elements. It will automatically do necessary initialization when rendering a page element, such as subscribing to storage, applying style, etc. Below is the interface of the base component.
 
-<pre class="language-javascript"><code class="lang-javascript"><strong>export default class EditorElement&#x3C;P, S> extends Component&#x3C;P &#x26; EditorElementProps, S &#x26; EditorElementState> {
+<pre class="language-typescript"><code class="lang-typescript"><strong>export default class EditorElement&#x3C;P, S> extends Component&#x3C;P &#x26; EditorElementProps, S &#x26; EditorElementState> {
 </strong>  // Define the default props.
   static defaultProps = {
     storages: [StorageEditor],
@@ -66,7 +66,7 @@ Below is the refactored version of the `Body` element.
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 const Div = styled.div``
 
 export default function Body({ children, ...rest }: IPFElementProps) {
@@ -76,7 +76,7 @@ export default function Body({ children, ...rest }: IPFElementProps) {
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 const StyledDiv = styled.div``
 
 export default class EditorElementBody extends EditorElement<void, void> {
@@ -90,7 +90,7 @@ export default class EditorElementBody extends EditorElement<void, void> {
 
 Let's refactor the `Section` element, which is more advanced than the `Body` element. Below is the current code of the `Section` element.
 
-```javascript
+```typescript
 interface SectionProps extends IPFElementProps {
   container: boolean
   containerWidth: number
@@ -197,7 +197,7 @@ There is no need to change element properties, so copy and paste them into the n
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 interface SectionProps extends IPFElementProps {
   container: boolean
   containerWidth: number
@@ -234,7 +234,7 @@ export default function Section(props: SectionProps) {
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 export type EditorElementSectionProps = EditorElementProps & {
   container: boolean
   containerWidth: number
@@ -280,7 +280,7 @@ In the current function component of the `Section` element, three states control
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 interface SectionProps extends IPFElementProps {
   container: boolean
   containerWidth: number
@@ -333,7 +333,7 @@ export default function Section(props: SectionProps) {
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 export type EditorElementSectionProps = EditorElementProps & {
   container: boolean
   containerWidth: number
@@ -390,7 +390,7 @@ Now, we will convert the use of the `useEffect` hooks to the equivalent class me
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 interface SectionProps extends IPFElementProps {
   container: boolean
   containerWidth: number
@@ -455,7 +455,7 @@ export default function Section(props: SectionProps) {
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 export type EditorElementSectionProps = EditorElementProps & {
   container: boolean
   containerWidth: number
@@ -535,7 +535,7 @@ If the legacy function component declares nested functions, we need to move thes
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 interface SectionProps extends IPFElementProps {
   container: boolean
   containerWidth: number
@@ -619,7 +619,7 @@ export default function Section(props: SectionProps) {
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 export type EditorElementSectionProps = EditorElementProps & {
   container: boolean
   containerWidth: number
@@ -723,7 +723,7 @@ It's time to finalize the refactor work by moving the remaining code in the func
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 Section.defaultProps = {
   container: true,
   containerWidth: 1170,
@@ -811,7 +811,7 @@ export default function Section(props: SectionProps) {
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 export default class EditorElementSection extends EditorElement<EditorElementSectionProps, EditorElementSectionState> {
   static defaultProps = {
     src: '',
@@ -939,7 +939,7 @@ Let's take the `Section` element above as an example of this new behavior. After
 
 Below is the final version of the component class of the page element `Section`.
 
-```javascript
+```typescript
 export default class EditorElementSection extends EditorElement<EditorElementSectionProps, EditorElementSectionState> {
   static inspector = sectionInspectors
 

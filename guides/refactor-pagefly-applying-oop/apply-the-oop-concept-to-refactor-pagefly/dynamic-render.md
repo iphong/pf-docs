@@ -4,7 +4,7 @@ Besides the need to refactor components and modules to be more modular, I've cre
 
 Below is a sample use of the `Render` component.
 
-```javascript
+```typescript
 function Dashboard() {
   return <Render
     componentName="DashboardOnboarding"
@@ -21,7 +21,7 @@ To dynamically render a React component using the `Render` component, you need t
 
 The content of the file `includes/loaders/components.ts` is similar to the following.
 
-```javascript
+```typescript
 const components: StringToReactComponentMapping = {
   DashboardOnboarding: async () => (await import('/path/to/file')).default,
 }
@@ -29,7 +29,7 @@ const components: StringToReactComponentMapping = {
 
 The behavior of the `Render` component is similar to the native `lazy` function of React but doesn't need to use the `Suspense` component for rendering a placeholder. Below is a rewriting of the example above using the native `lazy` function of React.
 
-```javascript
+```typescript
 const DashboardOnboarding = lazy(() => import('/path/to/file')
 
 function Dashboard() {

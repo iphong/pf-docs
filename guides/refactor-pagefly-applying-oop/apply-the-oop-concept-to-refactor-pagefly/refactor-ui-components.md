@@ -1,14 +1,14 @@
 # Refactor UI components
 
-Using the dynamic render mechanism, it will be better if we refactor the current UI components of PageFly from React functional components using hooks and global state subscriptions to component classes updating internal states based on events. This work aims to make UI components more encapsulated and independent. This behavior can optimize the loading trunk and help prevent failure from spreading from one UI component to another.
+Using the dynamic render mechanism, it will be better if we refactor the current UI components of PageFly from React functional components to component classes. This work aims to make UI components more encapsulated and independent. This behavior can optimize the loading trunk and help prevent failure from spreading from one UI component to another.
 
-However, because the functional components of React are simple and easy to create and promote the composition design pattern, stand-alone UI components that can composite with others to build a complete UI can be kept as is to save time and effort.
+However, because the React functional component mechanism is simple and easy to create, it promotes the composition design pattern. So, stand-alone UI components that can composite with others to build a complete UI can be kept as is to save time and effort.
 
-On the other hand, UI components that can be used as a base to build advanced UI components should be refactored from React functional components to component classes. This work promotes the inheritance design pattern and can save a lot of code duplication to process similar logic, render similar content, and handle similar behavior.
+On the other hand, UI components that can be used as a base to build advanced UI components should be refactored from React functional components to component classes. The inheritance ability of the React component class mechanism can save us a lot of code duplication to process similar logic, render similar content, and handle similar behavior.
 
 I've created the `Component` class that extends the native `PureComponent` class of React as the base for real-life UI components to build upon. Below is the interface of the base class.
 
-```javascript
+```typescript
 export default class Component<P, S> extends PureComponent<P & ComponentProps, S & ComponentState> {
   static defaultProps = {
     // Define a list of storage to subscribe to.
@@ -61,7 +61,7 @@ When executing the `getDerivedStateFromProps` method, React does not keep the or
 
 Below is an example of using the `propsToState` property and declaring the `getDerivedStateFromProps` method to auto-populate the component state from the passed properties when rendering.
 
-```javascript
+```typescript
 class InspectorControllerClass extends Component<InspectorControllerProps, InspectorControllerState> {
   static propsToState = {
     'contexts.InspectorContext': 'store',
@@ -85,7 +85,7 @@ If a subclass overrides methods other than the `render` method of the `Component
 
 Below is an interface of the refactored version of the UI component for rendering the cookie consent bar that demonstrates the use of the `super` keyword.
 
-```javascript
+```typescript
 export default class InspectorControl<P, S> extends Component<P & InspectorControlProps, S & InspectorControlState> {
   static contextType: Context<any> = PushParameterEvent
 
@@ -127,7 +127,7 @@ Currently, PageFly strongly relies on hooks and contexts to work as intended. So
 
 Below is a sample use of the `adaptHooks` function.
 
-```javascript
+```typescript
 class EditorWorkspaceClass extends Component<void, EditorState> {
   render(): ReactNode {
     return '...'
@@ -144,7 +144,7 @@ const EditorWorkspace = adaptHooks(EditorWorkspaceClass, {
 
 Below is a sample use of the `adaptContexts` function.
 
-```javascript
+```typescript
       // Pass some legacy contexts when rendering inspector element.
       // @TODO: Should replace the use of context with storage?
       const RenderWithContexts = adaptContexts(Render, {

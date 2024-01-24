@@ -12,7 +12,7 @@ I've refactored and moved the file that declares the current `InspectorControlle
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 export default function InspectorController(props: InspectorControllerProps) {
   const { t } = useTranslation()
   const {
@@ -124,7 +124,7 @@ export default function InspectorController(props: InspectorControllerProps) {
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 class InspectorControllerClass extends Component<InspectorControllerProps, InspectorControllerState> {
   static propsToState = {
     'contexts.InspectorContext': 'store',
@@ -275,7 +275,7 @@ As you can see, the refactored component no longer renders the inspector control
 
 I've also refactored the `InspectorGroup` component, which renders a group of input controls, to use the `RenderControl` component to render input controls as follows.
 
-```javascript
+```typescript
 export default class InspectorGroup extends Component<InspectorGroupProps, InspectorGroupState> {
   static defaultProps = {
     inputs: [],
@@ -342,7 +342,7 @@ Below is the refactored definition for the text editor for inputting content for
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 export function ControlledHeadingContent() {
   const { t } = useTranslation()
   const store = useContext(InspectorContext)
@@ -386,7 +386,7 @@ const _heading2Inspectors = [
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 const heading2Configs = {
   tab: 'general',
   group: 'heading2Content',
@@ -413,7 +413,7 @@ Below is the refactored code of the component `TextEditingInspector`, which rend
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 function TextEditingInspector(props: Props) {
   const {
     value,
@@ -458,7 +458,7 @@ export default TextEditingInspector
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 export default class InspectorControlTextEditor extends InspectorControl<InspectorControlTextEditorProps, void> {
   editorRef: RefObject<any> = null
 
@@ -501,7 +501,7 @@ In the new structure, input control components no longer need to manually set th
 
 Below is the interface of the `InspectorControl` component.
 
-```javascript
+```typescript
 export default class InspectorControl<P, S> extends Component<P & InspectorControlProps, S & InspectorControlState> {
   // Define the default props.
   static defaultProps = {
@@ -550,7 +550,7 @@ Below are the definitions of input controls for custom ID and class attributes t
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 export const ControlledId = () => {
   const {
     data: { id },
@@ -594,7 +594,7 @@ const _attributeInspectors = [
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 const attributeConfigs = {
   tab: 'general',
   group: 'attributes',
@@ -634,7 +634,7 @@ Below is the refactored code of the component `TextInput`, which renders a singl
 
 {% tabs %}
 {% tab title="Legacy" %}
-```javascript
+```typescript
 function TextInput(props: ITextInput) {
   const { title, tooltip, helpText, spacing, ...rest } = props
 
@@ -715,7 +715,7 @@ export default TextInput
 {% endtab %}
 
 {% tab title="Refactored" %}
-```javascript
+```typescript
 export default class InspectorControlTextInput extends InspectorControl<InspectorControlTextInputProps, InspectorControlTextInputState> {
   static contextType: Context<any> = PushParameterEvent
 
