@@ -92,6 +92,10 @@ export default class StorageCookieConsent<T, K> extends Storage<
 
 I've defined two methods for updating different types of data for the storage `StorageCookieConsent`. The method `toggleModalVisibility` is to update the property `isModalVisible`, which is used by the component `EditorCookieBar` to either show or hide the cookie consent modal. Every time this method is called, it will trigger an event named `toggleCookieConsentModal` on the `document.body` element. The other method, `updateSettings`, is to update the cookie consent settings in the storage. When this method is called it will trigger an event named `changeCookieConsentSettings` on the `document.body` element.
 
+{% hint style="info" %}
+When changing storage containing a large amount of data, we can trigger multiple custom events to reduce the number of components affected by every change to as few as possible, which can prevent potential errors from spreading.
+{% endhint %}
+
 The global state `cookieSubscription` is updated by the hook function `useCookiesConsent`, the component `EditorCookieBar`, the component `CookieBar`, and the component `CookiesRequiredModal`. Changes made in the global state `cookieSubscription` affects the content and behavior of the following UI components: `CatalogItem`, `CatalogMenu`, `EditorCrispChat`, `OldPageAlert`, `PageReviewModal`, `PageOutline`, `Editor`, `CardUndo`, `CookieBar`, `CookiesRequiredModal`, `HelpSupport`, `LiveChat`, `ModalFooter`, `SearchModal`, `CardFreeServices`, `FeedbackModal`, `SupportResourcesCard`, `UndoCard`, `MediaEditorModal`, `FontUploadItem`, `Question`, `CookiesManagerModal`, `BeforeLeaveModal`, and `UserInterface`.
 
 When viewing the code, I find that only a few of the components listed above directly subscribe to `cookieSubscription` by calling the function `useSubscription` or directly change data in `cookieSubscription` by calling the `updateState` method. They are the following UI components: `CatalogItem`, `CatalogMenu`, `OldPageAlert`, `Editor`, and `CookiesManagerModal`. Other components indirectly subscribe to or change data in the global state `cookieSubscription` via the hook function `useCookiesConsent`. This situation means we only need to refactor the hook function `useCookiesConsent` and five UI components instead of all the affected components.
@@ -583,8 +587,6 @@ export function CookiesManagerModal({ action }) {
 ```
 {% endtab %}
 {% endtabs %}
-
-When changing storage containing a large amount of data, we can trigger multiple custom events to reduce the number of components affected by every change to as few as possible, which can prevent potential errors from spreading.
 
 {% hint style="success" %}
 The major difference between global state subscriptions and storage combined with custom events is that, by default, the first mechanism always forces subscribed components to update every time changes occur while the latter mechanism never forces any component to update when changes occur.
