@@ -39,7 +39,15 @@ The global state `cookieSubscription` is updated by the hook function `useCookie
 
 Luckily, when viewing the code, I find that only a few of the components listed above directly subscribe to `cookieSubscription` by calling the function `useSubscription` or directly change data in `cookieSubscription` by calling the `updateState` method. They are the following UI components: `CatalogItem`, `CatalogMenu`, `OldPageAlert`, `Editor`, and `CookiesManagerModal`. Other components indirectly subscribe to or change data in the global state `cookieSubscription` via the hook function `useCookiesConsent`. This situation means we only need to refactor the hook function `useCookiesConsent` and five UI components instead of all the affected components.
 
-However, while viewing the code of these components, I found the following lines of code are repeatedly used across many source code files.
+However, while viewing the code of these components, I found the following closely related code blocks repeatedly used across multiple source code files.
+
+```typescript
+    crispTrackingState ? openChat() : showModal(true)
+```
+
+```typescript
+    crispTrackingState ? openChat() : openModal('FUNCTIONAL_MODAL')
+```
 
 ```typescript
     if (crispTrackingState) {
@@ -50,7 +58,16 @@ However, while viewing the code of these components, I found the following lines
     }
 ```
 
-Code duplication like this is not a good behavior. So, I've converted these lines of code to a function named `openChatOrRequestPermission` and replaced all the code duplication with a calling to that function.
+```typescript
+    if (crispTrackingState) {
+      openChat()
+    } else {
+      openModal('FUNCTIONAL_MODAL')
+      handleChange()
+    }
+```
+
+Code duplication like this is not a good behavior. So, I've converted these lines of code to a function named `openChatOrRequestPermission` and replaced all the code duplications with a calling to that function.
 
 ```typescript
 export function openChatOrRequestPermission(
@@ -77,4 +94,247 @@ export function openChatOrRequestPermission(
   }
 }
 ```
+
+{% tabs %}
+{% tab title="Before" %}
+```typescript
+    crispTrackingState ? openChat() : showModal(true)
+```
+
+```typescript
+    crispTrackingState ? openChat() : openModal('FUNCTIONAL_MODAL')
+```
+
+```typescript
+    if (crispTrackingState) {
+      openChat()
+    } else {
+      closeModal()
+      openModal('FUNCTIONAL_MODAL')
+    }
+```
+
+```typescript
+    if (crispTrackingState) {
+      openChat()
+    } else {
+      openModal('FUNCTIONAL_MODAL')
+      handleChange()
+    }
+```
+{% endtab %}
+
+{% tab title="After" %}
+```typescript
+    openChatOrRequestPermission(null, false, () => showModal(true))
+```
+
+```typescript
+    openChatOrRequestPermission()
+```
+
+```typescript
+    openChatOrRequestPermission(null, true)
+```
+
+```typescript
+    openChatOrRequestPermission(handleChange)
+```
+{% endtab %}
+{% endtabs %}
+
+The code is much cleaner now. It's time to replace the global state subscription `cookieSubscription` with the storage `StorageCookieConsent` combined with a custom event named `changeStorageCookieConsent`.
+
+First, we will refactor the hook function `useCookiesConsent` as follows.
+
+{% tabs %}
+{% tab title="Before" %}
+```typescript
+const useCookiesConsent = () => {
+  // ...
+
+  const {
+    state: { isModalVisible, gaTrackingState, cookiesState, crispTrackingState, isOpenViaGetFeedback },
+    setState,
+  } = useSubscription(cookieSubscription)
+
+  // ...
+
+  return {
+    setState,
+    acceptAllCookies,
+    updateCookiesConsent,
+    isModalVisible,
+    showModal,
+    handleCancel,
+    acceptCookies,
+    acceptGATracking,
+    acceptCrisp,
+    gaTrackingState,
+    cookiesState,
+    crispTrackingState,
+    acceptAllCookiesWithoutEnableUIOptimization,
+    isOpenViaGetFeedback,
+    clickGetFeedback,
+    PFReviewCheckerShopDomain,
+  }
+}
+```
+{% endtab %}
+
+{% tab title="After" %}
+```typescript
+const useCookiesConsent = () => {
+  // ...
+
+  const storage: StorageInstance = StorageCookieConsent.getInstance()
+
+  const [cookieConsentState, updateCookieConsentState] = useState({
+    isModalVisible: storage.get('isModalVisible'),
+    gaTrackingState: storage.get('gaTrackingState'),
+    cookiesState: storage.get('cookiesState'),
+    crispTrackingState: storage.get('crispTrackingState'),
+    isOpenViaGetFeedback: storage.get('isOpenViaGetFeedback'),
+  })
+
+  const setState = newState => {
+    storage.update(newState)
+    Event.trigger(document.body, 'changeStorageCookieConsent', newState)
+  }
+
+  useEffect(() => {
+    function shouldUpdate(event: EventObject) {
+      for (const prop in cookieConsentState) {
+        const newValue = event.data[prop]
+
+        if (newValue !== undefined && cookieConsentState[prop] !== newValue) {
+          updateCookieConsentState({ ...cookieConsentState, [prop]: newValue })
+        }
+      }
+    }
+
+    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+
+    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+  }, [])
+
+  // ...
+
+  return {
+    setState,
+    acceptAllCookies,
+    updateCookiesConsent,
+    showModal,
+    handleCancel,
+    acceptCookies,
+    acceptGATracking,
+    acceptCrisp,
+    acceptAllCookiesWithoutEnableUIOptimization,
+    clickGetFeedback,
+    PFReviewCheckerShopDomain,
+    ...cookieConsentState
+  }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+As you can see, I updated the hook function `useCookiesConsent` to trigger a custom event named `changeStorageCookieConsent` every time it changes the data in the storage `StorageCookieConsent` and also listens to that custom event to update its internal state with changes in the storage. Now, we have two options: update UI components that directly subscribe to `cookieSubscription` to get data from the storage `StorageCookieConsent` and listen to the custom event `changeStorageCookieConsent`, or update these UI components to use the hook function `useCookiesConsent`.
+
+The first option needs self-validation and can reduce affections and limit dependencies. So, I decided to update these UI components that directly subscribe to `cookieSubscription` to get data from the storage `StorageCookieConsent` and listen to the custom event `changeStorageCookieConsent` to decide whether to re-render. Below are the refactored versions of these components.
+
+{% tabs %}
+{% tab title="Before" %}
+```typescript
+export default function CatalogItem({ onCloseDrawer, elementVariants, groupKey }) {
+  // ...
+
+  const {
+    state: { gaTrackingState, cookiesState },
+  } = useSubscription(cookieSubscription)
+
+  // ...
+}
+```
+{% endtab %}
+
+{% tab title="After" %}
+```typescript
+export default function CatalogItem({ onCloseDrawer, elementVariants, groupKey }) {
+  // ...
+
+  const storage = StorageCookieConsent.getInstance()
+  const [cookiesState, updateCookiesState] = useState(storage.get('cookiesState'))
+  const [gaTrackingState, updateGaTrackingState] = useState(storage.get('gaTrackingState'))
+
+  useEffect(() => {
+    function shouldUpdate(event: EventObject) {
+      const { cookiesState: _c, gaTrackingState: _g } = event.data
+
+      if (_c !== undefined && cookiesState !== _c) {
+        updateCookiesState(_c)
+      } else if (_g !== undefined && gaTrackingState !== _g) {
+        updateGaTrackingState(_g)
+      }
+    }
+
+    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+
+    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+  })
+
+  // ...
+}
+```
+{% endtab %}
+{% endtabs %}
+
+There are a few more lines of code. However, by doing this way, I take all the responsibility for the changes in the storage and only update the component if the changes affect its behavior.
+
+{% tabs %}
+{% tab title="Before" %}
+```typescript
+export default function CatalogMenu() {
+  // ...
+
+  const {
+    state: { gaTrackingState },
+  } = useSubscription(cookieSubscription)
+
+  // ...
+}
+```
+{% endtab %}
+
+{% tab title="After" %}
+```typescript
+export default function CatalogMenu() {
+  // ...
+
+  const storage = StorageCookieConsent.getInstance()
+  const [gaTrackingState, updateGaTrackingState] = useState(storage.get('gaTrackingState'))
+
+  useEffect(() => {
+    function shouldUpdate(event: EventObject) {
+      const { gaTrackingState: _g } = event.data
+
+      if (_g !== undefined && gaTrackingState !== _g) {
+        updateGaTrackingState(_g)
+      }
+    }
+
+    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+
+    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+  })
+
+  // ...
+}
+```
+{% endtab %}
+{% endtabs %}
+
+When a component calls the function `useSubscription` to subscribe to a global state without specifying a list of dependencies, every change in the global state will force the component to update its behavior. And because using a global state subscription is too easy, we usually forget to specify dependencies, which might cause the component to update itself when unnecessary. This behavior results in a not-good performance or even causes bugs to occur.
+
+When using storage combined with custom events, we will need to listen to changes that occur in storage and manually verify the changes for individual cases. Hence, mistakes will likely controlled better than using the global state subscription.
 
