@@ -52,8 +52,6 @@ I will demonstrate the idea of using storage and custom events to replace global
 Below is the storage `StorageCookieConsent` I've created to replace the global state `cookieSubscription` for saving the cookie consent settings.
 
 ```typescript
-import Storage from '@/@refactoring/includes/storage'
-
 type StorageCookieConsentDataType = {
   cookiesState?: boolean
   lastActionFrom?: string
@@ -68,12 +66,35 @@ export default class StorageCookieConsent<T, K> extends Storage<
   T & StorageCookieConsentDataType,
   K & StorageCookieConsentDataType
 > {
+  /**
+   * Toggle the `isModalVisible` property.
+   *
+   * The function will trigger the `toggleCookieConsentModal` event on the `document.body`.
+   *
+   * @param visible The new visiblity state to set for the cookie consent modal.
+   *
+   * @returns void
+   */
+  toggleModalVisibility(visible: boolean) => void
+
+  /**
+   * Update cookie consent settings.
+   *
+   * The function will trigger the `changeCookieConsentSettings` event on the `document.body`.
+   *
+   * @param settings New cookie consent settings.
+   *
+   * @returns void
+   */
+  updateSettings(settings: Partial<StorageCookieConsentDataType>) => void
 }
 ```
 
+I've defined two methods for updating different types of data for the storage `StorageCookieConsent`. The method `toggleModalVisibility` is to update the property `isModalVisible`, which is used by the component `EditorCookieBar` to either show or hide the cookie consent modal. Every time this method is called, it will trigger an event named `toggleCookieConsentModal` on the `document.body` element. The other method, `updateSettings`, is to update the cookie consent settings in the storage. When this method is called it will trigger an event named `changeCookieConsentSettings` on the `document.body` element.
+
 The global state `cookieSubscription` is updated by the hook function `useCookiesConsent`, the component `EditorCookieBar`, the component `CookieBar`, and the component `CookiesRequiredModal`. Changes made in the global state `cookieSubscription` affects the content and behavior of the following UI components: `CatalogItem`, `CatalogMenu`, `EditorCrispChat`, `OldPageAlert`, `PageReviewModal`, `PageOutline`, `Editor`, `CardUndo`, `CookieBar`, `CookiesRequiredModal`, `HelpSupport`, `LiveChat`, `ModalFooter`, `SearchModal`, `CardFreeServices`, `FeedbackModal`, `SupportResourcesCard`, `UndoCard`, `MediaEditorModal`, `FontUploadItem`, `Question`, `CookiesManagerModal`, `BeforeLeaveModal`, and `UserInterface`.
 
-Luckily, when viewing the code, I find that only a few of the components listed above directly subscribe to `cookieSubscription` by calling the function `useSubscription` or directly change data in `cookieSubscription` by calling the `updateState` method. They are the following UI components: `CatalogItem`, `CatalogMenu`, `OldPageAlert`, `Editor`, and `CookiesManagerModal`. Other components indirectly subscribe to or change data in the global state `cookieSubscription` via the hook function `useCookiesConsent`. This situation means we only need to refactor the hook function `useCookiesConsent` and five UI components instead of all the affected components.
+When viewing the code, I find that only a few of the components listed above directly subscribe to `cookieSubscription` by calling the function `useSubscription` or directly change data in `cookieSubscription` by calling the `updateState` method. They are the following UI components: `CatalogItem`, `CatalogMenu`, `OldPageAlert`, `Editor`, and `CookiesManagerModal`. Other components indirectly subscribe to or change data in the global state `cookieSubscription` via the hook function `useCookiesConsent`. This situation means we only need to refactor the hook function `useCookiesConsent` and five UI components instead of all the affected components.
 
 However, while viewing the code of these components, I found the following closely related code blocks repeatedly used across multiple source code files.
 
@@ -107,10 +128,21 @@ Code duplication like this is not a good behavior. So, I've converted these line
 
 ```typescript
 export function openChatOrRequestPermission(
-  callback: Function = null, closeVisibleModalFirst: boolean = false, showCustomModal: Function = null
+  params: {
+    showCustomModal?: Function
+    openChatCallback?: Function
+    openModalCallback?: Function
+    closeVisibleModalFirst?: boolean
+  } = {}
 ) {
+  const { showCustomModal, openChatCallback, openModalCallback, closeVisibleModalFirst } = params
+
   if (StorageCookieConsent.getInstance().get('crispTrackingState')) {
     openChat()
+
+    if (typeof openChatCallback === 'function') {
+      openChatCallback()
+    }
   } else {
     // Close all visible modals first if necessary.
     if (closeVisibleModalFirst) {
@@ -124,8 +156,8 @@ export function openChatOrRequestPermission(
       modalSubscription.updateState({ FUNCTIONAL_MODAL: true })
     }
 
-    if (typeof callback === 'function') {
-      callback()
+    if (typeof openModalCallback === 'function') {
+      openModalCallback()
     }
   }
 }
@@ -134,52 +166,39 @@ export function openChatOrRequestPermission(
 {% tabs %}
 {% tab title="Before" %}
 ```typescript
-    crispTrackingState ? openChat() : showModal(true)
+crispTrackingState ? openChat() : showModal(true)
 ```
 
 ```typescript
-    crispTrackingState ? openChat() : openModal('FUNCTIONAL_MODAL')
+crispTrackingState ? openChat() : openModal('FUNCTIONAL_MODAL')
 ```
 
 ```typescript
-    if (crispTrackingState) {
-      openChat()
-    } else {
-      closeModal()
-      openModal('FUNCTIONAL_MODAL')
-    }
-```
-
-```typescript
-    if (crispTrackingState) {
-      openChat()
-    } else {
-      openModal('FUNCTIONAL_MODAL')
-      handleChange()
-    }
+if (crispTrackingState) {
+  openChat()
+} else {
+  closeModal()
+  openModal('FUNCTIONAL_MODAL')
+}
 ```
 {% endtab %}
 
 {% tab title="After" %}
 ```typescript
-    openChatOrRequestPermission(null, false, () => showModal(true))
+openChatOrRequestPermission({ showCustomModal: () => showModal(true) })
 ```
 
 ```typescript
-    openChatOrRequestPermission()
+openChatOrRequestPermission()
 ```
 
 ```typescript
-    openChatOrRequestPermission(null, true)
-```
-
-```typescript
-    openChatOrRequestPermission(handleChange)
+openChatOrRequestPermission({ closeVisibleModalFirst: true })
 ```
 {% endtab %}
 {% endtabs %}
 
-The code is much cleaner now. It's time to replace the global state subscription `cookieSubscription` with the storage `StorageCookieConsent` combined with a custom event named `changeStorageCookieConsent`.
+The code is much cleaner now. It's time to replace the global state subscription `cookieSubscription` with the storage `StorageCookieConsent` combined with two custom events named `toggleCookieConsentModal` and `changeCookieConsentSettings`.
 
 First, we will refactor the hook function `useCookiesConsent` as follows.
 
@@ -193,6 +212,15 @@ const useCookiesConsent = () => {
     state: { isModalVisible, gaTrackingState, cookiesState, crispTrackingState, isOpenViaGetFeedback },
     setState,
   } = useSubscription(cookieSubscription)
+
+  const showModal = openCrisp => {
+    setState({ isModalVisible: true })
+    openCrispChat = openCrisp
+  }
+
+  const handleCancel = () => {
+    setState({ isModalVisible: false })
+  }
 
   // ...
 
@@ -226,17 +254,13 @@ const useCookiesConsent = () => {
   const storage: StorageInstance = StorageCookieConsent.getInstance()
 
   const [cookieConsentState, updateCookieConsentState] = useState({
-    isModalVisible: storage.get('isModalVisible'),
     gaTrackingState: storage.get('gaTrackingState'),
     cookiesState: storage.get('cookiesState'),
     crispTrackingState: storage.get('crispTrackingState'),
     isOpenViaGetFeedback: storage.get('isOpenViaGetFeedback'),
   })
 
-  const setState = newState => {
-    storage.update(newState)
-    Event.trigger(document.body, 'changeStorageCookieConsent', newState)
-  }
+  const setState = storage.updateSettings
 
   useEffect(() => {
     function shouldUpdate(event: EventObject) {
@@ -255,10 +279,19 @@ const useCookiesConsent = () => {
       }
     }
 
-    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    Event.add(document.body, 'changeCookieConsentSettings', shouldUpdate)
 
-    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    return () => Event.remove(document.body, 'changeCookieConsentSettings', shouldUpdate)
   }, [])
+
+  const showModal = openCrisp => {
+    storage.toggleModalVisibility(true)
+    openCrispChat = openCrisp
+  }
+
+  const handleCancel = () => {
+    storage.toggleModalVisibility(false)
+  }
 
   // ...
 
@@ -281,9 +314,9 @@ const useCookiesConsent = () => {
 {% endtab %}
 {% endtabs %}
 
-As you can see, I updated the hook function `useCookiesConsent` to trigger a custom event named `changeStorageCookieConsent` every time it changes the data in the storage `StorageCookieConsent` and also listens to that custom event to update its internal state with changes in the storage. Now, we have two options: update UI components that directly subscribe to `cookieSubscription` to get data from the storage `StorageCookieConsent` and listen to the custom event `changeStorageCookieConsent`, or update these UI components to use the hook function `useCookiesConsent`.
+As you can see, I updated the hook function `useCookiesConsent` to use methods from the storage to update data and listen to the custom event `changeCookieConsentSettings` to update its internal state according to changes in the storage. Now, we have two options: update UI components that directly subscribe to `cookieSubscription` to get data from the storage `StorageCookieConsent` and listen to custom events, or update these UI components to use the hook function `useCookiesConsent`.
 
-The first option needs self-validation and can reduce affections and limit dependencies. So, I decided to update these UI components that directly subscribe to `cookieSubscription` to get data from the storage `StorageCookieConsent` and listen to the custom event `changeStorageCookieConsent` to decide whether to re-render.
+The first option needs self-validation and can reduce affections and limit dependencies. So, I decided to update these UI components that directly subscribe to `cookieSubscription` to get data from the storage `StorageCookieConsent` and listen to custom events to decide whether to re-render or update behavior.
 
 Below are the refactored versions of these components.
 
@@ -322,9 +355,9 @@ export default function CatalogItem({ onCloseDrawer, elementVariants, groupKey }
       }
     }
 
-    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    Event.add(document.body, 'changeCookieConsentSettings', shouldUpdate)
 
-    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    return () => Event.remove(document.body, 'changeCookieConsentSettings', shouldUpdate)
   })
 
   // ...
@@ -367,9 +400,9 @@ export default function CatalogMenu() {
       }
     }
 
-    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    Event.add(document.body, 'changeCookieConsentSettings', shouldUpdate)
 
-    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    return () => Event.remove(document.body, 'changeCookieConsentSettings', shouldUpdate)
   })
 
   // ...
@@ -380,7 +413,7 @@ export default function CatalogMenu() {
 
 When a component calls the function `useSubscription` to subscribe to a global state without specifying a list of dependencies, every change in the global state will force the component to update its behavior. And because using a global state subscription is too easy, we usually forget to specify dependencies, which might cause the component to update itself when unnecessary. This behavior results in a not-good performance or even causes bugs to occur.
 
-When using storage combined with custom events, we will need to proactively listen to changes that occur in storage and manually verify the changes for individual cases. Hence, mistakes will likely controlled better than using the global state subscription.
+When using storage combined with custom events, we will need to proactively listen to changes that occur in storage and manually verify the changes for individual cases. Hence, mistakes will likely be controlled better than using the global state subscription.
 
 {% tabs %}
 {% tab title="Before" %}
@@ -413,9 +446,9 @@ export const OldPageAlert = () => {
       }
     }
 
-    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    Event.add(document.body, 'changeCookieConsentSettings', shouldUpdate)
 
-    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    return () => Event.remove(document.body, 'changeCookieConsentSettings', shouldUpdate)
   })
 
   // ...
@@ -459,56 +492,10 @@ function Editor() {
       }
     }
 
-    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    Event.add(document.body, 'changeCookieConsentSettings', shouldUpdate)
 
-    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    return () => Event.remove(document.body, 'changeCookieConsentSettings', shouldUpdate)
   })
-
-  // ...
-}
-```
-{% endtab %}
-{% endtabs %}
-
-{% tabs %}
-{% tab title="Before" %}
-```typescript
-export function CardFreeServices() {
-  // ...
-
-  const { crispTrackingState } = useCookiesConsent()
-
-  const handleGetFeedBack = async () => {
-    if (crispTrackingState) {
-      openChat()
-      window.$crisp.push(['set', 'message:text', ['Hi, I want to get feedback on my store ']])
-      window.$crisp.push(['set', 'session:segments', [['pagereview']]])
-      await updatePageFlyMeta({ popup_feedback: true }).catch(e => console.error(e))
-    } else {
-      openModal('FUNCTIONAL_MODAL')
-    }
-  }
-
-  // ...
-}
-```
-{% endtab %}
-
-{% tab title="After" %}
-```typescript
-export function CardFreeServices() {
-  // ...
-
-  const handleGetFeedBack = async () => {
-    if (StorageCookieConsent.getInstance().get('crispTrackingState')) {
-      openChat()
-      window.$crisp.push(['set', 'message:text', ['Hi, I want to get feedback on my store ']])
-      window.$crisp.push(['set', 'session:segments', [['pagereview']]])
-      await updatePageFlyMeta({ popup_feedback: true }).catch(e => console.error(e))
-    } else {
-      openModal('FUNCTIONAL_MODAL')
-    }
-  }
 
   // ...
 }
@@ -581,9 +568,9 @@ export function CookiesManagerModal({ action }) {
       }
     }
 
-    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    Event.add(document.body, 'changeCookieConsentSettings', shouldUpdate)
 
-    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+    return () => Event.remove(document.body, 'changeCookieConsentSettings', shouldUpdate)
   }, [])
 
   useEffect(() => {
@@ -599,4 +586,12 @@ export function CookiesManagerModal({ action }) {
 
 When changing storage containing a large amount of data, we can trigger multiple custom events to reduce the number of components affected by every change to as few as possible, which can prevent potential errors from spreading.
 
-I recommend you checkout the commit ID `0880f3cb24` in the branch `cuongnm-refactoring-oop` of the repository `pfcore` to review the code changes.
+{% hint style="success" %}
+The major difference between global state subscriptions and storage combined with custom events is that, by default, the first mechanism always forces subscribed components to update every time changes occur while the latter mechanism never forces any component to update when changes occur.
+
+In my opinion, starting from no any relationships and then developing carefully when needed will be much safer than starting from the global where every component can easily subscribe to changes in a store to update itself or update the store. The ability to easily create a broad number of relationships can result in untrackable and uncontrollable situations.
+{% endhint %}
+
+{% hint style="info" %}
+I recommend you check out the commit ID `e9ce4d4fdc` in the branch `cuongnm-refactoring-oop` of the repository `pfcore` to review the code changes.
+{% endhint %}
