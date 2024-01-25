@@ -8,13 +8,51 @@ Currently, we create a global state using the `createSubscription` function and 
 
 My idea is to use storage and custom events to replace the global state subscription. UI components will read data from storage to render content and decide an appropriate behavior but not directly subscribe to changes in the storage. Instead, a UI component should listen to a custom event on a common HTML element, such as the `window` object or the `document.body` element, to proactively know when the storage data changes and decide whether to update itself. When a UI component changes storage data, it needs to trigger a custom event on the chosen HTML element to let other UI components know about it.
 
+To support this idea, I've created a base class named `Event` for working with custom events. Below is the interface of this base class.
+
+```typescript
+export default class Event {
+  /**
+   * Listen to an event on an object.
+   *
+   * @param sourceObject     This argument can be any object.
+   * @param eventName        Name of the event.
+   * @param callbackFunction Function that will be executed when the event is triggered.
+   *
+   * @returns void
+   */
+  static add(sourceObject: any | any[], eventName: string, callbackFunction: EventHandler) => void
+
+  /**
+   * Stop listening to an event on an object.
+   *
+   * @param sourceObject     This argument can be any object.
+   * @param eventName        Name of the event.
+   * @param callbackFunction Function that was previously registered.
+   *
+   * @returns void
+   */
+  static remove(sourceObject: any | any[], eventName: string, callbackFunction: EventHandler) => void
+
+  /**
+   * Trigger an event on an object.
+   *
+   * @param sourceObject This argument can be any object.
+   * @param eventName    Name of the event.
+   * @param eventData    Event data.
+   *
+   * @returns void
+   */
+  static trigger(sourceObject: any | any[], eventName: string, eventData: any = {}) => void
+}
+```
+
 I will demonstrate the idea of using storage and custom events to replace global state subscriptions by refactoring the use of the global state `cookieSubscription`. Currently, the global state `cookieSubscription` stores cookie consent settings. Several UI components subscribe to this global state to render appropriate content based on the current cookie consent settings.
 
 Below is the storage `StorageCookieConsent` I've created to replace the global state `cookieSubscription` for saving the cookie consent settings.
 
 ```typescript
-import cookieSubscription from '@/stores/cookies-controller'
-import Storage, { StorageSynchronization } from '@/@refactoring/includes/storage'
+import Storage from '@/@refactoring/includes/storage'
 
 type StorageCookieConsentDataType = {
   cookiesState?: boolean
@@ -30,8 +68,6 @@ export default class StorageCookieConsent<T, K> extends Storage<
   T & StorageCookieConsentDataType,
   K & StorageCookieConsentDataType
 > {
-  // Define synchronization with legacy stores.
-  static syncWithLegacyStores: StorageSynchronization = () => cookieSubscription
 }
 ```
 
@@ -204,12 +240,18 @@ const useCookiesConsent = () => {
 
   useEffect(() => {
     function shouldUpdate(event: EventObject) {
+      const newState = {}
+
       for (const prop in cookieConsentState) {
         const newValue = event.data[prop]
 
         if (newValue !== undefined && cookieConsentState[prop] !== newValue) {
-          updateCookieConsentState({ ...cookieConsentState, [prop]: newValue })
+          newState[prop] = newValue
         }
+      }
+
+      if (Object.keys(newState).length) {
+        updateCookieConsentState({ ...cookieConsentState, ...newState })
       }
     }
 
@@ -241,7 +283,9 @@ const useCookiesConsent = () => {
 
 As you can see, I updated the hook function `useCookiesConsent` to trigger a custom event named `changeStorageCookieConsent` every time it changes the data in the storage `StorageCookieConsent` and also listens to that custom event to update its internal state with changes in the storage. Now, we have two options: update UI components that directly subscribe to `cookieSubscription` to get data from the storage `StorageCookieConsent` and listen to the custom event `changeStorageCookieConsent`, or update these UI components to use the hook function `useCookiesConsent`.
 
-The first option needs self-validation and can reduce affections and limit dependencies. So, I decided to update these UI components that directly subscribe to `cookieSubscription` to get data from the storage `StorageCookieConsent` and listen to the custom event `changeStorageCookieConsent` to decide whether to re-render. Below are the refactored versions of these components.
+The first option needs self-validation and can reduce affections and limit dependencies. So, I decided to update these UI components that directly subscribe to `cookieSubscription` to get data from the storage `StorageCookieConsent` and listen to the custom event `changeStorageCookieConsent` to decide whether to re-render.
+
+Below are the refactored versions of these components.
 
 {% tabs %}
 {% tab title="Before" %}
@@ -336,5 +380,223 @@ export default function CatalogMenu() {
 
 When a component calls the function `useSubscription` to subscribe to a global state without specifying a list of dependencies, every change in the global state will force the component to update its behavior. And because using a global state subscription is too easy, we usually forget to specify dependencies, which might cause the component to update itself when unnecessary. This behavior results in a not-good performance or even causes bugs to occur.
 
-When using storage combined with custom events, we will need to listen to changes that occur in storage and manually verify the changes for individual cases. Hence, mistakes will likely controlled better than using the global state subscription.
+When using storage combined with custom events, we will need to proactively listen to changes that occur in storage and manually verify the changes for individual cases. Hence, mistakes will likely controlled better than using the global state subscription.
 
+{% tabs %}
+{% tab title="Before" %}
+```typescript
+export const OldPageAlert = () => {
+  const {
+    state: { gaTrackingState, cookiesState },
+  } = useSubscription(cookieSubscription)
+
+  // ...
+}
+```
+{% endtab %}
+
+{% tab title="After" %}
+```typescript
+export const OldPageAlert = () => {
+  const storage = StorageCookieConsent.getInstance()
+  const [cookiesState, updateCookiesState] = useState(storage.get('cookiesState'))
+  const [gaTrackingState, updateGaTrackingState] = useState(storage.get('gaTrackingState'))
+
+  useEffect(() => {
+    function shouldUpdate(event: EventObject) {
+      const { cookiesState: _c, gaTrackingState: _g } = event.data
+
+      if (_c !== undefined && cookiesState !== _c) {
+        updateCookiesState(_c)
+      } else if (_g !== undefined && gaTrackingState !== _g) {
+        updateGaTrackingState(_g)
+      }
+    }
+
+    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+
+    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+  })
+
+  // ...
+}
+```
+{% endtab %}
+{% endtabs %}
+
+{% tabs %}
+{% tab title="Before" %}
+```typescript
+function Editor() {
+  // ...
+
+  const {
+    state: { gaTrackingState, cookiesState },
+  } = useSubscription(cookieSubscription)
+
+  // ...
+}
+```
+{% endtab %}
+
+{% tab title="After" %}
+```typescript
+function Editor() {
+  // ...
+
+  const storage = StorageCookieConsent.getInstance()
+  const [cookiesState, updateCookiesState] = useState(storage.get('cookiesState'))
+  const [gaTrackingState, updateGaTrackingState] = useState(storage.get('gaTrackingState'))
+
+  useEffect(() => {
+    function shouldUpdate(event: EventObject) {
+      const { cookiesState: _c, gaTrackingState: _g } = event.data
+
+      if (_c !== undefined && cookiesState !== _c) {
+        updateCookiesState(_c)
+      } else if (_g !== undefined && gaTrackingState !== _g) {
+        updateGaTrackingState(_g)
+      }
+    }
+
+    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+
+    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+  })
+
+  // ...
+}
+```
+{% endtab %}
+{% endtabs %}
+
+{% tabs %}
+{% tab title="Before" %}
+```typescript
+export function CardFreeServices() {
+  // ...
+
+  const { crispTrackingState } = useCookiesConsent()
+
+  const handleGetFeedBack = async () => {
+    if (crispTrackingState) {
+      openChat()
+      window.$crisp.push(['set', 'message:text', ['Hi, I want to get feedback on my store ']])
+      window.$crisp.push(['set', 'session:segments', [['pagereview']]])
+      await updatePageFlyMeta({ popup_feedback: true }).catch(e => console.error(e))
+    } else {
+      openModal('FUNCTIONAL_MODAL')
+    }
+  }
+
+  // ...
+}
+```
+{% endtab %}
+
+{% tab title="After" %}
+```typescript
+export function CardFreeServices() {
+  // ...
+
+  const handleGetFeedBack = async () => {
+    if (StorageCookieConsent.getInstance().get('crispTrackingState')) {
+      openChat()
+      window.$crisp.push(['set', 'message:text', ['Hi, I want to get feedback on my store ']])
+      window.$crisp.push(['set', 'session:segments', [['pagereview']]])
+      await updatePageFlyMeta({ popup_feedback: true }).catch(e => console.error(e))
+    } else {
+      openModal('FUNCTIONAL_MODAL')
+    }
+  }
+
+  // ...
+}
+```
+{% endtab %}
+{% endtabs %}
+
+{% tabs %}
+{% tab title="Before" %}
+```typescript
+export function CookiesManagerModal({ action }) {
+  // ...
+
+  const {
+    state: { gaTrackingState, cookiesState, crispTrackingState },
+  } = useSubscription(cookieSubscription)
+
+  const [disabled, setDisabled] = useState(true)
+  const [tempCookiesState, setTempCookiesState] = useState({
+    gaTrackingState: gaTrackingState,
+    cookiesState: cookiesState,
+    crispTrackingState: crispTrackingState,
+  })
+
+  useEffect(() => {
+    setTempCookiesState({
+      gaTrackingState: gaTrackingState,
+      cookiesState: cookiesState,
+      crispTrackingState: crispTrackingState,
+    })
+  }, [gaTrackingState, cookiesState, crispTrackingState])
+
+  useEffect(() => {
+    setDisabled(isEqual(tempCookiesState, { gaTrackingState, cookiesState, crispTrackingState }))
+  }, [tempCookiesState])
+
+  // ...
+}
+```
+{% endtab %}
+
+{% tab title="After" %}
+```typescript
+export function CookiesManagerModal({ action }) {
+  // ...
+
+  const [disabled, setDisabled] = useState(true)
+  const storage = StorageCookieConsent.getInstance()
+
+  const [tempCookiesState, setTempCookiesState] = useState({
+    gaTrackingState: storage.get('gaTrackingState'),
+    cookiesState: storage.get('cookiesState'),
+    crispTrackingState: storage.get('crispTrackingState'),
+  })
+
+  useEffect(() => {
+    function shouldUpdate(event: EventObject) {
+      const newState = {}
+
+      for (const prop in tempCookiesState) {
+        const newValue = event.data[prop]
+
+        if (newValue !== undefined && tempCookiesState[prop] !== newValue) {
+          newState[prop] = newValue
+        }
+      }
+
+      if (Object.keys(newState).length) {
+        setTempCookiesState({ ...tempCookiesState, ...newState })
+      }
+    }
+
+    Event.add(document.body, 'changeStorageCookieConsent', shouldUpdate)
+
+    return () => Event.remove(document.body, 'changeStorageCookieConsent', shouldUpdate)
+  }, [])
+
+  useEffect(() => {
+    const { gaTrackingState, cookiesState, crispTrackingState } = storage.get()
+    setDisabled(isEqual(tempCookiesState, { gaTrackingState, cookiesState, crispTrackingState }))
+  }, [tempCookiesState])
+
+  // ...
+}
+```
+{% endtab %}
+{% endtabs %}
+
+When changing storage containing a large amount of data, we can trigger multiple custom events to reduce the number of components affected by every change to as few as possible, which can prevent potential errors from spreading.
+
+I recommend you checkout the commit ID `0880f3cb24` in the branch `cuongnm-refactoring-oop` of the repository `pfcore` to review the code changes.
