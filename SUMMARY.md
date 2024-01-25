@@ -36,9 +36,9 @@
     * [Storage mechanism](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/storage-mechanism.md)
     * [Dynamic render](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/dynamic-render.md)
     * [Refactor UI components](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-ui-components.md)
-    * [Global state subscription alternative](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/global-state-subscription-alternative.md)
     * [Refactor the editor module](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-the-editor-module.md)
     * [Refactor the inspector module](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/refactor-the-inspector-module.md)
+  * [Global state subscription alternative](guides/refactor-pagefly-applying-oop/global-state-subscription-alternative.md)
   * [Conclusion](guides/refactor-pagefly-applying-oop/conclusion.md)
   * [References](guides/refactor-pagefly-applying-oop/references.md)
 
