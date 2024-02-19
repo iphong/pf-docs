@@ -6,8 +6,8 @@
 [introduction.md](introduction.md)
 {% endcontent-ref %}
 
-{% content-ref url="procedures/" %}
-[procedures](procedures/)
+{% content-ref url="processes/" %}
+[processes](processes/)
 {% endcontent-ref %}
 
 ## Side notes
