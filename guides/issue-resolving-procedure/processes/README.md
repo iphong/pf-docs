@@ -1,15 +1,15 @@
-# Procedures
+# Processes
 
 {% content-ref url="1.-understand-the-issue.md" %}
 [1.-understand-the-issue.md](1.-understand-the-issue.md)
 {% endcontent-ref %}
 
-{% content-ref url="2.-find-at-least-two-solutions.md" %}
-[2.-find-at-least-two-solutions.md](2.-find-at-least-two-solutions.md)
+{% content-ref url="2.-find-multiple-solutions.md" %}
+[2.-find-multiple-solutions.md](2.-find-multiple-solutions.md)
 {% endcontent-ref %}
 
-{% content-ref url="3.-choose-the-simplest-and-most-effective-solution.md" %}
-[3.-choose-the-simplest-and-most-effective-solution.md](3.-choose-the-simplest-and-most-effective-solution.md)
+{% content-ref url="3.-choose-one-solution.md" %}
+[3.-choose-one-solution.md](3.-choose-one-solution.md)
 {% endcontent-ref %}
 
 {% content-ref url="4.-write-automated-tests.md" %}
