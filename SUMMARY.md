@@ -30,6 +30,7 @@
     * [3. Choose the simplest and most effective solution](guides/issue-resolving-procedure/processes/3.-choose-the-simplest-and-most-effective-solution.md)
     * [4. Write automated tests](guides/issue-resolving-procedure/processes/4.-write-automated-tests.md)
     * [5. Start coding](guides/issue-resolving-procedure/processes/5.-start-coding.md)
+  * [Example 1](guides/issue-resolving-procedure/example-1.md)
 * [Integrating with 3rd-party apps](guides/integrating-with-3rd-party-apps.md)
 * [Testing in PageFly](guides/testing-in-pagefly/README.md)
   * [Unit Tests](guides/testing-in-pagefly/unit-tests/README.md)
