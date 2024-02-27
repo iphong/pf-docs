@@ -9,25 +9,17 @@ description: >-
 
 ## Core Features
 
-### Inspectors
+### [Inspectors](inspectors.md)
 
-<figure><img src="../../../.gitbook/assets/Screenshot 2023-11-05 at 16.01.52.png" alt=""><figcaption><p>Inspectors</p></figcaption></figure>
+### [Page Outline](page-outline.md)
 
-Used for customizing mostly styles
+### [Editor Canvas](editor-canvas.md)
 
-### Page Outline
-
-<figure><img src="../../../.gitbook/assets/Screenshot 2023-11-05 at 16.00.55.png" alt=""><figcaption></figcaption></figure>
-
-### Editor Canvas
-
-<figure><img src="../../../.gitbook/assets/Screenshot 2023-11-05 at 16.00.04.png" alt=""><figcaption><p>Editor Canvas</p></figcaption></figure>
+### [Render element](render-element.md)
 
 #### Drag And Drop
 
 #### Highlight Layouts
-
-#### Render elements
 
 ### Auto Save
 

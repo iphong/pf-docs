@@ -4,6 +4,9 @@
 
 * [Getting started](README.md)
   * [Understanding Features](guides/readme/understanding-features/README.md)
+    * [Inspectors](guides/readme/understanding-features/inspectors.md)
+    * [Page Outline](guides/readme/understanding-features/page-outline.md)
+    * [Editor Canvas](guides/readme/understanding-features/editor-canvas.md)
     * [Render Element](guides/readme/understanding-features/render-element.md)
   * [Understanding the server](guides/readme/understanding-the-server.md)
   * [Page](guides/readme/page.md)
