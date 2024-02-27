@@ -3,7 +3,8 @@
 ## Guides
 
 * [Getting started](README.md)
-  * [Understanding Features](guides/readme/understanding-features.md)
+  * [Understanding Features](guides/readme/understanding-features/README.md)
+    * [Render Element](guides/readme/understanding-features/render-element.md)
   * [Understanding the server](guides/readme/understanding-the-server.md)
   * [Page](guides/readme/page.md)
   * [Setup the environment](guides/getting-started/setup-the-environment.md)

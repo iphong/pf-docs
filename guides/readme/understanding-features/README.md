@@ -11,17 +11,17 @@ description: >-
 
 ### Inspectors
 
-<figure><img src="../../.gitbook/assets/Screenshot 2023-11-05 at 16.01.52.png" alt=""><figcaption><p>Inspectors</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Screenshot 2023-11-05 at 16.01.52.png" alt=""><figcaption><p>Inspectors</p></figcaption></figure>
 
 Used for customizing mostly styles
 
 ### Page Outline
 
-<figure><img src="../../.gitbook/assets/Screenshot 2023-11-05 at 16.00.55.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Screenshot 2023-11-05 at 16.00.55.png" alt=""><figcaption></figcaption></figure>
 
 ### Editor Canvas
 
-<figure><img src="../../.gitbook/assets/Screenshot 2023-11-05 at 16.00.04.png" alt=""><figcaption><p>Editor Canvas</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Screenshot 2023-11-05 at 16.00.04.png" alt=""><figcaption><p>Editor Canvas</p></figcaption></figure>
 
 #### Drag And Drop
 
