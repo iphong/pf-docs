@@ -9,13 +9,21 @@ description: >-
 
 ## Core Features
 
-### [Inspectors](inspectors.md)
+{% content-ref url="inspectors.md" %}
+[inspectors.md](inspectors.md)
+{% endcontent-ref %}
 
-### [Page Outline](page-outline.md)
+{% content-ref url="page-outline.md" %}
+[page-outline.md](page-outline.md)
+{% endcontent-ref %}
 
-### [Editor Canvas](editor-canvas.md)
+{% content-ref url="editor-canvas.md" %}
+[editor-canvas.md](editor-canvas.md)
+{% endcontent-ref %}
 
-### [Render element](render-element.md)
+{% content-ref url="render-element.md" %}
+[render-element.md](render-element.md)
+{% endcontent-ref %}
 
 #### Drag And Drop
 
