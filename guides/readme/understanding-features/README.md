@@ -9,6 +9,10 @@ description: >-
 
 ## Core Features
 
+{% content-ref url="elements.md" %}
+[elements.md](elements.md)
+{% endcontent-ref %}
+
 {% content-ref url="inspectors.md" %}
 [inspectors.md](inspectors.md)
 {% endcontent-ref %}
@@ -25,47 +29,71 @@ description: >-
 [render-element.md](render-element.md)
 {% endcontent-ref %}
 
-#### Drag And Drop
+{% content-ref url="drag-and-drop.md" %}
+[drag-and-drop.md](drag-and-drop.md)
+{% endcontent-ref %}
 
-#### Highlight Layouts
+{% content-ref url="undo-redo.md" %}
+[undo-redo.md](undo-redo.md)
+{% endcontent-ref %}
 
-### Auto Save
+{% content-ref url="auto-save.md" %}
+[auto-save.md](auto-save.md)
+{% endcontent-ref %}
 
-### Undo Redo
+{% content-ref url="global-styling.md" %}
+[global-styling.md](global-styling.md)
+{% endcontent-ref %}
 
-### Analytics
+{% content-ref url="../../../references/global-sections.md" %}
+[global-sections.md](../../../references/global-sections.md)
+{% endcontent-ref %}
 
-### Theme Switching
+{% content-ref url="version-history.md" %}
+[version-history.md](version-history.md)
+{% endcontent-ref %}
 
-### Preview page
+{% content-ref url="pricing.md" %}
+[pricing.md](pricing.md)
+{% endcontent-ref %}
 
-### Template selector
+{% content-ref url="helper.md" %}
+[helper.md](helper.md)
+{% endcontent-ref %}
 
-### Elements
+{% content-ref url="theme-switching.md" %}
+[theme-switching.md](theme-switching.md)
+{% endcontent-ref %}
 
-### Helper
+{% content-ref url="save-and-publish.md" %}
+[save-and-publish.md](save-and-publish.md)
+{% endcontent-ref %}
 
-### Save And Publish
+{% content-ref url="template-selector.md" %}
+[template-selector.md](template-selector.md)
+{% endcontent-ref %}
 
-### Theme Styling
+{% content-ref url="theme-styling.md" %}
+[theme-styling.md](theme-styling.md)
+{% endcontent-ref %}
 
-### Pricing
+{% content-ref url="page-preview.md" %}
+[page-preview.md](page-preview.md)
+{% endcontent-ref %}
 
-### Version History
-
-### Global Styling
-
-### Global Sections
+{% content-ref url="highlight-layouts.md" %}
+[highlight-layouts.md](highlight-layouts.md)
+{% endcontent-ref %}
 
 ## Features' relation
 
-### Editor Canvas - Inspectors - Outline - Theme Styling - Global Styling
+Editor Canvas - Inspectors - Outline - Theme Styling - Global Styling
 
-### Undo Redo - Auto Save
+Undo Redo - Auto Save
 
-### Element - Helper - Global Sections
+Element - Helper - Global Sections
 
-### Save And Publish - Pricing
+Save And Publish - Pricing
 
 
 
