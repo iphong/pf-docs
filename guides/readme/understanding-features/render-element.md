@@ -1,10 +1,18 @@
 ---
-description: This document explains how the render element mechanism
+description: This document explains how elements are rendered inside PageFly pages
 ---
 
 # Render Element
 
 ## Data Structure
+
+### Flat vs Nested Data Structure
+
+We are a web page builder and since web pages are all using HTML markups our elements are designed to represent HTML elements.
+
+In PageFly, we choose to have a "Flat Data Structure" for several reasons. The biggest reason to choose this type of data structure is that it is easier to query for a specific element and make changes to it, rather than looping through deeply nested data.
+
+### Element Data
 
 ```typescript
 {
@@ -15,7 +23,7 @@ description: This document explains how the render element mechanism
 }
 ```
 
-### An Data Structure Example of PF Page
+### Page Elements Data
 
 The following code is the very basic structure of a page which consists of a root body element, and all of the element needed in its hieachy.
 
