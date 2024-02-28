@@ -1,5 +1,7 @@
 ---
-description: Fix pages published by PageFly losing styles on the storefront of a customer.
+description: >-
+  Fix pages published by PageFly losing styles on the storefront of a customer.
+  This example is credited to ThanhLM (Kevin).
 ---
 
 # Example 2
