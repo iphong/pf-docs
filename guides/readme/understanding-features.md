@@ -9,10 +9,12 @@ description: >-
 
 ## Core Features
 
-aaaaaaa
-
 {% content-ref url="understanding-features/elements.md" %}
 [elements.md](understanding-features/elements.md)
+{% endcontent-ref %}
+
+{% content-ref url="understanding-features/render-element.md" %}
+[render-element.md](understanding-features/render-element.md)
 {% endcontent-ref %}
 
 {% content-ref url="understanding-features/inspectors.md" %}
@@ -25,10 +27,6 @@ aaaaaaa
 
 {% content-ref url="understanding-features/editor-canvas.md" %}
 [editor-canvas.md](understanding-features/editor-canvas.md)
-{% endcontent-ref %}
-
-{% content-ref url="understanding-features/render-element.md" %}
-[render-element.md](understanding-features/render-element.md)
 {% endcontent-ref %}
 
 {% content-ref url="understanding-features/drag-and-drop.md" %}
