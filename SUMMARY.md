@@ -4,6 +4,7 @@
 
 * [Getting started](README.md)
   * [Understanding Features](guides/readme/understanding-features/README.md)
+    * [Guidelines for writing Documentation](guides/readme/understanding-features/guidelines-for-writing-documentation.md)
     * [Elements](guides/readme/understanding-features/elements.md)
     * [Inspectors](guides/readme/understanding-features/inspectors.md)
     * [Page Outline](guides/readme/understanding-features/page-outline.md)
