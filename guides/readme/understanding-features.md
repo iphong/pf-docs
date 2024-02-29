@@ -7,6 +7,10 @@ description: >-
 
 # Understanding Features
 
+{% hint style="info" %}
+If you are writing documentation for these page please read through [the guidelines here](understanding-features/core-mechanism-documentation-guidelines.md).
+{% endhint %}
+
 ## Core Features
 
 {% content-ref url="understanding-features/elements.md" %}
