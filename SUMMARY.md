@@ -3,7 +3,7 @@
 ## Guides
 
 * [Getting started](README.md)
-  * [Understanding Features](guides/readme/understanding-features/README.md)
+  * [Understanding Features](guides/readme/understanding-features.md)
     * [Core Mechanism Documentation Guidelines](guides/readme/understanding-features/core-mechanism-documentation-guidelines.md)
     * [Elements](guides/readme/understanding-features/elements.md)
     * [Render Element](guides/readme/understanding-features/render-element.md)
@@ -25,6 +25,7 @@
     * [Theme Styling](guides/readme/understanding-features/theme-styling.md)
     * [Page Preview](guides/readme/understanding-features/page-preview.md)
     * [Highlight Layouts](guides/readme/understanding-features/highlight-layouts.md)
+    * [Save and Publish Mechanism](guides/readme/understanding-features/save-and-publish-mechanism.md)
   * [Understanding the server](guides/readme/understanding-the-server.md)
   * [Page](guides/readme/page.md)
   * [Setup the environment](guides/getting-started/setup-the-environment.md)
