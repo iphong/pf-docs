@@ -6,11 +6,20 @@ description: This document explains how elements are rendered inside PageFly pag
 
 ## Data Structure
 
-### Flat vs Nested Data Structure
+Within the context of PageFly, a web page builder, the following describes the choice between flat and nested data structures for representing HTML elements:
 
-We are a web page builder and since web pages are all using HTML markups our elements are designed to represent HTML elements.
+* **Data Model:**  The elements within PageFly represent the individual components of a web page, mapped to their corresponding HTML elements.
+* **Data Structure Choice:** PageFly employs a **flat data structure** for several advantages.
+* **Advantages of Flat Data Structure:**  Flat data organization simplifies locating and modifying specific elements.exclamation This eliminates the need for traversing complex nested structures, enhancing query and modification performance.
 
-In PageFly, we choose to have a "Flat Data Structure" for several reasons. The biggest reason to choose this type of data structure is that it is easier to query for a specific element and make changes to it, rather than looping through deeply nested data.
+{% hint style="info" %}
+**Comparison with Nested Data Structure:**
+
+While nested data structures might mirror the hierarchical nature of HTML markup, they can introduce inefficiencies when:
+
+* **Querying specific elements:** Deeply nested structures require iterating through multiple levels to find the desired element, potentially affecting performance.
+* **Modifying elements:** Changes potentially necessitate updates in multiple nested locations, increasing complexity.
+{% endhint %}
 
 ### Element Data
 

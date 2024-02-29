@@ -1,12 +1,18 @@
 ---
 description: >-
-  Documentation writer may follow this guidelines for documenting core
-  mechanisms
+  This document outlines the preferred practices and standards for documenting
+  the core mechanisms within PageFly.
 ---
 
-# Guidelines for writing Documentation
+# Core Mechanism Documentation Guidelines
 
-## Starting Points for Documenting Our Core Mechanisms
+**These guidelines aim to ensure consistent, clear, and comprehensive documentation that effectively communicates the functionality and design of the system's essential components.**
+
+## Starting Points
+
+{% hint style="success" %}
+To ensure the clarity and comprehension of the forthcoming documentation, it is imperative to thoroughly review the following guidelines prior to commencing the writing process. This preparatory phase serves to solidify your understanding of the subject matter and facilitate the assembly of all requisite materials, ultimately contributing to the creation of well-structured and readily digestible documentation.
+{% endhint %}
 
 1. **Identify the Core Mechanism:**
    * Define what constitutes the "core mechanism" of your web app. Is it a specific algorithm, data structure, or interaction pattern that drives the app's functionality?
