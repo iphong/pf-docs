@@ -26,6 +26,7 @@
     * [Page Preview](guides/readme/understanding-features/page-preview.md)
     * [Highlight Layouts](guides/readme/understanding-features/highlight-layouts.md)
     * [Save and Publish Mechanism](guides/readme/understanding-features/save-and-publish-mechanism.md)
+    * [Undo redo](guides/readme/understanding-features/undo-redo-1.md)
   * [Understanding the server](guides/readme/understanding-the-server.md)
   * [Page](guides/readme/page.md)
   * [Setup the environment](guides/getting-started/setup-the-environment.md)
