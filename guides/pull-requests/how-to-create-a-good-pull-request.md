@@ -15,8 +15,8 @@ description: >-
 
 PR description is **compulsory**, do not use the generated description, this helps give the reviewers a quick look on how you solve the problem
 
-* If it's a bug, add reasons and solutions
-* <mark style="color:red;">Add a checklist of cases that you have tested on your development environment</mark>
+* <mark style="color:blue;">Submit the proposal for your work</mark>
+* Add a checklist of cases that you have tested on your development environment
   * For example: a pull request that fix the slideshow won't work should have a list of test cases like this
     * Check slideshow in product media
     * Check slideshow elements in section
