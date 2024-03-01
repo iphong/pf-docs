@@ -1,4 +1,4 @@
-# Test-driven development
+# Test-driven development (TDD)
 
 ### Introduction
 
@@ -6,7 +6,7 @@ I tended to write a detailed introduction about test-driven development (TDD) me
 
 Let me shorten it for you by an image and a short description.
 
-<figure><img src="../.gitbook/assets/tdd.png" alt=""><figcaption><p>Credited by <a href="https://testdriven.io/test-driven-development/">testdriven.io</a></p></figcaption></figure>
+<figure><img src="../.gitbook/assets/card.png" alt=""><figcaption><p>Credited by <a href="https://martinfowler.com/bliki/TestDrivenDevelopment.html">martinfowler.com</a></p></figcaption></figure>
 
 {% hint style="info" %}
 Test-driven development (TDD) focuses on an iterative development cycle where the emphasis is placed on writing test cases before the actual feature or function is written.

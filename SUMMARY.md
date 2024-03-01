@@ -89,7 +89,7 @@
   * [Global state subscription alternative](guides/refactor-pagefly-applying-oop/global-state-subscription-alternative.md)
   * [Conclusion](guides/refactor-pagefly-applying-oop/conclusion.md)
   * [References](guides/refactor-pagefly-applying-oop/references.md)
-* [Test-driven development](guides/test-driven-development.md)
+* [Test-driven development (TDD)](guides/test-driven-development-tdd.md)
 
 ## References
 
