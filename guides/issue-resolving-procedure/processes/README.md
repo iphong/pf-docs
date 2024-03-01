@@ -12,10 +12,10 @@
 [3.-choose-one-solution.md](3.-choose-one-solution.md)
 {% endcontent-ref %}
 
-{% content-ref url="4.-write-automated-tests.md" %}
-[4.-write-automated-tests.md](4.-write-automated-tests.md)
+{% content-ref url="4.-write-test-cases.md" %}
+[4.-write-test-cases.md](4.-write-test-cases.md)
 {% endcontent-ref %}
 
-{% content-ref url="5.-start-coding.md" %}
-[5.-start-coding.md](5.-start-coding.md)
+{% content-ref url="5.-test-and-code.md" %}
+[5.-test-and-code.md](5.-test-and-code.md)
 {% endcontent-ref %}
