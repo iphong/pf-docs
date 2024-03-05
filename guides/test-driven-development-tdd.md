@@ -94,31 +94,17 @@ First, we need to install some modules to support automated tests. Open the term
 npm i jest supertest cross-env --save-dev
 ```
 
-Then we need to create a config file for the `jest` module as follows.
+The config file for the `jest` module has already been created for some unit tests before but needs to be updated as follows.
 
 <details>
 
 <summary>[pfserver] jest.config.js</summary>
 
 ```javascript
-module.exports = {
-  preset: 'ts-jest',
-  roots: ['<rootDir>/extensions/helper-src/src', '<rootDir>/src'],
-  collectCoverageFrom: ['extensions/helper-src/src/**/*.{js,ts}', "src/**/*.test.{js,ts}"],
-  setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
-  testMatch: ['<rootDir>/extensions/helper-src/src/__tests__/**/*.{js,ts}', '<rootDir>/extensions/helper-src/src/*.{spec,test}.{js,ts}', '<rootDir>/src/**/*.{spec,test}.{js,ts}'],
-  testEnvironment: 'node',
-  transformIgnorePatterns: [
-    '[/\\\\]node_modules[/\\\\].+\\.(js|mjs|cjs|ts)$',
-  ],
-  modulePaths: ['<rootDir>/extensions/helper-src/src', '<rootDir>/src'],
-  moduleNameMapper: {
-    '@/(.*)$': '<rootDir>/extensions/helper-src/src/$1',
-    '@src/(.*)$': '<rootDir>/src/$1',
-  },
-  moduleFileExtensions: ['js', 'ts', 'json'],
-  watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
-}
+// ...
+-  testEnvironment: 'jsdom',
++  testEnvironment: 'node',
+// ...
 ```
 
 </details>
@@ -149,7 +135,7 @@ export async function validateShopAPI(req, res, next?): Promise<void> {
 
 </details>
 
-Finally, we need to update the server initialization process to connect to the MongoDB database for testing when the server runs in the `test` environment.
+Finally, we need to update some files that initialize the server to skip some tasks when the server runs in the `test` environment.
 
 <details>
 
@@ -159,11 +145,11 @@ Finally, we need to update the server initialization process to connect to the M
 // ...
   async connectMongoose(): Promise<string> {
 -    for (const uri of MONGODB_URI_ARR) {
-+    const mongoServers = process.env.NODE_ENV === 'test'
-+      ? [process.env.MONGODB_URI_FOR_AUTOMATED_TESTS]
-+      : MONGODB_URI_ARR
++    const mongoServers =
++      process.env.NODE_ENV === 'test' ? [process.env.MONGODB_URI_FOR_AUTOMATED_TESTS] : MONGODB_URI_ARR
 +
 +    for (const uri of mongoServers) {
+      if (!this.mongoConnected) {
 // ...
 +      if (process.env.NODE_ENV === 'test') {
 +        return
@@ -171,61 +157,14 @@ Finally, we need to update the server initialization process to connect to the M
 +
       mongoose.connection.on('error', e => {
 // ...
--    /**
--     * Start Express server.
--     */
--    let server = http.createServer(this.app)
--    createWebSocketServer(server, pubClient, subClient)
--    server.listen(http_port, () => {
--      console.info('App is running at http://localhost:%d in %s mode', http_port, NODE_ENV)
--      console.info('  Press CTRL-C to stop\n')
--    })
--    server.setTimeout(1800000)
--    if (enable_https) {
--      if (fs.existsSync(ssl_key_path) && fs.existsSync(ssl_crt_path)) {
--        server = https.createServer(
--          {
--            key: fs.readFileSync(ssl_key_path),
--            cert: fs.readFileSync(ssl_crt_path),
--          },
--          this.app
--        )
--        createWebSocketServer(server, pubClient, subClient)
--        server.listen(https_port, () => {
--          console.info(`%s App listening on https port: ${https_port}`, '✓')
--        })
--      } else {
--        console.info('no https')
-+
-+    // Do not start Express server in the `test` environment.
+  async runApp() {
++    // Do not run Express server in the `test` environment.
 +    // We will use the `supertest` module to emulate a server.
-+    if (NODE_ENV !== 'test') {
-+      /**
-+       * Start Express server.
-+       */
-+      let server = http.createServer(this.app)
-+      createWebSocketServer(server, pubClient, subClient)
-+      server.listen(http_port, () => {
-+        console.info('App is running at http://localhost:%d in %s mode', http_port, NODE_ENV)
-+        console.info('  Press CTRL-C to stop\n')
-+      })
-+      server.setTimeout(1800000)
-+      if (enable_https) {
-+        if (fs.existsSync(ssl_key_path) && fs.existsSync(ssl_crt_path)) {
-+          server = https.createServer(
-+            {
-+              key: fs.readFileSync(ssl_key_path),
-+              cert: fs.readFileSync(ssl_crt_path),
-+            },
-+            this.app
-+          )
-+          createWebSocketServer(server, pubClient, subClient)
-+          server.listen(https_port, () => {
-+            console.info(`%s App listening on https port: ${https_port}`, '✓')
-+          })
-+        } else {
-+          console.info('no https')
-+        }
++    if (NODE_ENV === 'test') {
++      return
++    }
++
+    // Remove `X-Powered-By: Express` response header.
 // ...
 -new PageFlyServer()
 +if (process.env.NODE_ENV !== 'test') {
@@ -233,7 +172,39 @@ Finally, we need to update the server initialization process to connect to the M
 +}
 +
 +// We need to export the initialization class to make the pfserver project testable.
-+export { PageFlyServer }
++export {PageFlyServer}
+```
+
+</details>
+
+<details>
+
+<summary>[pfserver] src/handlers/shopify.ts</summary>
+
+```typescript
+// ...
+-    this.initShopifyContext()
++    if (process.env.NODE_ENV !== 'test') {
++      this.initShopifyContext()
++    }
+// ...
+```
+
+</details>
+
+<details>
+
+<summary>[pfserver] src/helpers/fns.ts</summary>
+
+```typescript
+// ...
+-        html = fs.readFileSync(publicPath + '/index.html').toString()
++        try {
++          html = fs.readFileSync(publicPath + '/index.html').toString()
++        } catch (e) {
++          html = ''
++        }
+// ...
 ```
 
 </details>
@@ -254,27 +225,37 @@ Let's create a new test file to verify if the automated test session works as ex
 import 'dotenv/config'
 import request from 'supertest'
 import mongoose from 'mongoose'
-import { randomUUID } from 'crypto'
-import { PageFlyServer } from '../../../server'
+import {randomUUID} from 'crypto'
+import {PageFlyServer} from '../../../server'
 import ShopifyPage from '../../../data/models/ShopifyPage'
-
-let server, agent
+import PageFlyShopifyHandler from '../../../handlers/shopify'
 
 describe('Test the server endpoint /api/page/[id]', () => {
-  beforeAll(async () => {
-    // Init PageFly server.
-    if (!server) {
-      server = new PageFlyServer()
-      agent = request.agent(server.app)
+  let server, handler, agent
 
-      // Allow some time for the server to be completely initialized.
-      await new Promise(resolve => setTimeout(() => resolve(true), 500))
-    }
+  beforeAll(async () => {
+    // Connect Mongoose to MongoDB.
+    await mongoose.connect(process.env.MONGODB_URI_FOR_AUTOMATED_TESTS, { keepAlive: true })
+
+    // Fake some environment variables.
+    process.env.CATALOG_DATA_IMPORTED = 'yes'
+
+    // Init PageFly server.
+    server = new PageFlyServer()
+    handler = new PageFlyShopifyHandler(server.app, null)
+
+    handler.initRouting()
+
+    // Init an agent for testing.
+    agent = request.agent(server.app)
   })
 
-  afterAll(() => {
+  afterAll(async () => {
+    // Clear mock data.
+    await ShopifyPage.deleteMany({})
+
     // Disconnect from MongoDB.
-    mongoose.disconnect()
+    await mongoose.connection.close()
   })
 
   it('Should return correct page data for the specified page ID', async () => {
