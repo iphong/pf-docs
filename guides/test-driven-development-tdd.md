@@ -84,10 +84,222 @@ In [an article](https://www.browserstack.com/guide/what-is-test-driven-developme
 
 Delivering quality products requires debugging and optimization in the development process. When incorporated correctly, the TDD approach provides numerous benefits, particularly in bringing cost-efficiency in the long run and delivering true value to businesses.
 
+### Set things up
+
+Currently, the `pfserver` project is not fully settled for automated tests. Thus, we will do the necessary setup to make the `pfserver` project fully testable.
+
+First, we need to install some modules to support automated tests. Open the terminal and run the following command.
+
+```sh
+npm i jest supertest cross-env --save-dev
+```
+
+Then we need to create a config file for the `jest` module as follows.
+
+<details>
+
+<summary>[pfserver] jest.config.js</summary>
+
+```javascript
+module.exports = {
+  preset: 'ts-jest',
+  roots: ['<rootDir>/extensions/helper-src/src', '<rootDir>/src'],
+  collectCoverageFrom: ['extensions/helper-src/src/**/*.{js,ts}', "src/**/*.test.{js,ts}"],
+  setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
+  testMatch: ['<rootDir>/extensions/helper-src/src/__tests__/**/*.{js,ts}', '<rootDir>/extensions/helper-src/src/*.{spec,test}.{js,ts}', '<rootDir>/src/**/*.{spec,test}.{js,ts}'],
+  testEnvironment: 'node',
+  transformIgnorePatterns: [
+    '[/\\\\]node_modules[/\\\\].+\\.(js|mjs|cjs|ts)$',
+  ],
+  modulePaths: ['<rootDir>/extensions/helper-src/src', '<rootDir>/src'],
+  moduleNameMapper: {
+    '@/(.*)$': '<rootDir>/extensions/helper-src/src/$1',
+    '@src/(.*)$': '<rootDir>/src/$1',
+  },
+  moduleFileExtensions: ['js', 'ts', 'json'],
+  watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
+}
+```
+
+</details>
+
+Because the `pfserver` project requires a connection to MongoDB for querying and storing data, we need to test it on another database to prevent damaging the official database. Let's open the file `.env` and add the following directive to it.
+
+```
+MONGODB_URI_FOR_AUTOMATED_TESTS=mongodb://localhost:27017/test
+```
+
+Additionally, the PageFly server requires authentication when requesting its API endpoints. Hence, we need to update the function `validateShopAPI` to disable the authorization process when the server runs in the `test` environment.
+
+<details>
+
+<summary>[pfserver] src/helpers/middleware.ts</summary>
+
+```typescript
+// ...
+export async function validateShopAPI(req, res, next?): Promise<void> {
++  // Support automated testing API endpoints.
++  if (process.env.NODE_ENV === 'test') {
++    req.session.shop = req.query.shop || req.body.shop
++
++    return next && next()
++  }
+// ...
+```
+
+</details>
+
+Finally, we need to update the server initialization process to connect to the MongoDB database for testing when the server runs in the `test` environment.
+
+<details>
+
+<summary>[pfserver] src/server.ts</summary>
+
+```typescript
+// ...
+  async connectMongoose(): Promise<string> {
+-    for (const uri of MONGODB_URI_ARR) {
++    const mongoServers = process.env.NODE_ENV === 'test'
++      ? [process.env.MONGODB_URI_FOR_AUTOMATED_TESTS]
++      : MONGODB_URI_ARR
++
++    for (const uri of mongoServers) {
+// ...
++      if (process.env.NODE_ENV === 'test') {
++        return
++      }
++
+      mongoose.connection.on('error', e => {
+// ...
+-    /**
+-     * Start Express server.
+-     */
+-    let server = http.createServer(this.app)
+-    createWebSocketServer(server, pubClient, subClient)
+-    server.listen(http_port, () => {
+-      console.info('App is running at http://localhost:%d in %s mode', http_port, NODE_ENV)
+-      console.info('  Press CTRL-C to stop\n')
+-    })
+-    server.setTimeout(1800000)
+-    if (enable_https) {
+-      if (fs.existsSync(ssl_key_path) && fs.existsSync(ssl_crt_path)) {
+-        server = https.createServer(
+-          {
+-            key: fs.readFileSync(ssl_key_path),
+-            cert: fs.readFileSync(ssl_crt_path),
+-          },
+-          this.app
+-        )
+-        createWebSocketServer(server, pubClient, subClient)
+-        server.listen(https_port, () => {
+-          console.info(`%s App listening on https port: ${https_port}`, '✓')
+-        })
+-      } else {
+-        console.info('no https')
++
++    // Do not start Express server in the `test` environment.
++    // We will use the `supertest` module to emulate a server.
++    if (NODE_ENV !== 'test') {
++      /**
++       * Start Express server.
++       */
++      let server = http.createServer(this.app)
++      createWebSocketServer(server, pubClient, subClient)
++      server.listen(http_port, () => {
++        console.info('App is running at http://localhost:%d in %s mode', http_port, NODE_ENV)
++        console.info('  Press CTRL-C to stop\n')
++      })
++      server.setTimeout(1800000)
++      if (enable_https) {
++        if (fs.existsSync(ssl_key_path) && fs.existsSync(ssl_crt_path)) {
++          server = https.createServer(
++            {
++              key: fs.readFileSync(ssl_key_path),
++              cert: fs.readFileSync(ssl_crt_path),
++            },
++            this.app
++          )
++          createWebSocketServer(server, pubClient, subClient)
++          server.listen(https_port, () => {
++            console.info(`%s App listening on https port: ${https_port}`, '✓')
++          })
++        } else {
++          console.info('no https')
++        }
+// ...
+-new PageFlyServer()
++if (process.env.NODE_ENV !== 'test') {
++  new PageFlyServer()
++}
++
++// We need to export the initialization class to make the pfserver project testable.
++export { PageFlyServer }
+```
+
+</details>
+
+The `pfserver` project is fully settled for automated tests now. Open the terminal and run the following command to start an automated test session.
+
+```sh
+yarn cross-env NODE_ENV=test jest --testTimeout=5000 --watchAll --detectOpenHandles
+```
+
+Let's create a new test file to verify if the automated test session works as expected.
+
+<details>
+
+<summary>[pfserver] src/__<strong>tests__</strong>/routers/api/page.test.ts</summary>
+
+```typescript
+import 'dotenv/config'
+import request from 'supertest'
+import mongoose from 'mongoose'
+import { randomUUID } from 'crypto'
+import { PageFlyServer } from '../../../server'
+import ShopifyPage from '../../../data/models/ShopifyPage'
+
+let server, agent
+
+describe('Test the server endpoint /api/page/[id]', () => {
+  beforeAll(async () => {
+    // Init PageFly server.
+    if (!server) {
+      server = new PageFlyServer()
+      agent = request.agent(server.app)
+
+      // Allow some time for the server to be completely initialized.
+      await new Promise(resolve => setTimeout(() => resolve(true), 500))
+    }
+  })
+
+  afterAll(() => {
+    // Disconnect from MongoDB.
+    mongoose.disconnect()
+  })
+
+  it('Should return correct page data for the specified page ID', async () => {
+    // Create a page in the database for testing.
+    const page = await ShopifyPage.create({
+      _id: randomUUID(),
+      title: 'Test page 1',
+      shopDomain: 'cuongnm-dev-store.myshopify.com',
+    })
+
+    // Send a GET request to the API endpoint.
+    const res = await agent.get(`/api/page/${page._id}?shop=cuongnm-dev-store.myshopify.com`)
+
+    expect(res.body._id).toBe(page._id)
+    expect(res.body.shopDomain).toBe('cuongnm-dev-store.myshopify.com')
+  })
+})
+```
+
+</details>
+
+Now, you can save the file and switch to the terminal where you started the automated test session to see how it works yourself.
+
 ### References
 
-* [Test-driven development](https://en.wikipedia.org/wiki/Test-driven\_development)
-* [What is Test Driven Development (TDD)?](https://www.browserstack.com/guide/what-is-test-driven-development)
 * [Performing NodeJS Unit testing using Jest](https://www.browserstack.com/guide/unit-testing-for-nodejs-using-jest)
 * [Watch and rerun Jest JS tests](https://stackoverflow.com/questions/25472665/watch-and-rerun-jest-js-tests)
-* [How to watch your source and test files and run Jest automatically](https://github.com/iaretiga/gulp-jest-watcher)
+* [How to Test Your Express.js and Mongoose Apps with Jest and SuperTest](https://www.freecodecamp.org/news/how-to-test-in-express-and-mongoose-apps/)
