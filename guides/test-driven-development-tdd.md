@@ -212,7 +212,7 @@ Finally, we need to update some files that initialize the server to skip some ta
 The `pfserver` project is fully settled for automated tests now. Open the terminal and run the following command to start an automated test session.
 
 ```sh
-yarn cross-env NODE_ENV=test jest --testTimeout=5000 --watchAll --detectOpenHandles
+yarn cross-env NODE_ENV=test jest --watchAll --detectOpenHandles
 ```
 
 Let's create a new test file to verify if the automated test session works as expected.
