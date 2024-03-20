@@ -59,6 +59,7 @@
     * [3. Choose one solution](guides/issue-resolving-procedure/processes/3.-choose-one-solution.md)
     * [4. Write test cases](guides/issue-resolving-procedure/processes/4.-write-test-cases.md)
     * [5. Test and code](guides/issue-resolving-procedure/processes/5.-test-and-code.md)
+  * [Fixing a bug](guides/issue-resolving-procedure/fixing-a-bug.md)
   * [Example 1](guides/issue-resolving-procedure/example-1/README.md)
     * [1. Understand the issue](guides/issue-resolving-procedure/example-1/1.-understand-the-issue.md)
     * [2. Find multiple solutions](guides/issue-resolving-procedure/example-1/2.-find-multiple-solutions.md)
