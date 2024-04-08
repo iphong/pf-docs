@@ -128,4 +128,4 @@
 
 ## Utilities
 
-* [Set up tunnel Cloudflared with Partial DNS (CNAME Setup)](utilities/set-up-tunnel-cloudflared-with-partial-dns-cname-setup.md)
+* [Set up tunnel Cloudflare with Partial DNS (CNAME Setup)](utilities/set-up-tunnel-cloudflare-with-partial-dns-cname-setup.md)

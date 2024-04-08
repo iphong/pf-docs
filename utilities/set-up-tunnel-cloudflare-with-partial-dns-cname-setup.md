@@ -2,11 +2,11 @@
 description: A way to set up sustainable tunnel URL while starting the development server
 ---
 
-# Set up tunnel Cloudflared with Partial DNS (CNAME Setup)
+# Set up tunnel Cloudflare with Partial DNS (CNAME Setup)
 
-This article will guide us on how to connect your tunnel CloudFlared to a custom domain & reduce the time of starting the developing environment by manually running `ngrok http 3000` or re-creating Cloudflare tunnel if our system re-boots or catches a network error. Beyond that, the tunnel will be sustainable as your domain, with **NO random URL anymore**.
+This article will guide us on how to connect your tunnel Cloudflare to a custom domain & reduce the time of starting the developing environment by manually running `ngrok http 3000` or re-creating the Cloudflare tunnel if our system re-boots or catches a network error. Beyond that, the tunnel will be sustainable as your domain, with **NO random URL anymore**.
 
-A brief description of what this instruction does, as we already know that in order to run a **Shopify App Development**, we need a domain that valid with a TLS certificate so the domain must be display HTTPS. For serving our app over HTTPS using a valid TLS certificate, we can create our own certificate, or on the other hand, and make our life a little bit easier, we can use some external services like `ngrok`, or `Cloudflared` - which are very similar to us.
+A brief description of what this instruction does, as we already know that in order to run a **Shopify App Development**, we need a domain that valid with a TLS certificate so the domain must be display HTTPS. For serving our app over HTTPS using a valid TLS certificate, we can create our own certificate, or on the other hand, and make our life a little bit easier, we can use some external services like `ngrok`, or `Cloudflare` - which are very similar to us.
 
 ### Prelude
 
@@ -47,7 +47,7 @@ After finishing the process of buying a domain, we need to configure the DNS (Do
 
 #### Login Cloudflare <a href="#markdown-header-login-cloudflared" id="markdown-header-login-cloudflared"></a>
 
-> _**If this is the first time you get acquainted with Cloudflared, don't worry, I will help you step-by-step, unless you can skip this section.**_
+> _**If this is the first time you get acquainted with Cloudflare, don't worry, I will help you step-by-step, unless you can skip this section.**_
 
 First, you register your Cloudflare account in [dash.cloudflare.com](https://dash.cloudflare.com/login)
 
@@ -76,7 +76,7 @@ We can skip this process at this time, I will come back to this essential proces
 
 5. Change your nameservers
 
-You will see that Cloudflared provides us with two Cloudflared nameservers, our mission is to assign these nameservers to domain services.
+You will see that Cloudflare provides us with two Cloudflare nameservers, our mission is to assign these nameservers to domain services.
 
 Click copy nameservers step-by-step. Remember the Google Domain tab that previously I mentioned before, let's come back to this tab and paste these nameservers into `DNS` tab.
 
@@ -116,7 +116,7 @@ So we can configure the network tunnel in this feature. Click **Zero Trust** -> 
 
 * Choose your environment, in this case, I choose the MAC because I'm a MAC user. Please select the environment that is appropriate.
 * Connect tunnel to Cloudflare
-  * Cloudflared provides us with two options to connect, the first case is installing the Cloudflared CLI and starting the services on your local environment, and the second is starting the services directly without installing the Cloudflared CLI.
+  * Cloudflare provides us with two options to connect, the first case is installing the Cloudflare CLI and starting the services on your local environment, and the second is starting the services directly without installing the Cloudflare CLI.
   * Select the option that is suitable for you -> **Copy option** -> **Paste** to your terminal.
 
 **From Cloudflare**
