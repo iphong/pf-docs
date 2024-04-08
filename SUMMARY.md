@@ -120,8 +120,18 @@
     * [Lit Element Playground](https://lit.dev/playground/)
   * [PageFly examples](references/web-components/pagefly-examples.md)
 
+***
+
+* [Utilities](utilities/README.md)
+  * [Set up tunnel Cloudflared with Partial DNS (CNAME Setup)](utilities/set-up-tunnel-cloudflared-with-partial-dns-cname-setup.md)
+
 ## App Design Documents
 
 * [Introduction](app-design-documents/introduction.md)
 * [New media manager](app-design-documents/new-media-manager.md)
 * [Feature 1](app-design-documents/feature-1.md)
+
+***
+
+* [Utilities](utilities-1/README.md)
+  * [Set up tunnel Cloudflared with Partial DNS (CNAME Setup)](utilities-1/set-up-tunnel-cloudflared-with-partial-dns-cname-setup.md)
