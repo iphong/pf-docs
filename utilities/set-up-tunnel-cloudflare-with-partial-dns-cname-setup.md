@@ -60,7 +60,7 @@ In the [dashboard](https://dash.cloudflare.com/), we can slightly see the primar
 1. Click on the button **Get started**
 2. Add your domain registered -> Click **Continue**
 
-![alt text](https://img001.prntscr.com/file/img001/8ZSKu-4OTSSwKKI4vpKHuA.png)
+![Assign domain into Cloudflare](https://img001.prntscr.com/file/img001/8ZSKu-4OTSSwKKI4vpKHuA.png)
 
 3. Select Plan
 
