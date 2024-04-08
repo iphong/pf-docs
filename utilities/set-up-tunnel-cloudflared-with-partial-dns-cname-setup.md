@@ -134,7 +134,7 @@ As we can see cloudflared client is running as a system launch daemon, which mea
 *   Add public hostname
 
     * After connecting the tunnel to Cloudflare, you will need a public host site in order to establish a secure connection between Cloudflare's edge and your infrastructure.
-    * Click the **Add a public host name** button
+    * Click the **Add a Public Host Name** button
 
     &#x20;\
 
@@ -168,4 +168,4 @@ This mode will temporarily bypass our cache allowing you to see changes to your 
 
 ### Related topics
 
-#### [Run tunnel whenever your system boots](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/local-management/as-a-service/macos/) <a href="#markdown-header-run-tunnel-whenever-your-system-boots" id="markdown-header-run-tunnel-whenever-your-system-boots"></a>
+#### 1. [Run tunnel whenever your system boots](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/local-management/as-a-service/macos/) <a href="#markdown-header-run-tunnel-whenever-your-system-boots" id="markdown-header-run-tunnel-whenever-your-system-boots"></a>
