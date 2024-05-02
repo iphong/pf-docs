@@ -46,6 +46,7 @@
 * [Improve Performance](guides/improve-performance/README.md)
   * [What forces layout and reflow](guides/improve-performance/css-layout-and-reflow.md)
   * [Web Rendering Performance](https://developers.google.com/web/fundamentals/performance/rendering)
+  * [How to avoid performance issues when using React](guides/improve-performance/how-to-avoid-performance-issues-when-using-react.md)
   * [Optimize animation for better web page performance](guides/improve-performance/optimize-animation-for-better-web-page-performance.md)
 * [Setup Workspace](guides/setup-workspace/README.md)
   * [Integrate with Macbook M1](guides/setup-workspace/integrate-with-macbook-m1.md)
@@ -73,12 +74,13 @@
     * [3. Choose one solution](guides/issue-resolving-procedure/example-2/3.-choose-one-solution.md)
     * [4. Write test cases](guides/issue-resolving-procedure/example-2/4.-write-test-cases.md)
     * [5. Test and code](guides/issue-resolving-procedure/example-2/5.-test-and-code.md)
-* [Integrating with 3rd-party apps](guides/integrating-with-3rd-party-apps.md)
+* [Test-driven development (TDD)](guides/test-driven-development-tdd.md)
 * [Testing in PageFly](guides/testing-in-pagefly/README.md)
   * [Unit Tests](guides/testing-in-pagefly/unit-tests/README.md)
     * [Add an Unit Test](guides/testing-in-pagefly/unit-tests/add-an-unit-test.md)
   * [Automation Tests](guides/testing-in-pagefly/automation-tests/README.md)
     * [Add an automation test](guides/testing-in-pagefly/automation-tests/add-an-automation-test.md)
+* [Integrating with 3rd-party apps](guides/integrating-with-3rd-party-apps.md)
 * [Refactor PageFly applying OOP](guides/refactor-pagefly-applying-oop/README.md)
   * [The concept of object-oriented programming (OOP)](guides/refactor-pagefly-applying-oop/the-concept-of-object-oriented-programming-oop.md)
   * [Apply the OOP concept to refactor PageFly](guides/refactor-pagefly-applying-oop/apply-the-oop-concept-to-refactor-pagefly/README.md)
@@ -91,7 +93,6 @@
   * [Global state subscription alternative](guides/refactor-pagefly-applying-oop/global-state-subscription-alternative.md)
   * [Conclusion](guides/refactor-pagefly-applying-oop/conclusion.md)
   * [References](guides/refactor-pagefly-applying-oop/references.md)
-* [Test-driven development (TDD)](guides/test-driven-development-tdd.md)
 
 ## References
 
