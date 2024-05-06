@@ -219,8 +219,169 @@ To avoid this potential performance issue, render only components visible on the
 
 ## Memory leaks
 
-Another common problem affecting React performance is memory leaks. This issue happens when a component does not clean up event listeners or timers that are no longer needed and causes the browser to run out of memory.
+Another common problem affecting React performance is memory leaks. This issue happens when a component does not clean up resources that are no longer needed and causes the browser to run out of memory.
 
 To avoid it, you should return a clean-up function when using the `useEffect` hook or define the `componentWillUnmount` lifecycle method to do clean-up work.
+
+The very first common resource that should be cleaned up when no longer needed is event listeners.
+
+{% tabs %}
+{% tab title="useEffect" %}
+```javascript
+import React, { useEffect } from 'react'
+
+// Don't use inline event handlers.
+/*
+export default function App() {
+  return <button onClick={() => alert('Button clicked')}>Click me</button>
+}
+*/
+
+// Use event listeners and event delegation instead.
+export default function App() {
+  useEffect(() => {
+    function handleClick(e) {
+      if (e.target.tagName === 'BUTTON') {
+        alert('Button clicked')
+      }
+    }
+
+    document.addEventListener('click', handleClick)
+
+    // Remove event listeners when unmounting the component.
+    return () => document.removeEventListener('click', handleClick)
+  }, [])
+
+  return <button>Click me</button>
+}
+```
+{% endtab %}
+
+{% tab title="componentWillUnmount" %}
+```javascript
+import React, { Component } from 'react'
+
+// Don't use inline event handlers.
+/*
+export default class App extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return <button onClick={() => alert('Button clicked')}>Click me</button>
+  }
+}
+*/
+
+// Use event listeners and event delegation instead.
+export default class App extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  clickHandler(e) {
+    if (e.target.tagName === 'BUTTON') {
+      alert('Button clicked')
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.handleClick)
+  }
+
+  componentWillUnmount() {
+    // Remove event listeners when unmounting the component.
+    document.removeEventListener('click', this.handleClick)
+  }
+
+  render() {
+    return <button onClick={() => alert('Button clicked')}>Click me</button>
+  }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+Timers is another common resource that should be cleaned up when no longer needed.
+
+```javascript
+import React, { useEffect, useState } from 'react'
+
+let timer = null
+
+function StopWatch() {
+  const [ms, setMs] = useState(0)
+  const [sec, setSec] = useState(0)
+  const [min, setMin] = useState(0)
+  const [hour, setHour] = useState(0)
+
+  useEffect(() => {
+    timer && clearInterval(timer)
+
+    timer = setInterval(() => {
+      console.log('Timer is running')
+
+      if (ms + 1 < 999) {
+        setMs(ms + 1)
+      } else {
+        setMs(0)
+
+        if (sec + 1 < 60) {
+          setSec(sec + 1)
+        } else {
+          setSec(0)
+
+          if (min + 1 < 60) {
+            setMin(min + 1)
+          } else {
+            setMin(0)
+            setHour(hour + 1)
+          }
+        }
+      }
+    }, 1)
+
+    // Uncomment the following line to clean up the timer when unmounting the component.
+    //return () => clearInterval(timer)
+  })
+
+  return (
+    <>
+      <p>
+        {'Stopwatch is running: '}
+        {`${hour < 10 ? '0' : ''}${hour}:`}
+        {`${min < 10 ? '0' : ''}${min}:`}
+        {`${sec < 10 ? '0' : ''}${sec}.`}
+        {`${ms < 10 ? '00' : ms < 100 ? '0' : ''}${ms}`}
+      </p>
+    </>
+  )
+}
+
+export default function App() {
+  const [unmounted, setUnmounted] = useState(false)
+
+  useEffect(() => {
+    function unmountStopWatch(e) {
+      if (e.target.tagName === 'BUTTON') {
+        setUnmounted(true)
+      }
+    }
+
+    document.addEventListener('click', unmountStopWatch)
+
+    return () => document.removeEventListener('click', unmountStopWatch)
+  }, [])
+  return unmounted ? (
+    'Open DevTools and see the Console panel'
+  ) : (
+    <>
+      <StopWatch />
+      <button>Unmount stopwatch</button>
+    </>
+  )
+}
+```
 
 (work in progress)
