@@ -1,4 +1,4 @@
-# How to avoid performance issues when using React
+# Avoid some common React performance issues
 
 Facebook has done a great job when creating React, a simple and flexible library, for building web-based user interfaces. However, like other technologies, React has problems related to performance. Below are some common React performance issues and how to avoid them.
 
@@ -152,7 +152,7 @@ export default function App() {
 {% endtab %}
 {% endtabs %}
 
-Note that you need to use the `useCallback` hook to memoize functions that will be passed to function components memoized by `React.memo`. Otherwise, the use of `React.memo` will not work as expected.
+Note that you need to use the `useCallback` hook to memoize functions that will be passed to function components memoized by `React.memo`. Otherwise, the use of `React.memo` might not work as expected.
 
 Besides re-rendering components while unnecessary, rendering invisible components might also cause a performance issue. Let's take a look at the example below.
 
@@ -205,7 +205,7 @@ export default function App() {
 }
 ```
 
-The `SayHello` component is always rendered regardless of its visibility state. This behavior might not cause a noticeable performance issue if just a few components like the `SayHello` component are rendered. However, the performance will decrease when the number of invisible components increases.
+The `SayHello` component is always rendered regardless of its visibility state. This behavior might not cause a noticeable performance issue if just a few components like that are rendered. However, the performance will decrease when the number of invisible components increases.
 
 To avoid this potential performance issue, render only components visible on the screen. Below is the revised version of the example.
 
@@ -223,7 +223,7 @@ Another common problem affecting React performance is memory leaks. This issue h
 
 To avoid it, you should return a clean-up function when using the `useEffect` hook or define the `componentWillUnmount` lifecycle method to do clean-up work.
 
-The very first common resource that should be cleaned up when no longer needed is event listeners.
+Event listeners are the first common resource that should be cleaned up when no longer needed.
 
 {% tabs %}
 {% tab title="useEffect" %}
@@ -303,7 +303,7 @@ export default class App extends Component {
 {% endtab %}
 {% endtabs %}
 
-Timers is another common resource that should be cleaned up when no longer needed.
+Timers are another common resource that should be cleaned up when no longer needed.
 
 ```javascript
 import React, { useEffect, useState } from 'react'
@@ -384,4 +384,69 @@ export default function App() {
 }
 ```
 
-(work in progress)
+## Not using the key prop
+
+React uses virtual DOM to reduce heavy web browser tasks like painting and recalibrating. Because virtual DOM is just a Javascript object, updating it is direct and fast. Afterward, React uses reconciliation to update the real DOM.
+
+Reconciliation efficiently makes only necessary changes to the real DOM. Below are the basic steps that it follows.
+
+1. Creating a virtual DOM, a copy of the real DOM as a Javascript object.
+2. Create a new virtual DOM every time a component's props or state changes.
+3. Use a diffing algorithm to inspect the changes between the new virtual DOM and the previous one.
+
+The steps above help determine which elements in the real DOM need to be updated and then update only these elements. The diffing algorithm of React focuses on the following points.
+
+1.  **Elements of different types:**
+
+    The diffing algorithm discards the entire old DOM tree and constructs a new one from scratch when the root elements of the virtual DOM trees have different types.
+2. **Elements of the same types:**\
+   The diffing algorithm only updates changed attributes of DOM elements and changed props and state of existing React component instances and keeps the same underlying subtrees.
+3. **Recursing on children:**\
+   When recursing on children of a DOM node, the diffing algorithm iterates over both lists of children at the same time to find the differences.
+
+For the 3rd point, let's consider the following example.
+
+```jsx
+// Original DOM.
+<ul>
+    <li>first</li>
+    <li>second</li>
+</ul>
+
+// Updated DOM.
+<ul>
+    <li>zero</li>
+    <li>first</li>
+    <li>second</li>
+</ul>
+```
+
+In the example above, because the updated DOM has a new element prepended to the list of children, React will reconstruct the entire list when the diffing algorithm iterates from the first to the last `li` elements of both lists.
+
+As a walkaround for this inefficient process, React introduces the `key` prop. Below is the updated revision of the example above.
+
+```jsx
+// Original DOM.
+<ul>
+    <li key="first">first</li>
+    <li key="second">second</li>
+</ul>
+
+// Updated DOM.
+<ul>
+    <li key="zero">zero</li>
+    <li key="first">first</li>
+    <li key="second">second</li>
+</ul>
+```
+
+When the `key` prop is provided, the diffing algorithm can compare keys and selectively update only child elements whose keys have been changed. This is the reason React throws a warning to provide keys for items on a list. Therefore, always remember to define key prop when all children of a DOM element are of the same type.
+
+## Not using data caching
+
+
+
+## Not using memoization
+
+
+

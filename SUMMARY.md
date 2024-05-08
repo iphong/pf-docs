@@ -46,7 +46,7 @@
 * [Improve Performance](guides/improve-performance/README.md)
   * [What forces layout and reflow](guides/improve-performance/css-layout-and-reflow.md)
   * [Web Rendering Performance](https://developers.google.com/web/fundamentals/performance/rendering)
-  * [How to avoid performance issues when using React](guides/improve-performance/how-to-avoid-performance-issues-when-using-react.md)
+  * [Avoid some common React performance issues](guides/improve-performance/avoid-some-common-react-performance-issues.md)
   * [Optimize animation for better web page performance](guides/improve-performance/optimize-animation-for-better-web-page-performance.md)
 * [Setup Workspace](guides/setup-workspace/README.md)
   * [Integrate with Macbook M1](guides/setup-workspace/integrate-with-macbook-m1.md)
