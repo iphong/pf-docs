@@ -444,9 +444,9 @@ When the `key` prop is provided, the diffing algorithm can compare keys and sele
 
 ## Not using data caching
 
-Another common React performance issue is inefficient data fetching. The issue can happen when a component fetches too much data because of not caching data.
+Another common React performance issue is inefficient data fetching. The issue can happen when a component fetches too much data.
 
-To avoid this potential performance issue, always cache fetched data and paginate the data when possible. Below is a data caching example.
+To avoid this potential performance issue, always cache fetched data and paginate the data when possible. Below is an example of data paginating and caching.
 
 ```javascript
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -483,7 +483,7 @@ export default function App() {
         const offset = (page - 1) * limit
 
         const res = await fetch(
-          `http://universities.hipolabs.com/search?country=France&limit=${limit}&offset=${offset}`,
+          `http://universities.hipolabs.com/search?limit=${limit}&offset=${offset}`,
           { signal: aborter.signal }
         )
           .then(r => r.json())
@@ -552,5 +552,6 @@ export default function App() {
 
 ## Not using memoization
 
+When a React component computes data and then displays the result, not using memoization might cause performance issues.
 
-
+(work in progress)
