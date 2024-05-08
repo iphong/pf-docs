@@ -423,7 +423,7 @@ For the 3rd point, let's consider the following example.
 
 In the example above, because the updated DOM has a new element prepended to the list of children, React will reconstruct the entire list when the diffing algorithm iterates from the first to the last `li` elements of both lists.
 
-As a walkaround for this inefficient process, React introduces the `key` prop. Below is the updated revision of the example above.
+As a walkaround for this inefficient process which might cause performance issues, React introduces the `key` prop. Below is the updated revision of the example above.
 
 ```jsx
 // Original DOM.
@@ -444,7 +444,111 @@ When the `key` prop is provided, the diffing algorithm can compare keys and sele
 
 ## Not using data caching
 
+Another common React performance issue is inefficient data fetching. The issue can happen when a component fetches too much data because of not caching data.
 
+To avoid this potential performance issue, always cache fetched data and paginate the data when possible. Below is a data caching example.
+
+```javascript
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+
+const cache = {}
+
+export default function App() {
+  const [page, setPage] = useState(1)
+  const [data, setData] = useState([])
+  const [limit, setLimit] = useState(10)
+
+  const prevButtonDisabled = useMemo(() => page <= 1, [page])
+  const nextButtonDisabled = useMemo(() => data.length < limit, [data, limit])
+
+  const prevPage = useCallback(() => page > 1 && setPage(page - 1), [page])
+
+  const nextPage = useCallback(
+    () => data.length === limit && setPage(page + 1),
+    [page, data, limit]
+  )
+
+  const updateLimit = useCallback(e => {
+    setPage(1)
+    setLimit(Number(e.target.options[e.target.selectedIndex].value))
+  }, [])
+
+  useEffect(() => {
+    const aborter = new AbortController()
+
+    ;(async function () {
+      const key = `${limit}-${page}`
+
+      if (!cache[key]) {
+        const offset = (page - 1) * limit
+
+        const res = await fetch(
+          `http://universities.hipolabs.com/search?country=France&limit=${limit}&offset=${offset}`,
+          { signal: aborter.signal }
+        )
+          .then(r => r.json())
+          .catch(console.error)
+
+        cache[key] = res || []
+      }
+
+      setData(cache[key])
+    })()
+
+    return () => aborter.abort()
+  }, [page, limit])
+
+  return (
+    <table border="1" width="100%">
+      <thead>
+        <tr>
+          <th align="left">University</th>
+          <th align="left">Country</th>
+          <th align="left">Website</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.length ? (
+          data.map(item => (
+            <tr key={item.name}>
+              <td key={item.name}>{item.name}</td>
+              <td key={item.country}>{item.country}</td>
+              <td key={item.couweb_pagesntry}>{item.web_pages}</td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="3" align="center">
+              {page === 1 ? 'Loading...' : 'No more data.'}
+            </td>
+          </tr>
+        )}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colSpan="3" align="right">
+            <select defaultValue={limit} onChange={updateLimit}>
+              {[10, 20, 50, 100, 200].map(num => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
+            &nbsp;
+            <button onClick={prevPage} disabled={prevButtonDisabled}>
+              &lt;
+            </button>
+            &nbsp;
+            <button onClick={nextPage} disabled={nextButtonDisabled}>
+              &gt;
+            </button>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  )
+}
+```
 
 ## Not using memoization
 
