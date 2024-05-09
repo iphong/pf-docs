@@ -1,6 +1,6 @@
 # Avoid some common React performance issues
 
-Facebook has done a great job when creating React, a simple and flexible library, for building web-based user interfaces. However, like other technologies, React has problems related to performance. Below are some common React performance issues and how to avoid them.
+Facebook has done a great job when creating React, a simple and flexible library, for building web-based user interfaces. However, like other technologies, React has problems related to performance. In this article, I'm going to talk about some common React performance issues and how to avoid them.
 
 ## Unnecessary re-rendering
 
@@ -152,7 +152,9 @@ export default function App() {
 {% endtab %}
 {% endtabs %}
 
+{% hint style="info" %}
 Note that you need to use the `useCallback` hook to memoize functions that will be passed to function components memoized by `React.memo`. Otherwise, the use of `React.memo` might not work as expected.
+{% endhint %}
 
 Besides re-rendering components while unnecessary, rendering invisible components might also cause a performance issue. Let's take a look at the example below.
 
@@ -223,7 +225,9 @@ Another common problem affecting React performance is memory leaks. This issue h
 
 To avoid it, you should return a clean-up function when using the `useEffect` hook or define the `componentWillUnmount` lifecycle method to do clean-up work.
 
+{% hint style="info" %}
 Event listeners are the first common resource that should be cleaned up when no longer needed.
+{% endhint %}
 
 {% tabs %}
 {% tab title="useEffect" %}
@@ -303,7 +307,9 @@ export default class App extends Component {
 {% endtab %}
 {% endtabs %}
 
+{% hint style="info" %}
 Timers are another common resource that should be cleaned up when no longer needed.
+{% endhint %}
 
 ```javascript
 import React, { useEffect, useState } from 'react'
@@ -440,13 +446,19 @@ As a walkaround for this inefficient process which might cause performance issue
 </ul>
 ```
 
+{% hint style="info" %}
 When the `key` prop is provided, the diffing algorithm can compare keys and selectively update only child elements whose keys have been changed. This is the reason React throws a warning to provide keys for items on a list. Therefore, always remember to define key prop when all children of a DOM element are of the same type.
+{% endhint %}
 
 ## Not using data caching
 
 Another common React performance issue is inefficient data fetching. The issue can happen when a component fetches too much data.
 
-To avoid this potential performance issue, always cache fetched data and paginate the data when possible. Below is an example of data paginating and caching.
+{% hint style="info" %}
+To avoid this potential performance issue, always cache fetched data and paginate the data when possible.
+{% endhint %}
+
+Below is an example of data paginating and caching.
 
 ```javascript
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -458,9 +470,11 @@ export default function App() {
   const [data, setData] = useState([])
   const [limit, setLimit] = useState(10)
 
+  // Compute button state.
   const prevButtonDisabled = useMemo(() => page <= 1, [page])
   const nextButtonDisabled = useMemo(() => data.length < limit, [data, limit])
 
+  // Define pagination handlers.
   const prevPage = useCallback(() => page > 1 && setPage(page - 1), [page])
 
   const nextPage = useCallback(
@@ -468,11 +482,13 @@ export default function App() {
     [page, data, limit]
   )
 
+  // Define event listener to change limit.
   const updateLimit = useCallback(e => {
     setPage(1)
     setLimit(Number(e.target.options[e.target.selectedIndex].value))
   }, [])
 
+  // Fetch and cache data.
   useEffect(() => {
     const aborter = new AbortController()
 
@@ -498,6 +514,7 @@ export default function App() {
     return () => aborter.abort()
   }, [page, limit])
 
+  // Render...
   return (
     <table border="1" width="100%">
       <thead>
@@ -554,4 +571,147 @@ export default function App() {
 
 When a React component computes data and then displays the result, not using memoization might cause performance issues.
 
-(work in progress)
+{% hint style="info" %}
+To avoid this potential performance issue, use the `useCallback` and `useMemo` hooks to memoize functions and the result of computations.
+{% endhint %}
+
+Below is an example of using memoization.
+
+```javascript
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+
+let cache = null
+let timer = null
+
+export default function App() {
+  const [data, setData] = useState(null)
+  const [search, setSearch] = useState('')
+  const [country, setCountry] = useState('')
+
+  // Define event listeners to filter the item list.
+  const filterByCountry = useCallback(
+    e => setCountry(e.target.options[e.target.selectedIndex].value),
+    []
+  )
+
+  const filterByKeyword = useCallback(e => {
+    if (timer) {
+      clearTimeout(timer)
+    }
+
+    timer = setTimeout(() => setSearch(e.target.value), 200)
+  }, [])
+
+  // Compute a list of countries for filtering.
+  const countryList = useMemo(
+    () => Array.from(new Set(data?.map(item => item.country))),
+    [data]
+  )
+
+  // Filter the item list by selected country.
+  const filteredByCountry = useMemo(
+    () => data?.filter(item => !country || item.country === country),
+    [data, country]
+  )
+
+  // Filter the item list by inputted keyword.
+  const filteredByKeyword = useMemo(
+    () =>
+      filteredByCountry?.filter(
+        item =>
+          !search || item.name.toLowerCase().indexOf(search.toLowerCase()) > -1
+      ),
+    [filteredByCountry, search]
+  )
+
+  // Fetch and cache data.
+  useEffect(() => {
+    const aborter = new AbortController()
+
+    ;(async function () {
+      if (!cache) {
+        const res = await fetch('http://universities.hipolabs.com/search', {
+          signal: aborter.signal,
+        })
+          .then(r => r.json())
+          .catch(console.error)
+
+        cache = res || null
+      }
+
+      setData(cache)
+    })()
+
+    return () => aborter.abort()
+  }, [])
+
+  // Init event handlers.
+  useEffect(() => {
+    const changeHandler = e => {
+      if (e.target.tagName === 'SELECT') {
+        filterByCountry(e)
+      } else if (e.target.tagName === 'INPUT') {
+        filterByKeyword(e)
+      }
+    }
+
+    document.addEventListener('keyup', changeHandler)
+    document.addEventListener('change', changeHandler)
+
+    return () => {
+      document.removeEventListener('keyup', changeHandler)
+      document.removeEventListener('change', changeHandler)
+    }
+  }, [filterByCountry, filterByKeyword])
+
+  // Render...
+  return (
+    <table border="1">
+      <thead>
+        <tr>
+          <td colSpan="3">
+            <select defaultValue={country}>
+              <option key="placeholder" value="">
+                - Filter by country -
+              </option>
+              {countryList?.map(country => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+            &nbsp;
+            <input defaultValue={search} placeholder="- Filter by keyword -" />
+          </td>
+        </tr>
+        <tr>
+          <th align="left">University</th>
+          <th align="left">Country</th>
+          <th align="left">Website</th>
+        </tr>
+      </thead>
+      <tbody>
+        {filteredByKeyword?.length ? (
+          filteredByKeyword.map(item => (
+            <tr key={`${item.name}-${item.country}-${item.web_pages}`}>
+              <td key={item.name}>{item.name}</td>
+              <td key={item.country}>{item.country}</td>
+              <td key={item.couweb_pagesntry}>{item.web_pages}</td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="3" align="center">
+              {data === null ? 'Loading...' : 'No data.'}
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  )
+}
+```
+
+## Conclusion
+
+Above are some common issues affecting React performance and how to avoid them. If you experience other issues, please feel free to post your comments.
