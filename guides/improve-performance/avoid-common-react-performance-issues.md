@@ -716,4 +716,4 @@ export default function App() {
 
 ## Conclusion
 
-Above are some common issues affecting React performance and how to avoid them. If you experience other issues, please feel free to post your comments.
+Above are some common issues affecting React performance and how to avoid them. If you experience other issues, please feel free to [post your comments](https://inside.base.vn/update/16625).
