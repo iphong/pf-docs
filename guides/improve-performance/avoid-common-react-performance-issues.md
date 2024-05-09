@@ -1,4 +1,4 @@
-# Avoid some common React performance issues
+# Avoid common React performance issues
 
 Facebook has done a great job when creating React, a simple and flexible library, for building web-based user interfaces. However, like other technologies, React has problems related to performance. In this article, I'm going to talk about some common React performance issues and how to avoid them.
 
@@ -57,7 +57,7 @@ export default function App() {
     setCounter2(counter2 + 1)
   }, [counter2])
 
-  // Render app UI
+  // Render...
   return (
     <div className="container">
       <div>
@@ -136,7 +136,7 @@ export default function App() {
     setCounter2(counter2 + 1)
   }
 
-  // Render app UI
+  // Render...
   return (
     <div className="container">
       <div>
@@ -191,7 +191,7 @@ export default function App() {
     setOpen(false)
   }, [])
 
-  // Render app UI
+  // Render...
   return (
     <>
       <form className="container" onSubmit={e => e.preventDefault()}>
@@ -379,6 +379,8 @@ export default function App() {
 
     return () => document.removeEventListener('click', unmountStopWatch)
   }, [])
+
+  // Render...
   return unmounted ? (
     'Open DevTools and see the Console panel'
   ) : (
