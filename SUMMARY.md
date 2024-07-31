@@ -48,6 +48,7 @@
   * [Web Rendering Performance](https://developers.google.com/web/fundamentals/performance/rendering)
   * [Avoid common React performance issues](guides/improve-performance/avoid-common-react-performance-issues.md)
   * [Optimize animation for better web page performance](guides/improve-performance/optimize-animation-for-better-web-page-performance.md)
+  * [Page Performance](guides/improve-performance/page-performance.md)
 * [Setup Workspace](guides/setup-workspace/README.md)
   * [Integrate with Macbook M1](guides/setup-workspace/integrate-with-macbook-m1.md)
 * [Pull Requests](guides/pull-requests/README.md)
