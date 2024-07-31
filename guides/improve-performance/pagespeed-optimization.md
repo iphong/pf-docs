@@ -5,7 +5,7 @@ description: >-
   improving performance.
 ---
 
-# Page Performance
+# PageSpeed Optimization
 
 ### What is Core Web Vitals
 
@@ -47,15 +47,15 @@ Measures visual stability. To provide a good user experience, pages should maint
 
 #### Largest Contentful Paint (LCP)
 
-Check this guide out [here](https://web.dev/articles/optimize-lcp)
+Check this guide out [here](https://web.dev/articles/optimize-lcp).
 
 #### Interaction to Next Paint (INP)
 
-Check this guide out [here](https://web.dev/articles/optimize-inp)
+Check this guide out [here](https://web.dev/articles/optimize-inp).
 
 #### Cumulative Layout Shift (CLS)
 
-Check this guide out [here](https://web.dev/articles/optimize-cls)
+Check this guide out [here](https://web.dev/articles/optimize-cls).
 
 ### Tips to optimize&#x20;
 
@@ -96,7 +96,7 @@ Check this guide out [here](https://web.dev/articles/optimize-cls)
 
 #### JS
 
-* Minify and Compress JavaScript
+* Minify and Compress JavaScript.
 * Reduce and Defer JavaScript Loading
   * Load JS at the End of the Body: Place non-critical JS at the end of the \<body> tag to prevent it from blocking the initial rendering of the page.
   * Load JavaScript Asynchronously: Use the async or defer attributes in your \<script> tags to prevent JS from blocking the rendering of the page.
@@ -119,7 +119,7 @@ Check this guide out [here](https://web.dev/articles/optimize-cls)
   * Use Web Workers: Offload heavy JavaScript computations to Web Workers to prevent blocking the main thread, which could cause UI lag.
   * Avoid Long-Running Scripts: Break up long-running scripts to allow the browser to perform other tasks, such as rendering and responding to user input.
 * Using CSS instead of JavaScript
-  * Consider using primarily HTML and CSS instead of JS. Check this blog for [example](https://blog.logrocket.com/5-things-you-can-do-with-css-instead-of-javascript/)
+  * Consider using HTML and CSS primarily instead of JS. Check this blog for [example](https://blog.logrocket.com/5-things-you-can-do-with-css-instead-of-javascript/)
 * Optimize with Lazy Loading
   * Lazy Load Non-Critical JS: Defer the loading of non-essential JS until it’s needed. This includes scripts for features like social media widgets, analytics, or ads.
 * Avoid Memory Leaks
@@ -131,7 +131,7 @@ Check this guide out [here](https://web.dev/articles/optimize-cls)
 
 ### To Sum Up
 
-After all, we need to ensure that the performance of the features you’re working on scores greater than or equal 90 on both mobile and desktop.
+After all, we need to ensure that the performance of the features you’re working on scores greater than or equal to 90 on both mobile and desktop.
 
 <figure><img src="../../.gitbook/assets/Monosnap theme-dawn-demo 2024-07-31 15-54-57 (1).png" alt=""><figcaption></figcaption></figure>
 
